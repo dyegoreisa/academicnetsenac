@@ -13,7 +13,7 @@ public class Conexao {
 			Class.forName("org.postgresql.Driver");
 			conexao = DriverManager
 					.getConnection(
-							"jdbc:postgresql://localhost:5432/AcademicNet",
+							"jdbc:postgresql://localhost:5432/academicnetsenac",
 							"postgres", "banco123");
 		} catch (Exception e) {
 			e.printStackTrace();
