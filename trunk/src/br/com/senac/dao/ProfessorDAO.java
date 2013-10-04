@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import br.com.senac.model.Professor;
+import br.com.senac.model.Turma;
 
 public class ProfessorDAO {
 
@@ -216,6 +217,42 @@ public class ProfessorDAO {
 			}
 		}
 		return professor;
+	}
+	
+	public Professor getProfessorComTurmas(Professor p) {
+		conn = Conexao.getConexao();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement("SELECT t.id, t.nome FROM professor p "
+					+ "LEFT JOIN turma_professor tp ON tp.id_professor = p.id "
+					+ "LEFT JOIN turma t ON t.id = tp.id_turma "
+					+ "WHERE p.id = ? ");
+			pstmt.setInt(1, p.getId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				p.addTurma(new Turma(rs.getInt("t.id"), rs.getString("t.nome")));
+			}
+			
+			rs.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return p;
 	}
 	
 }

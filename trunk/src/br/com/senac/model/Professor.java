@@ -61,4 +61,8 @@ public class Professor extends Pessoa {
 		return turmas;
 	}
 
+	public void addTurma(Turma turma) {
+		turmas.add(turma);
+	}
+
 }
