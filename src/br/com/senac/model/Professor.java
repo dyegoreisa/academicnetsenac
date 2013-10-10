@@ -65,4 +65,11 @@ public class Professor extends Pessoa {
 		turmas.add(turma);
 	}
 
+	@Override
+	public String toString() {
+		return "[Nome: " + getNome() + ", Sobrenome: " + getSobrenome() + ", E-mail: " + getEmail() 
+				+ ", especialidade: " + especialidade + ", Salario: " + salario 
+				+ ", Vinculo: " + vinculo + "]";
+	}
+
 }
