@@ -45,6 +45,8 @@ public abstract class Pessoa {
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 	}
+	
+	public Pessoa() {}
 
 	public int getId() {
 		return id;
@@ -71,7 +73,10 @@ public abstract class Pessoa {
 	}
 	
 	public String getDataNascimento(SimpleDateFormat sf) {
-		return sf.format(dataNascimento);
+		if (dataNascimento != null) {
+			return sf.format(dataNascimento);
+		}
+		return "";
 	}	
 	
 	public java.sql.Date getDataNascimentoToSQL() {
@@ -80,6 +85,34 @@ public abstract class Pessoa {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }
