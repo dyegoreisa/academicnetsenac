@@ -179,11 +179,11 @@ public class ProfessorDAO {
 					+ ", \"sobrenome\" "
 					+ ", \"sexo\" "
 					+ ", \"telefone\" "
-					+ ", \"data_nacimento\" "
+					+ ", \"data_nascimento\" "
 					+ ", \"email\" "
 					+ ", \"especialidade\" "
 					+ ", \"salario\" "
-					+ ", \"vindulo\" "
+					+ ", \"vinculo\" "
 					+ " FROM \"professor\" WHERE \"id\" = ?");
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();

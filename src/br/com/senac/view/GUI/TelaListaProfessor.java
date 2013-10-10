@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,12 +16,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.AbstractTableModel;
 
+import br.com.senac.dao.ProfessorDAO;
 import br.com.senac.model.Professor;
 
 public class TelaListaProfessor extends JFrame {
@@ -58,20 +59,17 @@ public class TelaListaProfessor extends JFrame {
         basic.add(topPanel);
 
         JPanel fieldPanel = new JPanel();
+               
+        ProfessorDAO profDAO = new ProfessorDAO();
         
-        // TODO: trecho deve ser alterado para buscar do banco
-        ArrayList<Professor> professores = new ArrayList<Professor>();
-        professores.add(new Professor("Rogerio", "Saraiva", "rogerio@saraiva", "DBA", 3200.00, "CLT"));
-        professores.add(new Professor("Vanessa", "Medeiros", "vanessa@saraiva", "Analista", 3800.00, "Bolsa"));
-        professores.add(new Professor("Beatriz", "Azevedo", "beatriz@saraiva", "Engenheira", 4500.00, "PJ"));
-        professores.add(new Professor("Arthur", "Reis", "arthur@saraiva", "Redes", 2600.00, "CLT"));
-        
-        JList listProfessores = new JList(professores.toArray());
+        JTable tableProfessores = new JTable(new ProfessorModelTable(profDAO.listar()));
+        fieldPanel.add(tableProfessores);
 
-        JScrollPane pane = new JScrollPane();
-        pane.getViewport().add(listProfessores);
+        JScrollPane pane = new JScrollPane(tableProfessores);
+        tableProfessores.setFillsViewportHeight(true);
         pane.setPreferredSize(new Dimension(500, 250));
         fieldPanel.add(pane);
+      
         
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         basic.add(fieldPanel);      
@@ -104,6 +102,115 @@ public class TelaListaProfessor extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+	}
+	
+	class ProfessorModelTable extends AbstractTableModel {
+
+		private static final long serialVersionUID = -4097626378869023301L;
+		
+		private ArrayList<Professor> dados;
+		private String[] colunas = {"Nome", "Sobrenome", "E-mail", "Especialidade", "Salario", "Vinculo"};
+		
+		public ProfessorModelTable (ArrayList<Professor> dados) {
+			this.dados = dados;
+		}
+		
+	    public int getColumnCount() {
+	        return colunas.length;
+	    }
+
+	    public int getRowCount() {
+	        return dados.size();
+	    }
+
+	    public String getColumnName(int col) {
+	        return colunas[col];
+	    }
+
+	    public Object getValueAt(int row, int col) {
+	    	switch(col) 
+	    	{
+	    	case 0:
+	    		return dados.get(row).getNome();
+
+	    	case 1:
+	    		return dados.get(row).getSobrenome();
+
+	    	case 2:
+	    		return dados.get(row).getEmail();
+	    		
+	    	case 3:
+	    		return dados.get(row).getEspecialidade();
+	    		
+	    	case 4:
+	    		return dados.get(row).getSalario();
+	    		
+	    	case 5:
+	    		return dados.get(row).getVinculo();
+	    		
+	    	default:
+	    		return null;
+	    	}
+	    }
+
+	    public Class getColumnClass(int c) {
+	        return getValueAt(0, c).getClass();
+	    }
+
+	    /*
+	     * Don't need to implement this method unless your table's
+	     * editable.
+	     */
+	    public boolean isCellEditable(int row, int col) {
+	        //Note that the data/cell address is constant,
+	        //no matter where the cell appears on screen.
+	        if (col < 2) {
+	            return false;
+	        } else {
+	            return true;
+	        }
+	    }
+
+	    /*
+	     * Don't need to implement this method unless your table's
+	     * data can change.
+	     */
+	    public void setValueAt(Object value, int row, int col) {
+	    	switch(col) 
+	    	{
+	    	case 0:
+	    		if (value instanceof String) {
+	    			dados.get(row).setNome((String) value);
+	    		}
+
+	    	case 1:
+	    		if (value instanceof String) {
+	    			dados.get(row).setSobrenome((String) value);
+	    		}
+
+	    	case 2:
+	    		if (value instanceof String) {
+	    			dados.get(row).setEmail((String) value);
+	    		}
+	    		
+	    	case 3:
+	    		if (value instanceof String) {
+	    			dados.get(row).setEspecialidade((String) value);
+	    		}
+	    		
+	    	case 4:
+	    		if (value instanceof Double) {
+	    			dados.get(row).setSalario((Double) value);
+	    		}
+	    		
+	    	case 5:
+	    		if (value instanceof String) {
+	    			dados.get(row).setVinculo((String) value);
+	    		}	    		
+	    	}
+	        fireTableCellUpdated(row, col);
+	    }
+	    
 	}
 	
 }

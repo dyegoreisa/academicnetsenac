@@ -45,6 +45,10 @@ public class Professor extends Pessoa {
 		this.vinculo = vinculo;
 	}
 
+	public Professor() {
+		super();
+	}
+
 	public String getEspecialidade() {
 		return especialidade;
 	}
@@ -61,13 +65,25 @@ public class Professor extends Pessoa {
 		return turmas;
 	}
 
+	public void setEspecialidade(String especialidade) {
+		this.especialidade = especialidade;
+	}
+
+	public void setSalario(double salario) {
+		this.salario = salario;
+	}
+
+	public void setVinculo(String vinculo) {
+		this.vinculo = vinculo;
+	}
+
 	public void addTurma(Turma turma) {
 		turmas.add(turma);
 	}
 
 	@Override
 	public String toString() {
-		return "[Nome: " + getNome() + ", Sobrenome: " + getSobrenome() + ", E-mail: " + getEmail() 
+		return "[ID: " + getId() + ", Nome: " + getNome() + ", Sobrenome: " + getSobrenome() + ", E-mail: " + getEmail() 
 				+ ", especialidade: " + especialidade + ", Salario: " + salario 
 				+ ", Vinculo: " + vinculo + "]";
 	}

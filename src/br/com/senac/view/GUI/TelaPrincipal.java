@@ -23,7 +23,7 @@ public class TelaPrincipal extends JFrame {
 	private final void initUI() {
 		
 		JMenuBar menuBar = new JMenuBar();
-		System.out.println();
+		
 		ImageIcon iconSair = new ImageIcon(getClass().getResource("/images/fechar16x16.png"));
 		ImageIcon iconAluno = new ImageIcon(getClass().getResource("/images/aluno16x16.png"));
 		ImageIcon iconProfessor = new ImageIcon(getClass().getResource("/images/professor16x16.png"));
