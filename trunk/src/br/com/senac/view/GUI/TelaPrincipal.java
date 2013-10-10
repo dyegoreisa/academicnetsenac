@@ -14,6 +14,8 @@ import javax.swing.SwingUtilities;
 
 public class TelaPrincipal extends JFrame {
 
+	private static final long serialVersionUID = 8019909825934557167L;
+
 	public TelaPrincipal() {
 		initUI();
 	}
