@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import br.com.senac.model.Aluno;
 import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
@@ -223,21 +224,29 @@ public class ProfessorDAO {
 		return professor;
 	}
 	
-	public Professor getProfessorComTurmas(Professor p) {
+	public ArrayList<Aluno> listarAlunosByProfessor(int id) {
 		conn = Conexao.getConexao();
 		
+		ArrayList<Aluno> alunos = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		
 		try {
-			pstmt = conn.prepareStatement("SELECT t.id, t.nome FROM professor p "
-					+ "LEFT JOIN turma_professor tp ON tp.id_professor = p.id "
-					+ "LEFT JOIN turma t ON t.id = tp.id_turma "
-					+ "WHERE p.id = ? ");
-			pstmt.setInt(1, p.getId());
+			pstmt = conn.prepareStatement("select a.id, a.nome, a.sobrenome, "
+					+ "a.email, a.matricula, a.bolsa "
+					+ "from turma_professor tp "
+					+ "join turma_aluno ta on ta.id_turma = tp.id_turma "
+					+ "join aluno a on a.id = ta.id_aluno "
+					+ "where tp.id_professor = ?");
+			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				p.addTurma(new Turma(rs.getInt("t.id"), rs.getString("t.nome")));
+				alunos.add(new Aluno(rs.getInt("id"), 
+						rs.getString("nome"),
+						rs.getString("sobrenome"), 
+						rs.getString("email"), 
+						rs.getInt("matricula"), 
+						rs.getBoolean("bolsa")));
 			}
 			
 			rs.close();
@@ -256,7 +265,7 @@ public class ProfessorDAO {
 				e.printStackTrace();
 			}
 		}
-		return p;
+		return alunos;
 	}
 	
 }
