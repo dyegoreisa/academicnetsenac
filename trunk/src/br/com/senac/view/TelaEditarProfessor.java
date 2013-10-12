@@ -35,7 +35,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 	private ProfessorDAO profDAO;
 	private JTextField txtId, txtNome, txtSobrenome, txtSexo, txtTelefone, txtNascimento;
 	private JTextField txtEmail, txtEspecialidade, txtSalario, txtVinculo;
-	private JButton btnSalvar, btnExcluir, btnFechar;
+	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	
 	public TelaEditarProfessor (Professor professor) {
         profDAO = new ProfessorDAO();
@@ -174,6 +174,12 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+        btnVisualizar = new JButton("Ver Alunos");
+        btnVisualizar.setMnemonic(KeyEvent.VK_V);
+        btnVisualizar.addActionListener(this);
+        bottom.add(btnVisualizar);
+        
+        
         btnSalvar = new JButton("Salvar");
         btnSalvar.setMnemonic(KeyEvent.VK_S);
         btnSalvar.addActionListener(this);
@@ -203,6 +209,11 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnVisualizar) {
+			System.out.println(profDAO.listarAlunosByProfessor(professor.getId()));
+			JOptionPane.showMessageDialog(this, profDAO.listarAlunosByProfessor(professor.getId()));
+		}
+		
 		if (e.getSource() == btnSalvar) {
 			//professor.setId(Integer.parseInt(txtId.toString()));
 			professor.setNome(txtNome.getText());
@@ -220,23 +231,27 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 			} else {
 				profDAO.inserir(professor);
 			}
+			TelaListaProfessor tlp = new TelaListaProfessor();
+			tlp.setVisible(true);
+			
+			dispose();
 		}
 		
-//		if (e.getSource() == btnFechar) {
-//			dispose();
-//		}
+		if (e.getSource() == btnFechar) {
+			dispose();
+		}
 		
 		if (e.getSource() == btnExcluir) {
 			if (JOptionPane.showConfirmDialog(this, "Deseja realmente escluir o professor?",
 					"Exluir Professor", JOptionPane.YES_NO_OPTION) == 0) {
 				profDAO.apagar(professor);
 			}
+			TelaListaProfessor tlp = new TelaListaProfessor();
+			tlp.setVisible(true);
+			
+			dispose();
 		}
 		
-		TelaListaProfessor tlp = new TelaListaProfessor();
-		tlp.setVisible(true);
-		
-		dispose();
 	}
 	
 }

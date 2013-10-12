@@ -83,9 +83,7 @@ public class Professor extends Pessoa {
 
 	@Override
 	public String toString() {
-		return "[ID: " + getId() + ", Nome: " + getNome() + ", Sobrenome: " + getSobrenome() + ", E-mail: " + getEmail() 
-				+ ", especialidade: " + especialidade + ", Salario: " + salario 
-				+ ", Vinculo: " + vinculo + "]";
+		return "[Nome: " + getNome() + " Especialidade: " + especialidade + "]";
 	}
 
 }

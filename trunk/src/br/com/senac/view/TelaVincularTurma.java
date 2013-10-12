@@ -9,14 +9,15 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.text.SimpleDateFormat;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,25 +26,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.ListModel;
 
 import br.com.senac.dao.AlunoDAO;
 import br.com.senac.dao.ProfessorDAO;
 import br.com.senac.dao.TurmaDAO;
 import br.com.senac.model.Aluno;
+import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
-public class TelaVincularTurma extends JFrame implements ActionListener  {
+public class TelaVincularTurma extends JFrame implements ActionListener, MouseListener  {
 
 	private Turma turma;
 	private TurmaDAO turmaDAO;
 	private AlunoDAO alunoDAO;
 	private ProfessorDAO professorDAO;
-	private JTextField txt;
+	private int id;
 	private JButton btnSalvar, btnFechar;
-	private JList listAlunosVinculados;
-	private JList listProfessoresVinculados;
+	private JList<Aluno> listAlunos, listAlunosVinculados;
+	private JList<Professor> listProfessores, listProfessoresVinculados;
 	
 	public TelaVincularTurma (Turma turma) {
         turmaDAO = new TurmaDAO();
@@ -91,13 +94,13 @@ public class TelaVincularTurma extends JFrame implements ActionListener  {
         Color colorLabel = new Color(50, 50, 25);
                 
         // ID:
+        id = turma.getId();
         JLabel lblId = new JLabel("ID:");
         lblId.setFont(fontLabel);
         lblId.setForeground(colorLabel);
         fieldPanel.add(lblId, BorderLayout.WEST);
         JLabel ltxtId = new JLabel(String.valueOf(turma.getId()));
         fieldPanel.add(ltxtId, BorderLayout.EAST);
-        
         
         // Nome:
         JLabel lblNome = new JLabel("Nome:");
@@ -108,32 +111,33 @@ public class TelaVincularTurma extends JFrame implements ActionListener  {
         fieldPanel.add(lxtNome, BorderLayout.EAST);
         
         // Lista de alunos
-        JList listAlunos = new JList(new ModelListAluno(alunoDAO.listar());
+        listAlunos = new JList<Aluno>(new ModelListAluno(alunoDAO.listar()));
+        listAlunos.addMouseListener(this);
         JScrollPane paneListaAlunos = new JScrollPane();
         paneListaAlunos.getViewport().add(listAlunos);
         fieldPanel.add(paneListaAlunos);
         
         // Lista de alunos vinculados
-    /*    listAlunosVinculados = new JList();
+        listAlunosVinculados = new JList<Aluno>(new ModelListAluno(turmaDAO.listarAlunos(turma.getId())));
         JScrollPane paneListaAlunosVinculados = new JScrollPane();
-        paneListaAlunos.getViewport().add(listAlunosVinculados);
+        paneListaAlunosVinculados .getViewport().add(listAlunosVinculados);
         fieldPanel.add(paneListaAlunosVinculados);
-      */  
         
-       /* // Lista de professores
-        String[] arrayProfessores = {"ja", "vi", "jo", "ma"};
-        JList listProfessores = new JList(arrayProfessores);
+        
+        // Lista de professores
+        listProfessores = new JList<Professor>(new ModelListProfessor(professorDAO.listar()));
+        listProfessores.addMouseListener(this);
         JScrollPane paneListaProfessores = new JScrollPane();
         paneListaProfessores.getViewport().add(listProfessores);
         fieldPanel.add(paneListaProfessores);
         
         // Lista de professores vinculados
-        listProfessoresVinculados = new JList(arrayProfessores);
+        listProfessoresVinculados = new JList<Professor>(new ModelListProfessor(turmaDAO.listarProfessores(turma.getId())));
         JScrollPane paneListaProfessoresVinculados = new JScrollPane();
-        paneListaProfessores.getViewport().add(listProfessoresVinculados);
-        fieldPanel.add(paneListaProfessoresVinculados);
-              */  
-
+        paneListaProfessoresVinculados.getViewport().add(listProfessoresVinculados);
+        fieldPanel.add(paneListaProfessoresVinculados);  
+		
+		
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         basic.add(fieldPanel);      
 
@@ -164,6 +168,13 @@ public class TelaVincularTurma extends JFrame implements ActionListener  {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnSalvar) {
+			ModelListAluno modelListAlu = (ModelListAluno) listAlunosVinculados.getModel();
+			ArrayList<Aluno> arrayAlunos = modelListAlu.getArray();
+			
+			ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
+			ArrayList<Professor> arrayProfessores = modelListProf.getArray();
+			
+			turmaDAO.vincular(id, arrayAlunos, arrayProfessores);
 		}
 		
 		TelaListaTurma tlt = new TelaListaTurma();
@@ -172,7 +183,53 @@ public class TelaVincularTurma extends JFrame implements ActionListener  {
 		dispose();
 	}
 	
-	public class ModelListAluno extends AbstractTableModel {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getClickCount() == 2) {
+			if (e.getSource() == listAlunos) {
+				ModelListAluno modelListAlu = (ModelListAluno) listAlunosVinculados.getModel();
+				ArrayList<Aluno> arrayAlunos = modelListAlu.getArray();
+				arrayAlunos.add(listAlunos.getSelectedValue());
+				ModelListAluno modelAlunos = new ModelListAluno(arrayAlunos);
+				listAlunosVinculados.setModel(modelAlunos);
+			}
+			
+			if (e.getSource() == listProfessores) {
+				ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
+				ArrayList<Professor> arrayProfessores = modelListProf.getArray();
+				arrayProfessores.add(listProfessores.getSelectedValue());
+				ModelListProfessor modelProfessor = new ModelListProfessor(arrayProfessores);
+				listProfessoresVinculados.setModel(modelProfessor);
+			}
+
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}	
+	
+	public class ModelListAluno extends AbstractListModel<Aluno> {
 
 		private static final long serialVersionUID = -6382215151854365504L;
 
@@ -183,51 +240,45 @@ public class TelaVincularTurma extends JFrame implements ActionListener  {
 		}
 		
 		@Override
-		public int getRowCount() {
+		public int getSize() {
 			return alunos.size();
 		}
 
 		@Override
-		public int getColumnCount() {
-			return 9;
+		public Aluno getElementAt(int index) {
+			return alunos.get(index);
+		}
+		
+		public ArrayList<Aluno> getArray() {
+			return alunos;
+		}
+				
+	}
+	
+	public class ModelListProfessor extends AbstractListModel<Professor> {
+
+		private static final long serialVersionUID = -4308246899702883106L;
+
+		private ArrayList<Professor> professores;
+		
+		public ModelListProfessor(ArrayList<Professor> professores) {
+			this.professores = professores;
+		}
+		
+		@Override
+		public int getSize() {
+			return professores.size();
 		}
 
 		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			switch(columnIndex)
-			{
-			case 0:
-				return alunos.get(rowIndex).getId();
-				
-			case 1:
-				return alunos.get(rowIndex).getNome();
-				
-			case 2:
-				return alunos.get(rowIndex).getSobrenome();
-				
-			case 3:
-				return alunos.get(rowIndex).getSexo();
-				
-			case 4:
-				return alunos.get(rowIndex).getTelefone();
-				
-			case 5:
-				SimpleDateFormat formated = new SimpleDateFormat("dd/MM/YYYY");
-				return alunos.get(rowIndex).getDataNascimento(formated);
-				
-			case 6:
-				return alunos.get(rowIndex).getEmail();
-				
-			case 7:
-				return alunos.get(rowIndex).getMatricula();
-				
-			case 8:
-				return alunos.get(rowIndex).getBolsa();
-				
-			default:
-				return null;
-			}
+		public Professor getElementAt(int index) {
+			return professores.get(index);
+		}
+		
+		public ArrayList<Professor> getArray() {
+			return professores;
 		}
 		
 	}
+
 }

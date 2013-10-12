@@ -68,6 +68,12 @@ public class Aluno extends Pessoa {
 		turmas.add(turma);
 	}
 
+	@Override
+	public String toString() {
+		return "[Nome: " + getNome() + " Matricula: " + matricula + "]";
+	}
+
+	
 }
 
 

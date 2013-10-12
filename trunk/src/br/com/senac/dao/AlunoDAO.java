@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import br.com.senac.model.Aluno;
+import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
 public class AlunoDAO {
@@ -131,7 +132,7 @@ private Connection conn;
 	public ArrayList<Aluno> listar() {
 		conn = Conexao.getConexao();
 		
-		ArrayList<Aluno> aluno = new ArrayList<>();
+		ArrayList<Aluno> alunos = new ArrayList<>();
 		Statement stmt = null;
 		
 		try {
@@ -141,7 +142,7 @@ private Connection conn;
 					+ "\"matricula\", \"bolsa\" FROM \"aluno\"");
 			
 			while (rs.next()) {
-				aluno.add(new Aluno(rs.getInt("id"), 
+				alunos.add(new Aluno(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"),
 						rs.getString("sexo"),
@@ -168,7 +169,7 @@ private Connection conn;
 				e.printStackTrace();
 			}
 		}
-		return aluno;
+		return alunos;
 	}
 	
 	public Aluno getById(int id) {
@@ -222,21 +223,30 @@ private Connection conn;
 		return aluno;
 	}
 	
-	public Aluno getAlunoComTurmas(Aluno p) {
+	public ArrayList<Professor> listarProfessoresByAluno(int id) {
 		conn = Conexao.getConexao();
 		
+		ArrayList<Professor> professores = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		
 		try {
-			pstmt = conn.prepareStatement("SELECT t.id, t.nome FROM aluno p "
-					+ "LEFT JOIN turma_aluno tp ON tp.id_aluno = p.id "
-					+ "LEFT JOIN turma t ON t.id = tp.id_turma "
-					+ "WHERE p.id = ? ");
-			pstmt.setInt(1, p.getId());
+			pstmt = conn.prepareStatement("select p.id, p.nome, p.sobrenome, "
+					+ "p.email, p.especialidade, p.salario, p.vinculo "
+					+ "from turma_aluno ta "
+					+ "join turma_professor tp on tp.id_turma = ta.id_turma "
+					+ "join professor p on p.id = tp.id_professor "
+					+ "where ta.id_aluno = ?");
+			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				p.addTurma(new Turma(rs.getInt("t.id"), rs.getString("t.nome")));
+				professores.add(new Professor(rs.getInt("id"), 
+						rs.getString("nome"),
+						rs.getString("sobrenome"), 
+						rs.getString("email"),
+						rs.getString("especialidade"),
+						rs.getDouble("salario"), 
+						rs.getString("vinculo")));
 			}
 			
 			rs.close();
@@ -255,9 +265,8 @@ private Connection conn;
 				e.printStackTrace();
 			}
 		}
-		return p;
+		return professores;
 	}
-	
 }
 
 

@@ -34,7 +34,7 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 	private AlunoDAO alunoDAO;
 	private JTextField txtId, txtNome, txtSobrenome, txtSexo, txtTelefone, txtNascimento;
 	private JTextField txtEmail, txtMatricula, txtBolsa;
-	private JButton btnSalvar, btnExcluir, btnFechar;
+	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	
 	public TelaEditarAluno (Aluno aluno) {
         alunoDAO = new AlunoDAO();
@@ -164,6 +164,11 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+        btnVisualizar = new JButton("Ver Professor");
+        btnVisualizar.setMnemonic(KeyEvent.VK_V);
+        btnVisualizar.addActionListener(this);
+        bottom.add(btnVisualizar);
+        
         btnSalvar = new JButton("Salvar");
         btnSalvar.setMnemonic(KeyEvent.VK_S);
         btnSalvar.addActionListener(this);
@@ -193,6 +198,10 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnVisualizar) {
+			JOptionPane.showMessageDialog(this, alunoDAO.listarProfessoresByAluno(aluno.getId()));
+		}
+		
 		if (e.getSource() == btnSalvar) {
 			//aluno.setId(Integer.parseInt(txtId.toString()));
 			aluno.setNome(txtNome.getText());
@@ -215,23 +224,27 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 			} else {
 				alunoDAO.inserir(aluno);
 			}
+			TelaListaAluno tlp = new TelaListaAluno();
+			tlp.setVisible(true);
+			
+			dispose();			
 		}
 		
-//		if (e.getSource() == btnFechar) {
-//			dispose();
-//		}
+		if (e.getSource() == btnFechar) {
+			dispose();
+		}
 		
 		if (e.getSource() == btnExcluir) {
 			if (JOptionPane.showConfirmDialog(this, "Deseja realmente escluir o aluno?",
 					"Exluir Aluno", JOptionPane.YES_NO_OPTION) == 0) {
 				alunoDAO.apagar(aluno);
 			}
+			TelaListaAluno tlp = new TelaListaAluno();
+			tlp.setVisible(true);
+			
+			dispose();
 		}
 		
-		TelaListaAluno tlp = new TelaListaAluno();
-		tlp.setVisible(true);
-		
-		dispose();
 	}
 	
 }
