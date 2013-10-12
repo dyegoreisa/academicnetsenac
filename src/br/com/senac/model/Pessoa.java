@@ -1,5 +1,6 @@
 package br.com.senac.model;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,7 +47,9 @@ public abstract class Pessoa {
 		this.email = email;
 	}
 	
-	public Pessoa() {}
+	public Pessoa() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public int getId() {
 		return id;
@@ -80,7 +83,15 @@ public abstract class Pessoa {
 	}	
 	
 	public java.sql.Date getDataNascimentoToSQL() {
-		return new java.sql.Date(dataNascimento.getTime());
+		java.sql.Date data = null;
+		try {
+			data =  new java.sql.Date(dataNascimento.getTime());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 
 	public String getEmail() {
@@ -109,6 +120,17 @@ public abstract class Pessoa {
 
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+	
+	public void setDataNascimento(String dataNascimento) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			this.dataNascimento = formatter.parse(dataNascimento);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setEmail(String email) {

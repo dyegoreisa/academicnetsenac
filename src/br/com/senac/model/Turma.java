@@ -7,6 +7,8 @@ public class Turma {
 	private String nome;
 	private ArrayList<Professor> professores;
 	
+	public Turma() {}
+	
 	public Turma(int id, String nome, ArrayList<Professor> professores) {
 		this.id = id;
 		this.nome = nome;
@@ -29,6 +31,14 @@ public class Turma {
 
 	public String getNome() {
 		return nome;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public ArrayList<Professor> getProfessores() {

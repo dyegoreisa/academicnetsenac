@@ -2,7 +2,7 @@ package br.com.senac.controller;
 
 import javax.swing.SwingUtilities;
 
-import br.com.senac.view.GUI.TelaPrincipal;
+import br.com.senac.view.TelaPrincipal;
 
 public class DyegoReisSergioInacio {
 	
@@ -13,6 +13,6 @@ public class DyegoReisSergioInacio {
                 TelaPrincipal tp = new TelaPrincipal();
                 tp.setVisible(true);
             }
-        });		
+        });
 	}
 }
