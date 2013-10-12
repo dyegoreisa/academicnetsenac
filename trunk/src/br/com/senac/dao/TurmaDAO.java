@@ -107,7 +107,7 @@ public class TurmaDAO {
 		
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT \"id\", \"nome\", FROM \"Turma\"");
+			ResultSet rs = stmt.executeQuery("SELECT \"id\", \"nome\" FROM \"turma\"");
 			
 			while (rs.next()) {
 				Turmaes.add(new Turma(rs.getInt("id"), rs.getString("nome")));
@@ -139,7 +139,7 @@ public class TurmaDAO {
 		PreparedStatement pstmt =  null;
 		
 		try {
-			pstmt = conn.prepareStatement("SELECT \"id\", \"nome\" FROM \"Turma\" WHERE \"id\" = ?");
+			pstmt = conn.prepareStatement("SELECT \"id\", \"nome\" FROM \"turma\" WHERE \"id\" = ?");
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			

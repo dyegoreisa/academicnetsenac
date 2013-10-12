@@ -22,14 +22,18 @@ public class ProfessorDAO {
 		
 		try {
 			pstmt = conn.prepareStatement("INSERT INTO \"professor\"("
-					+ "\"nome\", \"sobrenome\", \"email\", \"especialidade\", \"salario\", \"vinculo\")"
-					+ " values(?,?,?,?,?,?)");
+					+ "\"nome\", \"sobrenome\", \"sexo\", \"telefone\", \"data_nascimento\","
+					+ "\"email\", \"especialidade\", \"salario\", \"vinculo\")"
+					+ " values(?,?,?,?,?,?,?,?,?)");
 			pstmt.setString(1, p.getNome());
 			pstmt.setString(2, p.getSobrenome());
-			pstmt.setString(3, p.getEmail());
-			pstmt.setString(4, p.getEspecialidade());
-			pstmt.setDouble(5, p.getSalario());
-			pstmt.setString(6, p.getVinculo());
+			pstmt.setString(3, p.getSexo());
+			pstmt.setString(4, p.getTelefone());
+			pstmt.setDate(5, p.getDataNascimentoToSQL());
+			pstmt.setString(6, p.getEmail());
+			pstmt.setString(7, p.getEspecialidade());
+			pstmt.setDouble(8, p.getSalario());
+			pstmt.setString(9, p.getVinculo());
 			resp = pstmt.execute();
 			
 		} catch (SQLException e) {
@@ -62,11 +66,11 @@ public class ProfessorDAO {
 					+ ", \"sobrenome\" = ? "
 					+ ", \"sexo\" = ? "
 					+ ", \"telefone\" = ? "
-					+ ", \"data_nacimento\" = ? "
+					+ ", \"data_nascimento\" = ? "
 					+ ", \"email\" = ? "
 					+ ", \"especialidade\" = ? "
 					+ ", \"salario\" = ? "
-					+ ", \"vindulo\" = ? "
+					+ ", \"vinculo\" = ? "
 					+ "WHERE \"id\" = ?");
 			pstmt.setString(1, p.getNome());
 			pstmt.setString(2, p.getSobrenome());
@@ -188,18 +192,18 @@ public class ProfessorDAO {
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			
-			rs.next();
-			professor = new Professor(rs.getInt("id"), 
-					rs.getString("nome"),
-					rs.getString("sobrenome"),
-					rs.getString("sexo"),
-					rs.getString("telefone"),
-					rs.getDate("data_nascimento"),
-					rs.getString("email"),
-					rs.getString("especialidade"),
-					rs.getDouble("salario"),
-					rs.getString("vinculo"));
-			
+			if (rs.next()) {
+				professor = new Professor(rs.getInt("id"), 
+						rs.getString("nome"),
+						rs.getString("sobrenome"),
+						rs.getString("sexo"),
+						rs.getString("telefone"),
+						rs.getDate("data_nascimento"),
+						rs.getString("email"),
+						rs.getString("especialidade"),
+						rs.getDouble("salario"),
+						rs.getString("vinculo"));
+			}
 			rs.close();
 			
 		} catch (SQLException e) {

@@ -9,6 +9,8 @@ public class Aluno extends Pessoa {
 	private Boolean bolsa;
 	private ArrayList<Turma> turmas = new ArrayList<>();
 
+	public Aluno() {}
+	
 	public Aluno(String nome, String sobrenome, String email,
 			int matricula, Boolean bolsa, String vinculo) {
 		super(nome, sobrenome, email);
@@ -50,6 +52,14 @@ public class Aluno extends Pessoa {
 		return bolsa;
 	}
 
+	public void setMatricula(int matricula) {
+		this.matricula = matricula;
+	}
+	
+	public void setBolsa(boolean bolsa) {
+		this.bolsa = bolsa;
+	}
+	
 	public ArrayList<Turma> getTurmas() {
 		return turmas;
 	}

@@ -14,7 +14,7 @@ public class AlunoDAO {
 	
 private Connection conn;
 	
-	public boolean inserir(Aluno p) {
+	public boolean inserir(Aluno a) {
 		conn = Conexao.getConexao();
 
 		boolean resp = false;
@@ -22,13 +22,18 @@ private Connection conn;
 		
 		try {
 			pstmt = conn.prepareStatement("INSERT INTO \"aluno\"("
-					+ "\"nome\", \"sobrenome\", \"email\", \"matricula\", \"bolsa\",)"
-					+ " values(?,?,?,?,?)");
-			pstmt.setString(1, p.getNome());
-			pstmt.setString(2, p.getSobrenome());
-			pstmt.setString(3, p.getEmail());
-			pstmt.setInt(4, p.getMatricula());
-			pstmt.setBoolean(5, p.getBolsa());
+					+ "\"nome\", \"sobrenome\", "
+					+ "\"sexo\", \"telefone\", \"data_nascimento\", "
+					+ "\"email\", \"matricula\", \"bolsa\")"
+					+ " values(?,?,?,?,?,?,?,?)");
+			pstmt.setString(1, a.getNome());
+			pstmt.setString(2, a.getSobrenome());
+			pstmt.setString(3, a.getSexo());
+			pstmt.setString(4, a.getTelefone());
+			pstmt.setDate(5, a.getDataNascimentoToSQL());
+			pstmt.setString(6, a.getEmail());
+			pstmt.setInt(7, a.getMatricula());
+			pstmt.setBoolean(8, a.getBolsa());
 			
 			resp = pstmt.execute();
 			
@@ -62,7 +67,7 @@ private Connection conn;
 					+ ", \"sobrenome\" = ? "
 					+ ", \"sexo\" = ? "
 					+ ", \"telefone\" = ? "
-					+ ", \"data_nacimento\" = ? "
+					+ ", \"data_nascimento\" = ? "
 					+ ", \"email\" = ? "
 					+ ", \"matricula\" = ? "
 					+ ", \"bolsa\" = ? "
@@ -75,7 +80,7 @@ private Connection conn;
 			pstmt.setString(6, p.getEmail());
 			pstmt.setInt(7, p.getMatricula());
 			pstmt.setBoolean(8, p.getBolsa());
-			pstmt.setInt(10, p.getId());
+			pstmt.setInt(9, p.getId());
 			resp = pstmt.execute();
 			
 		} catch (SQLException e) {
@@ -132,12 +137,16 @@ private Connection conn;
 		try {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT \"id\", \"nome\", \"sobrenome\", \"email\", "
-					+ "\"matricula\", \"bolsa\", FROM \"aluno\"");
+					+ "\"sexo\", \"telefone\", \"data_nascimento\", "
+					+ "\"matricula\", \"bolsa\" FROM \"aluno\"");
 			
 			while (rs.next()) {
 				aluno.add(new Aluno(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"),
+						rs.getString("sexo"),
+						rs.getString("telefone"),
+						rs.getDate("data_nascimento"),
 						rs.getString("email"),
 						rs.getInt("matricula"),
 						rs.getBoolean("bolsa")));
@@ -175,11 +184,11 @@ private Connection conn;
 					+ ", \"sobrenome\" "
 					+ ", \"sexo\" "
 					+ ", \"telefone\" "
-					+ ", \"data_nacimento\" "
+					+ ", \"data_nascimento\" "
 					+ ", \"email\" "
 					+ ", \"matricula\" "
 					+ ", \"bolsa\" "
-					+ " FROM \"professor\" WHERE \"id\" = ?");
+					+ " FROM \"aluno\" WHERE \"id\" = ?");
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			
