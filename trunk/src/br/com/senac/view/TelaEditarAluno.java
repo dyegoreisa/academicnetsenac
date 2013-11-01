@@ -114,7 +114,6 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
         lblSexo.setFont(fontLabel);
         lblSexo.setForeground(colorLabel);
         fieldPanel.add(lblSexo, BorderLayout.WEST);
-        //txtSexo = new JTextField(aluno.getSexo());
         cobSexo = new JComboBox<String>();
         cobSexo.addItem("Masculino");
         cobSexo.addItem("Feminino");

@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,8 +33,9 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 
 	private Professor professor;
 	private ProfessorDAO profDAO;
-	private JTextField txtNome, txtSobrenome, txtSexo, txtTelefone, txtNascimento;
-	private JTextField txtEmail, txtEspecialidade, txtSalario, txtVinculo;
+	private JTextField txtNome, txtSobrenome, txtTelefone, txtNascimento;
+	private JTextField txtEmail, txtEspecialidade, txtSalario;
+	private JComboBox<String> cobSexo, cobVinculo;;
 	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	
 	public TelaEditarProfessor (Professor professor) {
@@ -110,8 +112,11 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         lblSexo.setFont(fontLabel);
         lblSexo.setForeground(colorLabel);
         fieldPanel.add(lblSexo, BorderLayout.WEST);
-        txtSexo = new JTextField(professor.getSexo());
-        fieldPanel.add(txtSexo, BorderLayout.EAST);
+        cobSexo = new JComboBox<String>();
+        cobSexo.addItem("Masculino");
+        cobSexo.addItem("Feminino");
+        cobSexo.setSelectedIndex(professor.getSexoInt());
+        fieldPanel.add(cobSexo, BorderLayout.EAST);
         
         
         // Telefone:
@@ -164,8 +169,12 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         lblVinculo.setFont(fontLabel);
         lblVinculo.setForeground(colorLabel);
         fieldPanel.add(lblVinculo, BorderLayout.WEST);
-        txtVinculo = new JTextField(professor.getVinculo());
-        fieldPanel.add(txtVinculo, BorderLayout.EAST); 
+        cobVinculo = new JComboBox<String>();
+        cobVinculo.addItem("CLT");
+        cobVinculo.addItem("Bolsa");
+        cobVinculo.addItem("PJ");
+        cobVinculo.addItem("Servidor");
+        fieldPanel.add(cobVinculo, BorderLayout.EAST); 
         
 
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -199,7 +208,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         bottom.setMaximumSize(new Dimension(450, 0));
         
         setTitle("Professor");
-        setSize(new Dimension(450, 350));
+        setSize(new Dimension(450, 450));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -217,12 +226,12 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 			//professor.setId(Integer.parseInt(txtId.toString()));
 			professor.setNome(txtNome.getText());
 			professor.setSobrenome(txtSobrenome.getText());
-			professor.setSexo(txtSexo.getText());
+			professor.setSexoInt(cobSexo.getSelectedIndex());
 			professor.setTelefone(txtTelefone.getText());
 			professor.setDataNascimento(txtNascimento.getText());
 			professor.setEmail(txtEmail.getText());
 			professor.setEspecialidade(txtEspecialidade.getText());
-			professor.setVinculo(txtVinculo.getText());
+			professor.setVinculo(cobVinculo.getSelectedItem().toString());
 			professor.setSalario(Double.parseDouble(txtSalario.getText()));	
 			
 			if (professor.getId() > 0) {
