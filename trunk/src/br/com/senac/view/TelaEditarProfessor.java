@@ -9,7 +9,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
@@ -33,7 +32,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 
 	private Professor professor;
 	private ProfessorDAO profDAO;
-	private JTextField txtId, txtNome, txtSobrenome, txtSexo, txtTelefone, txtNascimento;
+	private JTextField txtNome, txtSobrenome, txtSexo, txtTelefone, txtNascimento;
 	private JTextField txtEmail, txtEspecialidade, txtSalario, txtVinculo;
 	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	

@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 
 import br.com.senac.controller.ExportarAlunos;
@@ -120,10 +122,17 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 		}
 		if (e.getSource() == btnExportar) {
 			ExportarAlunos exportarAlunos = new ExportarAlunos();
-			exportarAlunos.exportar(alunoDAO.listar(), JOptionPane.showInputDialog("Informe o local para salvar o arquivo."));
-			JOptionPane.showMessageDialog(this, "Arquivo exportado!");
+
+			JFileChooser chooser = new JFileChooser();
+		    FileNameExtensionFilter filter = new FileNameExtensionFilter("Coma Separated Values", "csv");
+		    chooser.setFileFilter(filter);
+		    int returnVal = chooser.showOpenDialog(null);
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+		    	exportarAlunos.exportar(alunoDAO.listar(), chooser.getSelectedFile().getAbsolutePath());
+		    	JOptionPane.showMessageDialog(null, "Arquivo "
+		    			+ chooser.getSelectedFile().getName() + " exportado!");
+		    }
 		}
-		
 		
 	}
 	
