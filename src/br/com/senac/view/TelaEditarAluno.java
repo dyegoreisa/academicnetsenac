@@ -15,6 +15,8 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,8 +34,10 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 	
 	private Aluno aluno;
 	private AlunoDAO alunoDAO;
-	private JTextField txtId, txtNome, txtSobrenome, txtSexo, txtTelefone, txtNascimento;
-	private JTextField txtEmail, txtMatricula, txtBolsa;
+	private JTextField txtNome, txtSobrenome, txtTelefone, txtNascimento;
+	private JTextField txtEmail, txtMatricula;
+	private JComboBox<String> cobSexo;
+	private JCheckBox chbBolsa;
 	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	
 	public TelaEditarAluno (Aluno aluno) {
@@ -110,8 +114,12 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
         lblSexo.setFont(fontLabel);
         lblSexo.setForeground(colorLabel);
         fieldPanel.add(lblSexo, BorderLayout.WEST);
-        txtSexo = new JTextField(aluno.getSexo());
-        fieldPanel.add(txtSexo, BorderLayout.EAST);
+        //txtSexo = new JTextField(aluno.getSexo());
+        cobSexo = new JComboBox<String>();
+        cobSexo.addItem("Masculino");
+        cobSexo.addItem("Feminino");
+        cobSexo.setSelectedIndex(aluno.getSexoInt());
+        fieldPanel.add(cobSexo, BorderLayout.EAST);
         
         
         // Telefone:
@@ -128,7 +136,7 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
         lblNascimento.setFont(fontLabel);
         lblNascimento.setForeground(colorLabel);
         fieldPanel.add(lblNascimento, BorderLayout.WEST);
-        txtNascimento = new JTextField(aluno.getDataNascimento(new SimpleDateFormat("dd/mm/yyyy")));
+        txtNascimento = new JTextField(aluno.getDataNascimento(new SimpleDateFormat("dd/MM/yyyy")));
         fieldPanel.add(txtNascimento, BorderLayout.EAST); 
         
         
@@ -155,8 +163,9 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
         lblBolsa.setFont(fontLabel);
         lblBolsa.setForeground(colorLabel);
         fieldPanel.add(lblBolsa, BorderLayout.WEST);
-        txtBolsa = new JTextField(String.valueOf(aluno.getBolsa()));
-        fieldPanel.add(txtBolsa, BorderLayout.EAST);
+        chbBolsa = new JCheckBox();
+        chbBolsa.setSelected(aluno.getBolsa());
+        fieldPanel.add(chbBolsa, BorderLayout.EAST);
         
 
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -189,7 +198,7 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
         bottom.setMaximumSize(new Dimension(450, 0));
         
         setTitle("Aluno");
-        setSize(new Dimension(450, 350));
+        setSize(new Dimension(450, 450));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -203,10 +212,9 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 		}
 		
 		if (e.getSource() == btnSalvar) {
-			//aluno.setId(Integer.parseInt(txtId.toString()));
 			aluno.setNome(txtNome.getText());
 			aluno.setSobrenome(txtSobrenome.getText());
-			aluno.setSexo(txtSexo.getText());
+			aluno.setSexoInt(cobSexo.getSelectedIndex());
 			aluno.setTelefone(txtTelefone.getText());
 			aluno.setDataNascimento(txtNascimento.getText());
 			aluno.setEmail(txtEmail.getText());
@@ -217,7 +225,7 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			aluno.setBolsa(Boolean.parseBoolean(txtBolsa.getText()));
+			aluno.setBolsa(chbBolsa.isSelected());
 			
 			if (aluno.getId() > 0) {
 				alunoDAO.atualizar(aluno);
@@ -231,6 +239,8 @@ public class TelaEditarAluno extends JFrame implements ActionListener {
 		}
 		
 		if (e.getSource() == btnFechar) {
+			TelaListaAluno tlp = new TelaListaAluno();
+			tlp.setVisible(true);
 			dispose();
 		}
 		

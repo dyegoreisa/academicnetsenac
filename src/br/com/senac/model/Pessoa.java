@@ -66,6 +66,13 @@ public abstract class Pessoa {
 	public String getSexo() {
 		return sexo;
 	}
+	
+	public int getSexoInt() {
+		if (getSexo() instanceof String && getSexo().equals("F")) {
+			return 1;
+		}
+		return 0;
+	}
 
 	public String getTelefone() {
 		return telefone;
@@ -112,6 +119,10 @@ public abstract class Pessoa {
 
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
+	}
+	
+	public void setSexoInt(int sexo) {
+		setSexo(sexo == 0 ? "M" : "F");
 	}
 
 	public void setTelefone(String telefone) {

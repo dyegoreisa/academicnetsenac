@@ -49,7 +49,7 @@ public class Aluno extends Pessoa {
 	}
 
 	public Boolean getBolsa() {
-		return bolsa;
+		return bolsa instanceof Boolean && bolsa == true;
 	}
 
 	public void setMatricula(int matricula) {

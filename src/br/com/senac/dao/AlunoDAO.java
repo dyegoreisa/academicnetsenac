@@ -61,7 +61,6 @@ private Connection conn;
 		
 		boolean resp = false;
 		PreparedStatement pstmt = null;
-		
 		try {
 			pstmt = conn.prepareStatement("UPDATE \"aluno\" SET "
 					+ "\"nome\" = ? "

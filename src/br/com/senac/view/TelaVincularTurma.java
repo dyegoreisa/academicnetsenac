@@ -26,9 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
 
 import br.com.senac.dao.AlunoDAO;
 import br.com.senac.dao.ProfessorDAO;
@@ -39,6 +36,8 @@ import br.com.senac.model.Turma;
 
 public class TelaVincularTurma extends JFrame implements ActionListener, MouseListener  {
 
+	private static final long serialVersionUID = 714672937069102260L;
+	
 	private Turma turma;
 	private TurmaDAO turmaDAO;
 	private AlunoDAO alunoDAO;
