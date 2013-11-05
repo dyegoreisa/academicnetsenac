@@ -2,6 +2,7 @@ package br.com.senac.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Pessoa {
@@ -9,7 +10,7 @@ public abstract class Pessoa {
 	private String nome;
 	private String sobrenome;
 	private String sexo;
-	private String telefone;
+	private ArrayList<Telefone> telefones = new ArrayList<>();
 	private Date dataNascimento;
 	private String email;
 	
@@ -26,23 +27,23 @@ public abstract class Pessoa {
 		this.email = email;
 	}	
 	
-	public Pessoa(String nome, String sobrenome, String sexo, String telefone,
+	public Pessoa(String nome, String sobrenome, String sexo, ArrayList<Telefone> telefones,
 			Date dataNascimento, String email) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.sexo = sexo;
-		this.telefone = telefone;
+		this.telefones = telefones;
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 	}
 
 	public Pessoa(int id, String nome, String sobrenome, String sexo,
-			String telefone, Date dataNascimento, String email) {
+			ArrayList<Telefone> telefones, Date dataNascimento, String email) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.sexo = sexo;
-		this.telefone = telefone;
+		this.telefones = telefones;
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 	}
@@ -74,8 +75,8 @@ public abstract class Pessoa {
 		return 0;
 	}
 
-	public String getTelefone() {
-		return telefone;
+	public ArrayList<Telefone> getTelefones() {
+		return telefones;
 	}
 
 	public Date getDataNascimento() {
@@ -125,8 +126,8 @@ public abstract class Pessoa {
 		setSexo(sexo == 0 ? "M" : "F");
 	}
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void addTelefone(Telefone telefone) {
+		this.telefones.add(telefone);
 	}
 
 	public void setDataNascimento(Date dataNascimento) {

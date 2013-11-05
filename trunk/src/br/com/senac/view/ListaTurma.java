@@ -28,14 +28,14 @@ import javax.swing.table.AbstractTableModel;
 import br.com.senac.dao.TurmaDAO;
 import br.com.senac.model.Turma;
 
-public class TelaListaTurma extends JFrame implements ActionListener, MouseListener{
+public class ListaTurma extends JFrame implements ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 5849257271905351845L;
 	private JButton btnNovo, btnVincular, btnFechar;
 	private JTable tableTurmas;
 	private TurmaDAO turmaDAO;
 	
-	public TelaListaTurma () {
+	public ListaTurma () {
 		turmaDAO = new TurmaDAO();
 		initUI();
 	}
@@ -111,7 +111,7 @@ public class TelaListaTurma extends JFrame implements ActionListener, MouseListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNovo) {
-            TelaEditarTurma tep = new TelaEditarTurma(null);
+            EditarTurma tep = new EditarTurma(null);
             tep.setVisible(true);
             dispose();
 		}
@@ -127,7 +127,7 @@ public class TelaListaTurma extends JFrame implements ActionListener, MouseListe
 				JOptionPane.showMessageDialog(this, "Selecione uma turma");
 			} else {
 				Turma t = turmaDAO.getById((Integer) tableTurmas.getValueAt(row, 0));
-				TelaVincularTurma tvt = new TelaVincularTurma(t);
+				VincularTurma tvt = new VincularTurma(t);
 				tvt.setVisible(true);
 				dispose();
 			}
@@ -140,7 +140,7 @@ public class TelaListaTurma extends JFrame implements ActionListener, MouseListe
 			JTable target = (JTable)e.getSource();
 			int row = target.getSelectedRow();
 			Turma t = turmaDAO.getById((Integer) target.getValueAt(row, 0));
-            TelaEditarTurma tet = new TelaEditarTurma(t);
+            EditarTurma tet = new EditarTurma(t);
             tet.setVisible(true);
             dispose();
 		}
@@ -176,7 +176,7 @@ public class TelaListaTurma extends JFrame implements ActionListener, MouseListe
 		private static final long serialVersionUID = -4097626378869023301L;
 		
 		private ArrayList<Turma> dados;
-		private String[] colunas = {"ID", "Nome"};
+		private String[] colunas = {"ID", "Nome", "Data Inicio", "Previsão"};
 		
 		public TurmaModelTable (ArrayList<Turma> dados) {
 			this.dados = dados;
@@ -202,7 +202,12 @@ public class TelaListaTurma extends JFrame implements ActionListener, MouseListe
 	    		
 	    	case 1:
 	    		return dados.get(row).getNome();
-
+	    		
+	    	case 2:
+	    		return dados.get(row).getDataInicio();
+	    		
+	    	case 3:
+	    		return dados.get(row).getPrevisaoTermino();
 	    		
 	    	default:
 	    		return null;

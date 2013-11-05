@@ -30,10 +30,10 @@ private Connection conn;
 			pstmt.setString(1, a.getNome());
 			pstmt.setString(2, a.getSobrenome());
 			pstmt.setString(3, a.getSexo());
-			pstmt.setString(4, a.getTelefone());
+			//pstmt.setString(4, a.getTelefone());
 			pstmt.setDate(5, a.getDataNascimentoToSQL());
 			pstmt.setString(6, a.getEmail());
-			pstmt.setInt(7, a.getMatricula());
+			//pstmt.setInt(7, a.getMatricula());
 			pstmt.setBoolean(8, a.getBolsa());
 			
 			resp = pstmt.execute();
@@ -75,10 +75,10 @@ private Connection conn;
 			pstmt.setString(1, p.getNome());
 			pstmt.setString(2, p.getSobrenome());
 			pstmt.setString(3, p.getSexo());
-			pstmt.setString(4, p.getTelefone());
+			//pstmt.setString(4, p.getTelefone());
 			pstmt.setDate(5, p.getDataNascimentoToSQL());
 			pstmt.setString(6, p.getEmail());
-			pstmt.setInt(7, p.getMatricula());
+			//pstmt.setInt(7, p.getMatricula());
 			pstmt.setBoolean(8, p.getBolsa());
 			pstmt.setInt(9, p.getId());
 			resp = pstmt.execute();
@@ -141,7 +141,7 @@ private Connection conn;
 					+ "\"matricula\", \"bolsa\" FROM \"aluno\"");
 			
 			while (rs.next()) {
-				alunos.add(new Aluno(rs.getInt("id"), 
+				/*alunos.add(new Aluno(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"),
 						rs.getString("sexo"),
@@ -149,7 +149,7 @@ private Connection conn;
 						rs.getDate("data_nascimento"),
 						rs.getString("email"),
 						rs.getInt("matricula"),
-						rs.getBoolean("bolsa")));
+						rs.getBoolean("bolsa")));*/
 			}
 			
 			rs.close();
@@ -193,7 +193,7 @@ private Connection conn;
 			ResultSet rs = pstmt.executeQuery();
 			
 			rs.next();
-			aluno = new Aluno(rs.getInt("id"), 
+			aluno = null; /*new Aluno(rs.getInt("id"), 
 					rs.getString("nome"),
 					rs.getString("sobrenome"),
 					rs.getString("sexo"),
@@ -202,7 +202,7 @@ private Connection conn;
 					rs.getString("email"),
 					rs.getInt("matricula"),
 					rs.getBoolean("bolsa"));
-			
+			*/
 			rs.close();
 			
 		} catch (SQLException e) {
@@ -239,13 +239,13 @@ private Connection conn;
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				professores.add(new Professor(rs.getInt("id"), 
+				professores.add(null);/*new Professor(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"), 
 						rs.getString("email"),
 						rs.getString("especialidade"),
 						rs.getDouble("salario"), 
-						rs.getString("vinculo")));
+						rs.getString("vinculo")));*/
 			}
 			
 			rs.close();

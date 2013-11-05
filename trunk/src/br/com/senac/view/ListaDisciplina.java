@@ -16,30 +16,26 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 
-import br.com.senac.controller.ExportarAlunos;
-import br.com.senac.dao.AlunoDAO;
-import br.com.senac.model.Aluno;
+import br.com.senac.dao.DisciplinaDAO;
+import br.com.senac.model.Disciplina;
 
-public class TelaListaAluno extends JFrame implements ActionListener, MouseListener{
+public class ListaDisciplina extends JFrame implements ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 3081662216432237545L;
-	private JButton btnNovo, btnExportar, btnFechar;
-	private JTable tableAlunos;
-	private AlunoDAO alunoDAO;
+	private JButton btnNovo, btnFechar;
+	private JTable tableDisciplinas;
+	private DisciplinaDAO disciplinaDAO;
 	
-	public TelaListaAluno () {
-		alunoDAO = new AlunoDAO();
+	public ListaDisciplina () {
+		disciplinaDAO = new DisciplinaDAO();
 		initUI();
 	}
 	
@@ -51,11 +47,11 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 		
 		JPanel topPanel = new JPanel(new BorderLayout(0, 0));
 		topPanel.setMaximumSize(new Dimension(450, 0));
-		JLabel title = new JLabel("Lista de alunos");
+		JLabel title = new JLabel("Lista de Disciplinas");
 		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 		topPanel.add(title);
 		
-		ImageIcon icon = new ImageIcon(getClass().getResource("/images/aluno48x48.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/disciplina48x48.png"));
         JLabel label = new JLabel(icon);
         label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         topPanel.add(label, BorderLayout.WEST);
@@ -69,12 +65,12 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 
         JPanel fieldPanel = new JPanel();
                
-        tableAlunos = new JTable(new AlunoModelTable(alunoDAO.listar()));
-        tableAlunos.addMouseListener(this);
-        fieldPanel.add(tableAlunos);
+        tableDisciplinas = new JTable(new DisciplinaModelTable(disciplinaDAO.listar()));
+        tableDisciplinas.addMouseListener(this);
+        fieldPanel.add(tableDisciplinas);
 
-        JScrollPane pane = new JScrollPane(tableAlunos);
-        tableAlunos.setFillsViewportHeight(true);
+        JScrollPane pane = new JScrollPane(tableDisciplinas);
+        tableDisciplinas.setFillsViewportHeight(true);
         pane.setPreferredSize(new Dimension(500, 250));
         fieldPanel.add(pane);
       
@@ -89,11 +85,6 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
         btnNovo.addActionListener(this);
         bottom.add(btnNovo);
         
-        btnExportar = new JButton("Exportar");
-        btnExportar.setMnemonic(KeyEvent.VK_E);
-        btnExportar.addActionListener(this);
-        bottom.add(btnExportar);
-
         btnFechar = new JButton("Fechar");
         btnFechar.setMnemonic(KeyEvent.VK_F);
         btnFechar.addActionListener(this);
@@ -103,7 +94,7 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 
         bottom.setMaximumSize(new Dimension(450, 0));
 
-        setTitle("Aluno");
+        setTitle("Disciplinas");
         setSize(new Dimension(600, 400));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -113,27 +104,13 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNovo) {
-            TelaEditarAluno tea = new TelaEditarAluno(null);
-            tea.setVisible(true);
+            EditarDisciplina tela = new EditarDisciplina(null);
+            tela.setVisible(true);
             dispose();
 		}
 		if (e.getSource() == btnFechar) {
 			dispose();
-		}
-		if (e.getSource() == btnExportar) {
-			ExportarAlunos exportarAlunos = new ExportarAlunos();
-
-			JFileChooser chooser = new JFileChooser();
-		    FileNameExtensionFilter filter = new FileNameExtensionFilter("Coma Separated Values", "csv");
-		    chooser.setFileFilter(filter);
-		    int returnVal = chooser.showOpenDialog(null);
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		    	exportarAlunos.exportar(alunoDAO.listar(), chooser.getSelectedFile().getAbsolutePath());
-		    	JOptionPane.showMessageDialog(null, "Arquivo "
-		    			+ chooser.getSelectedFile().getName() + " exportado!");
-		    }
-		}
-		
+		}		
 	}
 	
 	@Override
@@ -141,8 +118,8 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 		if (e.getClickCount() == 2) {
 			JTable target = (JTable)e.getSource();
 			int row = target.getSelectedRow();
-			Aluno a = alunoDAO.getById((Integer) target.getValueAt(row, 0));
-            TelaEditarAluno tea = new TelaEditarAluno(a);
+			Disciplina disciplina = disciplinaDAO.getById((Integer) target.getValueAt(row, 0));
+            EditarDisciplina tea = new EditarDisciplina(disciplina);
             tea.setVisible(true);
             dispose();
 		}
@@ -173,14 +150,14 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 		
 	}	
 	
-	class AlunoModelTable extends AbstractTableModel {
+	class DisciplinaModelTable extends AbstractTableModel {
 
 		private static final long serialVersionUID = 7248039800690616839L;
 		
-		private ArrayList<Aluno> dados;
-		private String[] colunas = {"ID", "Nome", "Sobrenome", "E-mail", "Matricula", "Bolsa"};
+		private ArrayList<Disciplina> dados;
+		private String[] colunas = {"ID", "Nome"};
 		
-		public AlunoModelTable (ArrayList<Aluno> dados) {
+		public DisciplinaModelTable (ArrayList<Disciplina> dados) {
 			this.dados = dados;
 		}
 		
@@ -204,18 +181,6 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 	    		
 	    	case 1:
 	    		return dados.get(row).getNome();
-
-	    	case 2:
-	    		return dados.get(row).getSobrenome();
-
-	    	case 3:
-	    		return dados.get(row).getEmail();
-	    		
-	    	case 4:
-	    		return dados.get(row).getMatricula();
-	    		
-	    	case 5:
-	    		return dados.get(row).getBolsa();
 	    		
 	    	default:
 	    		return null;
@@ -256,27 +221,6 @@ public class TelaListaAluno extends JFrame implements ActionListener, MouseListe
 	    		if (value instanceof String) {
 	    			dados.get(row).setNome((String) value);
 	    		}
-
-	    	case 2:
-	    		if (value instanceof String) {
-	    			dados.get(row).setSobrenome((String) value);
-	    		}
-
-	    	case 3:
-	    		if (value instanceof String) {
-	    			dados.get(row).setEmail((String) value);
-	    		}
-	    		
-	    	case 4:
-	    		if (value instanceof String) {
-	    			dados.get(row).setMatricula((Integer) value);
-	    		}
-	    		
-	    	case 5:
-	    		if (value instanceof Double) {
-	    			dados.get(row).setBolsa((Boolean) value);
-	    		}
-	    		
 	    	}
 	        fireTableCellUpdated(row, col);
 	    }

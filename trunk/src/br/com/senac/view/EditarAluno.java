@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -24,27 +25,28 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-import br.com.senac.dao.ProfessorDAO;
-import br.com.senac.model.Professor;
+import br.com.senac.dao.AlunoDAO;
+import br.com.senac.model.Aluno;
 
-public class TelaEditarProfessor extends JFrame implements ActionListener {
+public class EditarAluno extends JFrame implements ActionListener {
 
-	private static final long serialVersionUID = 8174800542868923064L;
-
-	private Professor professor;
-	private ProfessorDAO profDAO;
+	private static final long serialVersionUID = 524411140664560533L;
+	
+	private Aluno aluno;
+	private AlunoDAO alunoDAO;
 	private JTextField txtNome, txtSobrenome, txtTelefone, txtNascimento;
-	private JTextField txtEmail, txtEspecialidade, txtSalario;
-	private JComboBox<String> cobSexo, cobVinculo;;
+	private JTextField txtEmail, txtMatricula;
+	private JComboBox<String> cobSexo;
+	private JCheckBox chbBolsa;
 	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	
-	public TelaEditarProfessor (Professor professor) {
-        profDAO = new ProfessorDAO();
+	public EditarAluno (Aluno aluno) {
+        alunoDAO = new AlunoDAO();
         
-        if (professor == null) {
-        	this.professor = new Professor();
+        if (aluno == null) {
+        	this.aluno = new Aluno();
         } else {
-        	this.professor = profDAO.getById(professor.getId());
+        	this.aluno = alunoDAO.getById(aluno.getId());
         }
 		
 		initUI();
@@ -58,11 +60,11 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 		
 		JPanel topPanel = new JPanel(new BorderLayout(0, 0));
 		topPanel.setMaximumSize(new Dimension(450, 0));
-		JLabel title = new JLabel("Professor");
+		JLabel title = new JLabel("Aluno");
 		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 		topPanel.add(title);
 		
-		ImageIcon icon = new ImageIcon(getClass().getResource("/images/professor48x48.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/aluno48x48.png"));
         JLabel label = new JLabel(icon);
         label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         topPanel.add(label, BorderLayout.WEST);
@@ -85,7 +87,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         lblId.setFont(fontLabel);
         lblId.setForeground(colorLabel);
         fieldPanel.add(lblId, BorderLayout.WEST);
-        JLabel ltxtId = new JLabel(String.valueOf(professor.getId()));
+        JLabel ltxtId = new JLabel(String.valueOf(aluno.getId()));
         fieldPanel.add(ltxtId, BorderLayout.EAST);
         
         
@@ -94,7 +96,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         lblNome.setFont(fontLabel);
         lblNome.setForeground(colorLabel);
         fieldPanel.add(lblNome, BorderLayout.WEST);
-        txtNome = new JTextField(professor.getNome());
+        txtNome = new JTextField(aluno.getNome());
         fieldPanel.add(txtNome, BorderLayout.EAST);
         
         
@@ -103,7 +105,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         lblSobrenome.setFont(fontLabel);
         lblSobrenome.setForeground(colorLabel);
         fieldPanel.add(lblSobrenome, BorderLayout.WEST);
-        txtSobrenome = new JTextField(professor.getSobrenome());
+        txtSobrenome = new JTextField(aluno.getSobrenome());
         fieldPanel.add(txtSobrenome, BorderLayout.EAST); 
         
         
@@ -115,25 +117,25 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         cobSexo = new JComboBox<String>();
         cobSexo.addItem("Masculino");
         cobSexo.addItem("Feminino");
-        cobSexo.setSelectedIndex(professor.getSexoInt());
+        cobSexo.setSelectedIndex(aluno.getSexoInt());
         fieldPanel.add(cobSexo, BorderLayout.EAST);
         
         
         // Telefone:
-        JLabel lblTelefone = new JLabel("Telefone:");
+        /*JLabel lblTelefone = new JLabel("Telefone:");
         lblTelefone.setFont(fontLabel);
         lblTelefone.setForeground(colorLabel);
         fieldPanel.add(lblTelefone, BorderLayout.WEST);
-        txtTelefone = new JTextField(professor.getTelefone());
+        txtTelefone = new JTextField(aluno.getTelefone());
         fieldPanel.add(txtTelefone, BorderLayout.EAST);
-        
+        */
         
         // Data de Nacimento:
         JLabel lblNascimento = new JLabel("Nascimento:");
         lblNascimento.setFont(fontLabel);
         lblNascimento.setForeground(colorLabel);
         fieldPanel.add(lblNascimento, BorderLayout.WEST);
-        txtNascimento = new JTextField(professor.getDataNascimento(new SimpleDateFormat("dd/mm/yyyy")));
+        txtNascimento = new JTextField(aluno.getDataNascimento(new SimpleDateFormat("dd/MM/yyyy")));
         fieldPanel.add(txtNascimento, BorderLayout.EAST); 
         
         
@@ -142,39 +144,27 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
         lblEmail.setFont(fontLabel);
         lblEmail.setForeground(colorLabel);
         fieldPanel.add(lblEmail, BorderLayout.WEST);
-        txtEmail = new JTextField(professor.getEmail());
+        txtEmail = new JTextField(aluno.getEmail());
         fieldPanel.add(txtEmail, BorderLayout.EAST);
         
         
-        // Especialidade:
-        JLabel lblEspecialidade = new JLabel("Especialidade:");
-        lblEspecialidade.setFont(fontLabel);
-        lblEspecialidade.setForeground(colorLabel);
-        fieldPanel.add(lblEspecialidade, BorderLayout.WEST);
-        txtEspecialidade = new JTextField(professor.getEspecialidade());
-        fieldPanel.add(txtEspecialidade, BorderLayout.EAST); 
+        // Matricula:
+        /*JLabel lblMatricula = new JLabel("Matricula:");
+        lblMatricula.setFont(fontLabel);
+        lblMatricula.setForeground(colorLabel);
+        fieldPanel.add(lblMatricula, BorderLayout.WEST);
+        txtMatricula = new JTextField(aluno.getMatricula().toString());
+        fieldPanel.add(txtMatricula, BorderLayout.EAST); 
+        */
         
-        
-        // Salario:
-        JLabel lblSalario = new JLabel("Salario:");
-        lblSalario.setFont(fontLabel);
-        lblSalario.setForeground(colorLabel);
-        fieldPanel.add(lblSalario, BorderLayout.WEST);
-        txtSalario = new JTextField(String.valueOf(professor.getSalario()));
-        fieldPanel.add(txtSalario, BorderLayout.EAST);
-        
-        
-        // Vinculo:
-        JLabel lblVinculo = new JLabel("Vinculo:");
-        lblVinculo.setFont(fontLabel);
-        lblVinculo.setForeground(colorLabel);
-        fieldPanel.add(lblVinculo, BorderLayout.WEST);
-        cobVinculo = new JComboBox<String>();
-        cobVinculo.addItem("CLT");
-        cobVinculo.addItem("Bolsa");
-        cobVinculo.addItem("PJ");
-        cobVinculo.addItem("Servidor");
-        fieldPanel.add(cobVinculo, BorderLayout.EAST); 
+        // Bolsa:
+        JLabel lblBolsa = new JLabel("Bolsa:");
+        lblBolsa.setFont(fontLabel);
+        lblBolsa.setForeground(colorLabel);
+        fieldPanel.add(lblBolsa, BorderLayout.WEST);
+        chbBolsa = new JCheckBox();
+        chbBolsa.setSelected(aluno.getBolsa());
+        fieldPanel.add(chbBolsa, BorderLayout.EAST);
         
 
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -182,11 +172,10 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        btnVisualizar = new JButton("Ver Alunos");
+        btnVisualizar = new JButton("Ver Professor");
         btnVisualizar.setMnemonic(KeyEvent.VK_V);
         btnVisualizar.addActionListener(this);
         bottom.add(btnVisualizar);
-        
         
         btnSalvar = new JButton("Salvar");
         btnSalvar.setMnemonic(KeyEvent.VK_S);
@@ -207,7 +196,7 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 
         bottom.setMaximumSize(new Dimension(450, 0));
         
-        setTitle("Professor");
+        setTitle("Aluno");
         setSize(new Dimension(450, 450));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -218,43 +207,48 @@ public class TelaEditarProfessor extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnVisualizar) {
-			System.out.println(profDAO.listarAlunosByProfessor(professor.getId()));
-			JOptionPane.showMessageDialog(this, profDAO.listarAlunosByProfessor(professor.getId()));
+			JOptionPane.showMessageDialog(this, alunoDAO.listarProfessoresByAluno(aluno.getId()));
 		}
 		
 		if (e.getSource() == btnSalvar) {
-			//professor.setId(Integer.parseInt(txtId.toString()));
-			professor.setNome(txtNome.getText());
-			professor.setSobrenome(txtSobrenome.getText());
-			professor.setSexoInt(cobSexo.getSelectedIndex());
-			professor.setTelefone(txtTelefone.getText());
-			professor.setDataNascimento(txtNascimento.getText());
-			professor.setEmail(txtEmail.getText());
-			professor.setEspecialidade(txtEspecialidade.getText());
-			professor.setVinculo(cobVinculo.getSelectedItem().toString());
-			professor.setSalario(Double.parseDouble(txtSalario.getText()));	
+			aluno.setNome(txtNome.getText());
+			aluno.setSobrenome(txtSobrenome.getText());
+			aluno.setSexoInt(cobSexo.getSelectedIndex());
+			//aluno.setTelefone(txtTelefone.getText());
+			aluno.setDataNascimento(txtNascimento.getText());
+			aluno.setEmail(txtEmail.getText());
+			/*try { 
+				aluno.setMatricula(Integer.parseInt(txtMatricula.getText()));
+			} catch (NumberFormatException ex) {
+				ex.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}*/
+			aluno.setBolsa(chbBolsa.isSelected());
 			
-			if (professor.getId() > 0) {
-				profDAO.atualizar(professor);
+			if (aluno.getId() > 0) {
+				alunoDAO.atualizar(aluno);
 			} else {
-				profDAO.inserir(professor);
+				alunoDAO.inserir(aluno);
 			}
-			TelaListaProfessor tlp = new TelaListaProfessor();
+			ListaAluno tlp = new ListaAluno();
 			tlp.setVisible(true);
 			
-			dispose();
+			dispose();			
 		}
 		
 		if (e.getSource() == btnFechar) {
+			ListaAluno tlp = new ListaAluno();
+			tlp.setVisible(true);
 			dispose();
 		}
 		
 		if (e.getSource() == btnExcluir) {
-			if (JOptionPane.showConfirmDialog(this, "Deseja realmente escluir o professor?",
-					"Exluir Professor", JOptionPane.YES_NO_OPTION) == 0) {
-				profDAO.apagar(professor);
+			if (JOptionPane.showConfirmDialog(this, "Deseja realmente escluir o aluno?",
+					"Exluir Aluno", JOptionPane.YES_NO_OPTION) == 0) {
+				alunoDAO.apagar(aluno);
 			}
-			TelaListaProfessor tlp = new TelaListaProfessor();
+			ListaAluno tlp = new ListaAluno();
 			tlp.setVisible(true);
 			
 			dispose();

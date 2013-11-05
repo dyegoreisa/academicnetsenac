@@ -29,11 +29,11 @@ public class ProfessorDAO {
 			pstmt.setString(1, p.getNome());
 			pstmt.setString(2, p.getSobrenome());
 			pstmt.setString(3, p.getSexo());
-			pstmt.setString(4, p.getTelefone());
+			//pstmt.setString(4, p.getTelefone());
 			pstmt.setDate(5, p.getDataNascimentoToSQL());
 			pstmt.setString(6, p.getEmail());
 			pstmt.setString(7, p.getEspecialidade());
-			pstmt.setDouble(8, p.getSalario());
+			//pstmt.setDouble(8, p.getSalario());
 			pstmt.setString(9, p.getVinculo());
 			resp = pstmt.execute();
 			
@@ -76,11 +76,11 @@ public class ProfessorDAO {
 			pstmt.setString(1, p.getNome());
 			pstmt.setString(2, p.getSobrenome());
 			pstmt.setString(3, p.getSexo());
-			pstmt.setString(4, p.getTelefone());
+			//pstmt.setString(4, p.getTelefone());
 			pstmt.setDate(5, p.getDataNascimentoToSQL());
 			pstmt.setString(6, p.getEmail());
 			pstmt.setString(7, p.getEspecialidade());
-			pstmt.setDouble(8, p.getSalario());
+			//pstmt.setDouble(8, p.getSalario());
 			pstmt.setString(9, p.getVinculo());
 			
 			pstmt.setInt(10, p.getId());
@@ -143,13 +143,13 @@ public class ProfessorDAO {
 					+ "\"especialidade\", \"salario\", \"vinculo\" FROM \"professor\"");
 			
 			while (rs.next()) {
-				professores.add(new Professor(rs.getInt("id"), 
+				professores.add(null); /*new Professor(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"),
 						rs.getString("email"),
 						rs.getString("especialidade"),
 						rs.getDouble("salario"),
-						rs.getString("vinculo")));
+						rs.getString("vinculo")));*/
 			}
 			
 			rs.close();
@@ -194,7 +194,7 @@ public class ProfessorDAO {
 			ResultSet rs = pstmt.executeQuery();
 			
 			if (rs.next()) {
-				professor = new Professor(rs.getInt("id"), 
+				professor = null; /*new Professor(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"),
 						rs.getString("sexo"),
@@ -203,7 +203,7 @@ public class ProfessorDAO {
 						rs.getString("email"),
 						rs.getString("especialidade"),
 						rs.getDouble("salario"),
-						rs.getString("vinculo"));
+						rs.getString("vinculo"));*/
 			}
 			rs.close();
 			
@@ -241,12 +241,12 @@ public class ProfessorDAO {
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				alunos.add(new Aluno(rs.getInt("id"), 
+				alunos.add(null); /*new Aluno(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"), 
 						rs.getString("email"), 
 						rs.getInt("matricula"), 
-						rs.getBoolean("bolsa")));
+						rs.getBoolean("bolsa")));*/
 			}
 			
 			rs.close();

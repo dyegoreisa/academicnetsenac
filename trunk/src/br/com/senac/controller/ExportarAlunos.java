@@ -18,10 +18,10 @@ public class ExportarAlunos {
 					+ a.getNome() + ";"
 					+ a.getSobrenome() + ";"
 					+ a.getSexo() + ";"
-					+ a.getTelefone().toString().trim() + ";"
+					//+ a.getTelefone().toString().trim() + ";"
 					+ a.getDataNascimento(new SimpleDateFormat("dd/MM/YYYY")) + ";"
 					+ a.getEmail() + ";"
-					+ a.getMatricula() + ";"
+					//+ a.getMatricula() + ";"
 					+ a.getBolsa(), 
 					nomeArquivo);
 		}
