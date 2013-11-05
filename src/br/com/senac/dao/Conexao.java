@@ -3,6 +3,11 @@ package br.com.senac.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import org.hibernate.Session;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
+
 public class Conexao {
 	
 	private Conexao() {}
@@ -19,5 +24,15 @@ public class Conexao {
 			e.printStackTrace();
 		}
 		return conexao;
+	}
+	
+	public static Session getSession() {
+		Configuration config = new Configuration();
+		config.configure();
+	
+		ServiceRegistry registry = new ServiceRegistryBuilder().applySettings(
+				config.getProperties()).buildServiceRegistry();
+	
+		return config.buildSessionFactory(registry).openSession();
 	}
 }

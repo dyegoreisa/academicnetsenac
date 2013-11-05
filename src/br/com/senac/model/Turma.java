@@ -1,28 +1,40 @@
 package br.com.senac.model;
 
-import java.util.ArrayList;
+import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Turma {
+	
+	@Id @GeneratedValue
 	private int id;
+	
 	private String nome;
-	private ArrayList<Professor> professores;
+	
+	@Column(name = "data_inicio")
+	private Date dataInicio;
+	
+	@Column(name = "data_fim")
+	private Date dataFim;
+	
+	@Column(name = "previsao_termino")
+	private Date previsaoTermino;
+	
+	@ManyToOne
+	@JoinColumn(name="id_curso")
+	private Curso curso;
 	
 	public Turma() {}
-	
-	public Turma(int id, String nome, ArrayList<Professor> professores) {
-		this.id = id;
-		this.nome = nome;
-		this.professores = professores;
-	}
 
 	public Turma(int id, String nome) {
 		this.id = id;
 		this.nome = nome;
-	}
-	
-	public Turma(String nome, ArrayList<Professor> professores) {
-		this.nome = nome;
-		this.professores = professores;
 	}
 
 	public int getId() {
@@ -32,17 +44,45 @@ public class Turma {
 	public String getNome() {
 		return nome;
 	}
-	
+
+	public Date getDataInicio() {
+		return dataInicio;
+	}
+
+	public Date getDataFim() {
+		return dataFim;
+	}
+
+	public Date getPrevisaoTermino() {
+		return previsaoTermino;
+	}
+
+	public Curso getCurso() {
+		return curso;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	public ArrayList<Professor> getProfessores() {
-		return professores;
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
 	}
 
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
+	}
+
+	public void setPrevisaoTermino(Date previsaoTermino) {
+		this.previsaoTermino = previsaoTermino;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
+	}
+	
 }

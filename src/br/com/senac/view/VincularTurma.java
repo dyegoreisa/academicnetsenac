@@ -34,7 +34,7 @@ import br.com.senac.model.Aluno;
 import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
-public class TelaVincularTurma extends JFrame implements ActionListener, MouseListener  {
+public class VincularTurma extends JFrame implements ActionListener, MouseListener  {
 
 	private static final long serialVersionUID = 714672937069102260L;
 	
@@ -47,7 +47,7 @@ public class TelaVincularTurma extends JFrame implements ActionListener, MouseLi
 	private JList<Aluno> listAlunos, listAlunosVinculados;
 	private JList<Professor> listProfessores, listProfessoresVinculados;
 	
-	public TelaVincularTurma (Turma turma) {
+	public VincularTurma (Turma turma) {
         turmaDAO = new TurmaDAO();
         alunoDAO = new AlunoDAO();
         professorDAO = new ProfessorDAO();
@@ -117,11 +117,11 @@ public class TelaVincularTurma extends JFrame implements ActionListener, MouseLi
         fieldPanel.add(paneListaAlunos);
         
         // Lista de alunos vinculados
-        listAlunosVinculados = new JList<Aluno>(new ModelListAluno(turmaDAO.listarAlunos(turma.getId())));
+        /*listAlunosVinculados = new JList<Aluno>(new ModelListAluno(turmaDAO.listarAlunos(turma.getId())));
         JScrollPane paneListaAlunosVinculados = new JScrollPane();
         paneListaAlunosVinculados .getViewport().add(listAlunosVinculados);
         fieldPanel.add(paneListaAlunosVinculados);
-        
+        */
         
         // Lista de professores
         listProfessores = new JList<Professor>(new ModelListProfessor(professorDAO.listar()));
@@ -131,11 +131,11 @@ public class TelaVincularTurma extends JFrame implements ActionListener, MouseLi
         fieldPanel.add(paneListaProfessores);
         
         // Lista de professores vinculados
-        listProfessoresVinculados = new JList<Professor>(new ModelListProfessor(turmaDAO.listarProfessores(turma.getId())));
+        /*listProfessoresVinculados = new JList<Professor>(new ModelListProfessor(turmaDAO.listarProfessores(turma.getId())));
         JScrollPane paneListaProfessoresVinculados = new JScrollPane();
         paneListaProfessoresVinculados.getViewport().add(listProfessoresVinculados);
         fieldPanel.add(paneListaProfessoresVinculados);  
-		
+		*/
 		
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         basic.add(fieldPanel);      
@@ -173,10 +173,10 @@ public class TelaVincularTurma extends JFrame implements ActionListener, MouseLi
 			ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
 			ArrayList<Professor> arrayProfessores = modelListProf.getArray();
 			
-			turmaDAO.vincular(id, arrayAlunos, arrayProfessores);
+			//turmaDAO.vincular(id, arrayAlunos, arrayProfessores);
 		}
 		
-		TelaListaTurma tlt = new TelaListaTurma();
+		ListaTurma tlt = new ListaTurma();
 		tlt.setVisible(true);
 		
 		dispose();

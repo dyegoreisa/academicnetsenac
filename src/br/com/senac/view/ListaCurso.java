@@ -24,18 +24,18 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import br.com.senac.dao.ProfessorDAO;
-import br.com.senac.model.Professor;
+import br.com.senac.dao.CursoDAO;
+import br.com.senac.model.Curso;
 
-public class TelaListaProfessor extends JFrame implements ActionListener, MouseListener{
+public class ListaCurso extends JFrame implements ActionListener, MouseListener{
 
-	private static final long serialVersionUID = 5849257271905351845L;
+	private static final long serialVersionUID = 3081662216432237545L;
 	private JButton btnNovo, btnFechar;
-	private JTable tableProfessores;
-	private ProfessorDAO profDAO;
+	private JTable tableCursos;
+	private CursoDAO cursoDAO;
 	
-	public TelaListaProfessor () {
-		profDAO = new ProfessorDAO();
+	public ListaCurso () {
+		cursoDAO = new CursoDAO();
 		initUI();
 	}
 	
@@ -47,11 +47,11 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 		
 		JPanel topPanel = new JPanel(new BorderLayout(0, 0));
 		topPanel.setMaximumSize(new Dimension(450, 0));
-		JLabel title = new JLabel("Lista de professores");
+		JLabel title = new JLabel("Lista de Cursos");
 		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 		topPanel.add(title);
 		
-		ImageIcon icon = new ImageIcon(getClass().getResource("/images/professor48x48.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/curso48x48.png"));
         JLabel label = new JLabel(icon);
         label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         topPanel.add(label, BorderLayout.WEST);
@@ -65,12 +65,12 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 
         JPanel fieldPanel = new JPanel();
                
-        tableProfessores = new JTable(new ProfessorModelTable(profDAO.listar()));
-        tableProfessores.addMouseListener(this);
-        fieldPanel.add(tableProfessores);
+        tableCursos = new JTable(new CursoModelTable(cursoDAO.listar()));
+        tableCursos.addMouseListener(this);
+        fieldPanel.add(tableCursos);
 
-        JScrollPane pane = new JScrollPane(tableProfessores);
-        tableProfessores.setFillsViewportHeight(true);
+        JScrollPane pane = new JScrollPane(tableCursos);
+        tableCursos.setFillsViewportHeight(true);
         pane.setPreferredSize(new Dimension(500, 250));
         fieldPanel.add(pane);
       
@@ -83,18 +83,18 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
         btnNovo = new JButton("Novo");
         btnNovo.setMnemonic(KeyEvent.VK_N);
         btnNovo.addActionListener(this);
-
+        bottom.add(btnNovo);
+        
         btnFechar = new JButton("Fechar");
         btnFechar.setMnemonic(KeyEvent.VK_F);
         btnFechar.addActionListener(this);
-        
-        bottom.add(btnNovo);
         bottom.add(btnFechar);
+        
         basic.add(bottom);
 
         bottom.setMaximumSize(new Dimension(450, 0));
 
-        setTitle("Professor");
+        setTitle("Cursos");
         setSize(new Dimension(600, 400));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -104,14 +104,13 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnNovo) {
-            TelaEditarProfessor tep = new TelaEditarProfessor(null);
-            tep.setVisible(true);
+            EditarCurso tela = new EditarCurso(null);
+            tela.setVisible(true);
             dispose();
 		}
 		if (e.getSource() == btnFechar) {
 			dispose();
-		}
-		
+		}		
 	}
 	
 	@Override
@@ -119,9 +118,9 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 		if (e.getClickCount() == 2) {
 			JTable target = (JTable)e.getSource();
 			int row = target.getSelectedRow();
-			Professor p = profDAO.getById((Integer) target.getValueAt(row, 0));
-            TelaEditarProfessor tep = new TelaEditarProfessor(p);
-            tep.setVisible(true);
+			Curso curso = cursoDAO.getById((Integer) target.getValueAt(row, 0));
+            EditarCurso tea = new EditarCurso(curso);
+            tea.setVisible(true);
             dispose();
 		}
 		
@@ -151,14 +150,14 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 		
 	}	
 	
-	class ProfessorModelTable extends AbstractTableModel {
+	class CursoModelTable extends AbstractTableModel {
 
-		private static final long serialVersionUID = -4097626378869023301L;
+		private static final long serialVersionUID = 7248039800690616839L;
 		
-		private ArrayList<Professor> dados;
-		private String[] colunas = {"ID", "Nome", "Sobrenome", "E-mail", "Especialidade", "Salario", "Vinculo"};
+		private ArrayList<Curso> dados;
+		private String[] colunas = {"ID", "Nome"};
 		
-		public ProfessorModelTable (ArrayList<Professor> dados) {
+		public CursoModelTable (ArrayList<Curso> dados) {
 			this.dados = dados;
 		}
 		
@@ -182,21 +181,6 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 	    		
 	    	case 1:
 	    		return dados.get(row).getNome();
-
-	    	case 2:
-	    		return dados.get(row).getSobrenome();
-
-	    	case 3:
-	    		return dados.get(row).getEmail();
-	    		
-	    	case 4:
-	    		return dados.get(row).getEspecialidade();
-	    		
-	    	case 5:
-	    		return dados.get(row).getSalario();
-	    		
-	    	case 6:
-	    		return dados.get(row).getVinculo();
 	    		
 	    	default:
 	    		return null;
@@ -237,31 +221,6 @@ public class TelaListaProfessor extends JFrame implements ActionListener, MouseL
 	    		if (value instanceof String) {
 	    			dados.get(row).setNome((String) value);
 	    		}
-
-	    	case 2:
-	    		if (value instanceof String) {
-	    			dados.get(row).setSobrenome((String) value);
-	    		}
-
-	    	case 3:
-	    		if (value instanceof String) {
-	    			dados.get(row).setEmail((String) value);
-	    		}
-	    		
-	    	case 4:
-	    		if (value instanceof String) {
-	    			dados.get(row).setEspecialidade((String) value);
-	    		}
-	    		
-	    	case 5:
-	    		if (value instanceof Double) {
-	    			dados.get(row).setSalario((Double) value);
-	    		}
-	    		
-	    	case 6:
-	    		if (value instanceof String) {
-	    			dados.get(row).setVinculo((String) value);
-	    		}	    		
 	    	}
 	        fireTableCellUpdated(row, col);
 	    }

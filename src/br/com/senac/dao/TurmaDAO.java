@@ -1,174 +1,98 @@
 package br.com.senac.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import br.com.senac.model.Aluno;
-import br.com.senac.model.Professor;
+import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
+
 import br.com.senac.model.Turma;
 
 public class TurmaDAO {
-
-	private Connection conn;
 	
-	public boolean inserir(Turma t) {
-		conn = Conexao.getConexao();
+	public Session session;
 
-		boolean resp = false;
-		PreparedStatement pstmt = null;
-		
+	public boolean inserir(Turma turma) {
 		try {
-			pstmt = conn.prepareStatement("INSERT INTO \"turma\"(\"nome\") values(?)");
-			pstmt.setString(1, t.getNome());
-			resp = pstmt.execute();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+			session = Conexao.getSession();
+			session.beginTransaction();
+			session.save(turma);
+			session.getTransaction().commit();
+		} catch (ConstraintViolationException e) {
+			session.getTransaction().rollback();
+			System.out.println(e.getSQL());
+			System.out.println(e.getSQLException());
 		} catch (Exception e) {
+			session.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			session.close();
 		}
-		
-		return resp;
+		return false;
 	}
 
-	public boolean atualizar(Turma p) {
-		conn = Conexao.getConexao();
-		
-		boolean resp = false;
-		PreparedStatement pstmt = null;
-		
+	public boolean atualizar(Turma turma) {
 		try {
-			pstmt = conn.prepareStatement("UPDATE \"turma\" SET \"nome\" = ? WHERE \"id\" = ?");
-			pstmt.setString(1, p.getNome());
-			pstmt.setInt(2, p.getId());
-			resp = pstmt.execute();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+			session = Conexao.getSession();
+			session.beginTransaction();
+			session.update(turma);
+			session.getTransaction().commit();
 		} catch (Exception e) {
+			session.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			session.close();
 		}
-		return resp;
-	}
-
-	public boolean apagar(Turma d) {
-		conn = Conexao.getConexao();
-		
-		boolean resp = false;
-		PreparedStatement pstmt = null;
-		
-		try {
-			pstmt = conn.prepareStatement("DELETE FROM \"turma\" WHERE \"id\" = ?");
-			pstmt.setInt(1, d.getId());
-			resp = pstmt.execute();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return resp;
-	}
-
-	public ArrayList<Turma> listar() {
-		conn = Conexao.getConexao();
-		
-		ArrayList<Turma> Turmaes = new ArrayList<>();
-		Statement stmt = null;
-		
-		try {
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT \"id\", \"nome\" FROM \"turma\"");
-			
-			while (rs.next()) {
-				Turmaes.add(new Turma(rs.getInt("id"), rs.getString("nome")));
-			}
-			
-			rs.close();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return Turmaes;
+		return false;
 	}
 	
+	public boolean apagar(Turma turma) {
+		try {
+			session = Conexao.getSession();
+			session.beginTransaction();
+			session.delete(turma);
+			session.getTransaction().commit();
+		} catch(Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return false;
+	}
+
 	public Turma getById(int id) {
-		conn = Conexao.getConexao();
-		
-		Turma Turma = null;
-		PreparedStatement pstmt =  null;
-		
+		Turma turma = new Turma();
 		try {
-			pstmt = conn.prepareStatement("SELECT \"id\", \"nome\" FROM \"turma\" WHERE \"id\" = ?");
-			pstmt.setInt(1, id);
-			ResultSet rs = pstmt.executeQuery();
-			
-			rs.next();
-			Turma = new Turma(rs.getInt("id"), 
-					rs.getString("nome"));
-			
-			rs.close();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+			session = Conexao.getSession();
+			session.beginTransaction();
+			turma = (Turma) session.get(Turma.class, id);
+			session.getTransaction().commit();
 		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return turma;
+	}
+	
+	public ArrayList<Turma> listar() {
+		ArrayList<Turma> turmas = new ArrayList<>();
+		session = Conexao.getSession();
+		try {
+			session.beginTransaction();
+			turmas = (ArrayList<Turma>) session.createCriteria(Turma.class).list();
+			session.getTransaction().commit();
+		} catch(Exception e) {
+			session.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			session.close();
 		}
-		return Turma;
+		return turmas;
 	}
 
-	public ArrayList<Aluno> listarAlunos(int id) {
+/*	public ArrayList<Aluno> listarAlunos(int id) {
 		conn = Conexao.getConexao();
 		
 		ArrayList<Aluno> alunos = new ArrayList<>();
@@ -184,13 +108,13 @@ public class TurmaDAO {
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				alunos.add(new Aluno(rs.getInt("id"), 
+				alunos.add(null); /*new Aluno(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"), 
 						rs.getString("email"), 
 						rs.getInt("matricula"), 
-						rs.getBoolean("bolsa")));
-			}
+						rs.getBoolean("bolsa")));*/
+/*			}
 			
 			rs.close();
 			
@@ -227,14 +151,14 @@ public class TurmaDAO {
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				professores.add(new Professor(rs.getInt("id"), 
+				professores.add(null); /*new Professor(rs.getInt("id"), 
 						rs.getString("nome"),
 						rs.getString("sobrenome"), 
 						rs.getString("email"),
 						rs.getString("especialidade"),
 						rs.getDouble("salario"), 
-						rs.getString("vinculo")));
-			}
+						rs.getString("vinculo")));*/
+/*			}
 			
 			rs.close();
 			
@@ -326,5 +250,5 @@ public class TurmaDAO {
 				e.printStackTrace();
 			}
 		}		
-	}
+	}*/
 }
