@@ -29,38 +29,36 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import br.com.senac.dao.AlunoDAO;
-import br.com.senac.dao.ProfessorDAO;
+import br.com.senac.dao.MatriculaDAO;
 import br.com.senac.dao.TurmaDAO;
 import br.com.senac.model.Aluno;
+import br.com.senac.model.Matricula;
 import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
-public class VincularTurma extends JFrame implements ActionListener, MouseListener  {
+public class AdicionarAlunoTurma extends JFrame implements ActionListener, MouseListener  {
 
 	private static final long serialVersionUID = 714672937069102260L;
 	
 	private ImageIcon favicon;
 	private Turma turma;
-	private TurmaDAO turmaDAO;
 	private AlunoDAO alunoDAO;
-	private ProfessorDAO professorDAO;
+	private MatriculaDAO matriculaDAO;
 	private int id;
 	private JButton btnSalvar, btnFechar;
-	private JList<Aluno> listAlunos, listAlunosVinculados;
-	private JList<Professor> listProfessores, listProfessoresVinculados;
+	private JList<Aluno> listAlunos, listAlunosMatriculados;
 	
-	public VincularTurma (Turma turma) {
-        turmaDAO = new TurmaDAO();
-        alunoDAO = new AlunoDAO();
-        professorDAO = new ProfessorDAO();
-        
+	public AdicionarAlunoTurma (Turma turma) {
         if (turma == null) {
         	JOptionPane.showMessageDialog(this, "Deve ser selecionada uma turma.");
         	dispose();
         } else {
-        	this.turma = turmaDAO.getById(turma.getId());
+        	this.turma = turma;
         }
-		
+
+        matriculaDAO = new MatriculaDAO();
+        alunoDAO = new AlunoDAO();
+        
 		initUI();
 	}
 	
@@ -74,7 +72,7 @@ public class VincularTurma extends JFrame implements ActionListener, MouseListen
 		
 		JPanel topPanel = new JPanel(new BorderLayout(0, 0));
 		topPanel.setMaximumSize(new Dimension(450, 0));
-		JLabel title = new JLabel("Vincular à Turma");
+		JLabel title = new JLabel("Adicionar alunos a Turma");
 		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 		topPanel.add(title);
 		
@@ -90,57 +88,63 @@ public class VincularTurma extends JFrame implements ActionListener, MouseListen
 
         basic.add(topPanel);
 
-        JPanel fieldPanel = new JPanel();
-        fieldPanel.setLayout(new GridLayout(4, 2));
-               
         Font fontLabel = new Font("Verdana", Font.PLAIN, 14);
         Color colorLabel = new Color(50, 50, 25);
-                
+        
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new GridLayout(4,2));
+
         // ID:
         id = turma.getId();
         JLabel lblId = new JLabel("ID:");
         lblId.setFont(fontLabel);
         lblId.setForeground(colorLabel);
-        fieldPanel.add(lblId, BorderLayout.WEST);
+        labelPanel.add(lblId, BorderLayout.WEST);
         JLabel ltxtId = new JLabel(String.valueOf(turma.getId()));
-        fieldPanel.add(ltxtId, BorderLayout.EAST);
+        labelPanel.add(ltxtId, BorderLayout.EAST);
         
         // Nome:
         JLabel lblNome = new JLabel("Nome:");
         lblNome.setFont(fontLabel);
         lblNome.setForeground(colorLabel);
-        fieldPanel.add(lblNome, BorderLayout.WEST);
+        labelPanel.add(lblNome, BorderLayout.WEST);
         JLabel lxtNome = new JLabel(turma.getNome());
-        fieldPanel.add(lxtNome, BorderLayout.EAST);
+        labelPanel.add(lxtNome, BorderLayout.EAST);
+
+        // Labels Lista de alunos
+        JLabel lblListaAlunos = new JLabel("Lista de Alunos:");
+        lblListaAlunos.setFont(fontLabel);
+        lblListaAlunos.setForeground(colorLabel);
+        labelPanel.add(lblListaAlunos, BorderLayout.WEST);
+        
+        // Labels Lista de Alunos Matriculados
+        JLabel lblListaAlunoMatriculados = new JLabel("Lista de Alunos Matriculados:");
+        lblListaAlunoMatriculados.setFont(fontLabel);
+        lblListaAlunoMatriculados.setForeground(colorLabel);
+        labelPanel.add(lblListaAlunoMatriculados, BorderLayout.EAST);
+
+        labelPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        basic.add(labelPanel);      
+
+        
+        JPanel fieldPanel = new JPanel();
+        fieldPanel.setLayout(new GridLayout(1, 2));
         
         // Lista de alunos
         listAlunos = new JList<Aluno>(new ModelListAluno(alunoDAO.listar()));
         listAlunos.addMouseListener(this);
         JScrollPane paneListaAlunos = new JScrollPane();
         paneListaAlunos.getViewport().add(listAlunos);
-        fieldPanel.add(paneListaAlunos);
+        fieldPanel.add(paneListaAlunos, BorderLayout.WEST);
         
-        // Lista de alunos vinculados
-        /*listAlunosVinculados = new JList<Aluno>(new ModelListAluno(turmaDAO.listarAlunos(turma.getId())));
-        JScrollPane paneListaAlunosVinculados = new JScrollPane();
-        paneListaAlunosVinculados .getViewport().add(listAlunosVinculados);
-        fieldPanel.add(paneListaAlunosVinculados);
-        */
+        // Lista de alunos Matriculados
+        listAlunosMatriculados = new JList<Aluno>(new ModelListAluno(matriculaDAO.listarAlunosByTurma(turma)));
+        listAlunosMatriculados.addMouseListener(this);
+        JScrollPane paneListaAlunosMatriculados = new JScrollPane();
+        paneListaAlunosMatriculados.getViewport().add(listAlunosMatriculados);
+        fieldPanel.add(paneListaAlunosMatriculados, BorderLayout.EAST);
         
-        // Lista de professores
-        listProfessores = new JList<Professor>(new ModelListProfessor(professorDAO.listar()));
-        listProfessores.addMouseListener(this);
-        JScrollPane paneListaProfessores = new JScrollPane();
-        paneListaProfessores.getViewport().add(listProfessores);
-        fieldPanel.add(paneListaProfessores);
-        
-        // Lista de professores vinculados
-        /*listProfessoresVinculados = new JList<Professor>(new ModelListProfessor(turmaDAO.listarProfessores(turma.getId())));
-        JScrollPane paneListaProfessoresVinculados = new JScrollPane();
-        paneListaProfessoresVinculados.getViewport().add(listProfessoresVinculados);
-        fieldPanel.add(paneListaProfessoresVinculados);  
-		*/
-		
+        		
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         basic.add(fieldPanel);      
 
@@ -160,9 +164,9 @@ public class VincularTurma extends JFrame implements ActionListener, MouseListen
 
         bottom.setMaximumSize(new Dimension(450, 0));
         
-        setTitle("Vincular à Turma");
+        setTitle("Adicionar alunos à Turma");
         setIconImage(favicon.getImage());
-        setSize(new Dimension(450, 350));
+        setSize(new Dimension(550, 350));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -172,40 +176,50 @@ public class VincularTurma extends JFrame implements ActionListener, MouseListen
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnSalvar) {
-			ModelListAluno modelListAlu = (ModelListAluno) listAlunosVinculados.getModel();
+			ModelListAluno modelListAlu = (ModelListAluno) listAlunosMatriculados.getModel();
 			List<Aluno> arrayAlunos = modelListAlu.getArray();
 			
-			ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
-			List<Professor> arrayProfessores = modelListProf.getArray();
+			for (Aluno a : arrayAlunos) {
+				//matriculaDAO.inserir(a.getMatriculaAtiva());
+			}
+
+			ListaTurmaMatricula tltm = new ListaTurmaMatricula();
+			tltm.setVisible(true);
 			
-			//turmaDAO.vincular(id, arrayAlunos, arrayProfessores);
+			dispose();
 		}
 		
-		ListaTurma tlt = new ListaTurma();
-		tlt.setVisible(true);
+		if (e.getSource() == btnFechar) {
+			ListaTurmaMatricula tltm = new ListaTurmaMatricula();
+			tltm.setVisible(true);
+			
+			dispose();			
+		}
 		
-		dispose();
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
 			if (e.getSource() == listAlunos) {
-				ModelListAluno modelListAlu = (ModelListAluno) listAlunosVinculados.getModel();
+				ModelListAluno modelListAlu = (ModelListAluno) listAlunosMatriculados.getModel();
 				List<Aluno> arrayAlunos = modelListAlu.getArray();
-				arrayAlunos.add(listAlunos.getSelectedValue());
+				
+				// Lógica do número da matricula
+				String codigo = turma.getNome() + "-" + Math.random();
+				Aluno aluno = listAlunos.getSelectedValue();
+				//aluno.addMatricula(new Matricula(codigo.substring(0, 12), true, turma, aluno));
+				
+				arrayAlunos.add(aluno);
 				ModelListAluno modelAlunos = new ModelListAluno(arrayAlunos);
-				listAlunosVinculados.setModel(modelAlunos);
+				listAlunosMatriculados.setModel(modelAlunos);
 			}
 			
-			if (e.getSource() == listProfessores) {
-				ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
-				List<Professor> arrayProfessores = modelListProf.getArray();
-				arrayProfessores.add(listProfessores.getSelectedValue());
-				ModelListProfessor modelProfessor = new ModelListProfessor(arrayProfessores);
-				listProfessoresVinculados.setModel(modelProfessor);
+			if (e.getSource() == listAlunosMatriculados) {
+				int index = listAlunosMatriculados.getSelectedIndex();
+				listAlunosMatriculados.remove(index);
 			}
-
+			
 		}
 	}
 
@@ -257,32 +271,6 @@ public class VincularTurma extends JFrame implements ActionListener, MouseListen
 			return alunos;
 		}
 				
-	}
-	
-	public class ModelListProfessor extends AbstractListModel<Professor> {
-
-		private static final long serialVersionUID = -4308246899702883106L;
-
-		private List<Professor> professores;
-		
-		public ModelListProfessor(List<Professor> professores) {
-			this.professores = professores;
-		}
-		
-		@Override
-		public int getSize() {
-			return professores.size();
-		}
-
-		@Override
-		public Professor getElementAt(int index) {
-			return professores.get(index);
-		}
-		
-		public List<Professor> getArray() {
-			return professores;
-		}
-		
 	}
 
 }

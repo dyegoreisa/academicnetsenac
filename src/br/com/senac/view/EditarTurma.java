@@ -34,6 +34,7 @@ public class EditarTurma extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 8174800542868923064L;
 	
+	private ImageIcon favicon;
 	private Turma turma;
 	private TurmaDAO turmaDAO;
 	private CursoDAO cursoDAO;
@@ -57,6 +58,8 @@ public class EditarTurma extends JFrame implements ActionListener {
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/turma16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -152,10 +155,13 @@ public class EditarTurma extends JFrame implements ActionListener {
         lblCurso.setForeground(colorLabel);
         fieldPanel.add(lblCurso, BorderLayout.WEST);
         cobCursos = new JComboBox<Curso>();
-        int index = 0, count = 0;
+        int index = 0, count = 0, idCurso = 0;
+        if (turma.getCurso() != null) {
+        	idCurso = turma.getCurso().getId();
+        }
         for (Curso curso : cursoDAO.listar()) {
         	cobCursos.addItem(curso);
-        	if (curso.getId() == turma.getCurso().getId()) {
+        	if (curso.getId() == idCurso) {
         		index = count;
         	}
         	count++;
@@ -191,6 +197,7 @@ public class EditarTurma extends JFrame implements ActionListener {
         bottom.setMaximumSize(new Dimension(450, 0));
         
         setTitle("Turma");
+        setIconImage(favicon.getImage());
         setSize(new Dimension(450, 300));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

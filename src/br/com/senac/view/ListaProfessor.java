@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -30,6 +30,8 @@ import br.com.senac.model.Professor;
 public class ListaProfessor extends JFrame implements ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 5849257271905351845L;
+	
+	private ImageIcon favicon;
 	private JButton btnNovo, btnFechar;
 	private JTable tableProfessores;
 	private ProfessorDAO profDAO;
@@ -40,6 +42,8 @@ public class ListaProfessor extends JFrame implements ActionListener, MouseListe
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/professor16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -95,6 +99,7 @@ public class ListaProfessor extends JFrame implements ActionListener, MouseListe
         bottom.setMaximumSize(new Dimension(450, 0));
 
         setTitle("Professor");
+        setIconImage(favicon.getImage());
         setSize(new Dimension(600, 400));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -155,10 +160,10 @@ public class ListaProfessor extends JFrame implements ActionListener, MouseListe
 
 		private static final long serialVersionUID = -4097626378869023301L;
 		
-		private ArrayList<Professor> dados;
-		private String[] colunas = {"ID", "Nome", "Sobrenome", "E-mail", "Especialidade", "Salario", "Vinculo"};
+		private List<Professor> dados;
+		private String[] colunas = {"ID", "Nome", "Sobrenome", "E-mail", "Especialidade", "Vinculo"};
 		
-		public ProfessorModelTable (ArrayList<Professor> dados) {
+		public ProfessorModelTable (List<Professor> dados) {
 			this.dados = dados;
 		}
 		
@@ -193,9 +198,6 @@ public class ListaProfessor extends JFrame implements ActionListener, MouseListe
 	    		return dados.get(row).getEspecialidade();
 	    		
 	    	case 5:
-	    		return 0.0; //dados.get(row).getSalario();
-	    		
-	    	case 6:
 	    		return dados.get(row).getVinculo();
 	    		
 	    	default:
@@ -250,17 +252,12 @@ public class ListaProfessor extends JFrame implements ActionListener, MouseListe
 	    		
 	    	case 4:
 	    		if (value instanceof String) {
-	    			//dados.get(row).setEspecialidade((String) value);
+	    			dados.get(row).setEspecialidade((String) value);
 	    		}
 	    		
 	    	case 5:
-	    		if (value instanceof Double) {
-	    			//dados.get(row).setSalario((Double) value);
-	    		}
-	    		
-	    	case 6:
 	    		if (value instanceof String) {
-	    			//dados.get(row).setVinculo((String) value);
+	    			dados.get(row).setVinculo((String) value);
 	    		}	    		
 	    	}
 	        fireTableCellUpdated(row, col);

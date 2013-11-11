@@ -31,7 +31,9 @@ import br.com.senac.model.Turma;
 public class ListaTurma extends JFrame implements ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 5849257271905351845L;
-	private JButton btnNovo, btnVincular, btnFechar;
+	
+	private ImageIcon favicon;
+	private JButton btnNovo, btnFechar;
 	private JTable tableTurmas;
 	private TurmaDAO turmaDAO;
 	
@@ -41,6 +43,8 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/turma16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -86,12 +90,6 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
         btnNovo.addActionListener(this);
         bottom.add(btnNovo);
         
-        btnVincular = new JButton("Vincular");
-        btnVincular.setToolTipText("Vincular alunos e professores a uma turma.");
-        btnVincular.setMnemonic(KeyEvent.VK_A);
-        btnVincular.addActionListener(this);
-        bottom.add(btnVincular);
-
         btnFechar = new JButton("Fechar");
         btnFechar.setMnemonic(KeyEvent.VK_F);
         btnFechar.addActionListener(this);
@@ -102,6 +100,7 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
         bottom.setMaximumSize(new Dimension(450, 0));
 
         setTitle("Turma");
+        setIconImage(favicon.getImage());
         setSize(new Dimension(600, 400));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -118,20 +117,7 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
 		
 		if (e.getSource() == btnFechar) {
 			dispose();
-		}
-		
-		if (e.getSource() == btnVincular) {
-			int row = tableTurmas.getSelectedRow();
-			
-			if (row < 0) {
-				JOptionPane.showMessageDialog(this, "Selecione uma turma");
-			} else {
-				Turma t = turmaDAO.getById((Integer) tableTurmas.getValueAt(row, 0));
-				VincularTurma tvt = new VincularTurma(t);
-				tvt.setVisible(true);
-				dispose();
-			}
-		}
+		}		
 	}
 	
 	@Override

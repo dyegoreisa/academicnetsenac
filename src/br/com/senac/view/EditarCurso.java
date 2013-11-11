@@ -32,6 +32,7 @@ public class EditarCurso extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 524411140664560533L;
 	
+	private ImageIcon favicon;
 	private Curso curso;
 	private CursoDAO cursoDAO;
 	private JTextField txtNome;
@@ -50,6 +51,8 @@ public class EditarCurso extends JFrame implements ActionListener {
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/curso16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -123,6 +126,7 @@ public class EditarCurso extends JFrame implements ActionListener {
         bottom.setMaximumSize(new Dimension(450, 0));
         
         setTitle("Curso");
+        setIconImage(favicon.getImage());
         setSize(new Dimension(450, 180));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

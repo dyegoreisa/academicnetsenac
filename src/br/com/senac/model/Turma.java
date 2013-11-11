@@ -1,13 +1,19 @@
 package br.com.senac.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Turma {
@@ -17,18 +23,24 @@ public class Turma {
 	
 	private String nome;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "data_inicio")
 	private Date dataInicio;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "data_fim")
 	private Date dataFim;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "previsao_termino")
 	private Date previsaoTermino;
 	
 	@ManyToOne
 	@JoinColumn(name="id_curso")
 	private Curso curso;
+	
+	@OneToMany(mappedBy = "turma", targetEntity = Matricula.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Matricula> matriculas;
 	
 	public Turma() {}
 

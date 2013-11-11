@@ -2,17 +2,43 @@ package br.com.senac.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="tipo_pessoa")
+@Table(name="Pessoa")
 public abstract class Pessoa {
+	
+	@Id @GeneratedValue
 	private int id;
 	private String nome;
 	private String sobrenome;
-	private String sexo;
-	private ArrayList<Telefone> telefones = new ArrayList<>();
-	private Date dataNascimento;
 	private String email;
+	
+	@OneToMany(mappedBy = "pessoa", targetEntity = Telefone.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Telefone> telefones;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name="data_nascimento")
+	private Date dataNascimento;
+
+	private String sexo;
 	
 	public Pessoa(String nome, String sobrenome, String email) {
 		this.nome = nome;
@@ -27,7 +53,7 @@ public abstract class Pessoa {
 		this.email = email;
 	}	
 	
-	public Pessoa(String nome, String sobrenome, String sexo, ArrayList<Telefone> telefones,
+	public Pessoa(String nome, String sobrenome, String sexo, List<Telefone> telefones,
 			Date dataNascimento, String email) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
@@ -38,7 +64,7 @@ public abstract class Pessoa {
 	}
 
 	public Pessoa(int id, String nome, String sobrenome, String sexo,
-			ArrayList<Telefone> telefones, Date dataNascimento, String email) {
+			List<Telefone> telefones, Date dataNascimento, String email) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
@@ -75,7 +101,7 @@ public abstract class Pessoa {
 		return 0;
 	}
 
-	public ArrayList<Telefone> getTelefones() {
+	public List<Telefone> getTelefones() {
 		return telefones;
 	}
 
