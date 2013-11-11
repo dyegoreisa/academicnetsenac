@@ -1,11 +1,22 @@
 package br.com.senac.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@DiscriminatorValue("Professor")
+@Table(name="Professor")
 public class Professor extends Pessoa {
 
 	private String especialidade;
 	private String vinculo;
+	
+	@Transient
 	private ArrayList<Leciona> lecionaTurmas = new ArrayList<>();
 
 	public Professor() {}
@@ -18,23 +29,39 @@ public class Professor extends Pessoa {
 	}
 	
 	public String getEspecialidade() {
-		return especialidade;
+		if (especialidade instanceof String) {
+			return especialidade;
+		} else {
+			return "";
+		}
 	}
 
 	public String getVinculo() {
-		return vinculo;
+		if (vinculo instanceof String) {
+			return vinculo;
+		} else {
+			return "";
+		}
 	}
 	
-	public ArrayList<Turma> getTurmas() {
-		ArrayList<Turma> turmas = new ArrayList<>();
+	public void setEspecialidade(String especialidade) {
+		this.especialidade = especialidade;
+	}
+	
+	public void setVinculo(String vinculo) {
+		this.vinculo = vinculo;
+	}
+	
+	public List<Turma> getTurmas() {
+		List<Turma> turmas = new ArrayList<>();
 		for (Leciona lt : lecionaTurmas) {
 			turmas.add(lt.getTurma());
 		}
 		return turmas;
 	}
 	
-	public ArrayList<Disciplina> getDisciplinas() {
-		ArrayList<Disciplina> disciplinas = new ArrayList<>();
+	public List<Disciplina> getDisciplinas() {
+		List<Disciplina> disciplinas = new ArrayList<>();
 		for (Leciona lt : lecionaTurmas) {
 			disciplinas.add(lt.getDisciplina());
 		}

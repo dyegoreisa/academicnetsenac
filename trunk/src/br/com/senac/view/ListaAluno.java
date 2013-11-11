@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -34,6 +35,8 @@ import br.com.senac.model.Aluno;
 public class ListaAluno extends JFrame implements ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 3081662216432237545L;
+	
+	private ImageIcon favicon;
 	private JButton btnNovo, btnExportar, btnFechar;
 	private JTable tableAlunos;
 	private AlunoDAO alunoDAO;
@@ -44,6 +47,8 @@ public class ListaAluno extends JFrame implements ActionListener, MouseListener{
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/aluno16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -104,6 +109,7 @@ public class ListaAluno extends JFrame implements ActionListener, MouseListener{
         bottom.setMaximumSize(new Dimension(450, 0));
 
         setTitle("Aluno");
+        setIconImage(favicon.getImage());
         setSize(new Dimension(600, 400));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -177,10 +183,10 @@ public class ListaAluno extends JFrame implements ActionListener, MouseListener{
 
 		private static final long serialVersionUID = 7248039800690616839L;
 		
-		private ArrayList<Aluno> dados;
-		private String[] colunas = {"ID", "Nome", "Sobrenome", "E-mail", "Matricula", "Bolsa"};
+		private List<Aluno> dados;
+		private String[] colunas = {"ID", "Nome", "Sobrenome", "E-mail", "Sexo", "Bolsa"};
 		
-		public AlunoModelTable (ArrayList<Aluno> dados) {
+		public AlunoModelTable (List<Aluno> dados) {
 			this.dados = dados;
 		}
 		
@@ -212,7 +218,7 @@ public class ListaAluno extends JFrame implements ActionListener, MouseListener{
 	    		return dados.get(row).getEmail();
 	    		
 	    	case 4:
-	    		return ""; //dados.get(row).getMatricula();
+	    		return dados.get(row).getSexo();
 	    		
 	    	case 5:
 	    		return dados.get(row).getBolsa();
@@ -269,7 +275,7 @@ public class ListaAluno extends JFrame implements ActionListener, MouseListener{
 	    		
 	    	case 4:
 	    		if (value instanceof String) {
-	    			//dados.get(row).setMatricula((Integer) value);
+	    			dados.get(row).setSexo((String) value);
 	    		}
 	    		
 	    	case 5:

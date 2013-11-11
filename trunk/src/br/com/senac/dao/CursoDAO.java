@@ -11,18 +11,20 @@ public class CursoDAO {
 	public Session session;
 	
 	public boolean inserir(Curso curso) {
+		boolean resp = false;
 		try {
 			session = Conexao.getSession();
 			session.beginTransaction();
 			session.save(curso);
 			session.getTransaction().commit();
+			resp = true;
 		} catch (Exception e) {
 			session.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
 			session.close();
 		}
-		return false;
+		return resp;
 	}
 
 	public boolean atualizar(Curso curso) {
@@ -41,18 +43,20 @@ public class CursoDAO {
 	}
 	
 	public boolean apagar(Curso curso) {
+		boolean resp = false;
 		try {
 			session = Conexao.getSession();
 			session.beginTransaction();
 			session.delete(curso);
 			session.getTransaction().commit();
+			resp = true;
 		} catch(Exception e) {
 			session.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
 			session.close();
 		}
-		return false;
+		return resp;
 	}
 
 	public Curso getById(int id) {

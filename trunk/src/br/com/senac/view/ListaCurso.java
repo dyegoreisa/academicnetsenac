@@ -30,6 +30,8 @@ import br.com.senac.model.Curso;
 public class ListaCurso extends JFrame implements ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 3081662216432237545L;
+	
+	private ImageIcon favicon;
 	private JButton btnNovo, btnFechar;
 	private JTable tableCursos;
 	private CursoDAO cursoDAO;
@@ -40,6 +42,8 @@ public class ListaCurso extends JFrame implements ActionListener, MouseListener{
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/curso16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -95,6 +99,7 @@ public class ListaCurso extends JFrame implements ActionListener, MouseListener{
         bottom.setMaximumSize(new Dimension(450, 0));
 
         setTitle("Cursos");
+        setIconImage(favicon.getImage());
         setSize(new Dimension(600, 400));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

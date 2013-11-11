@@ -31,11 +31,12 @@ public class EditarProfessor extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 8174800542868923064L;
 
+	private ImageIcon favicon;
 	private Professor professor;
 	private ProfessorDAO profDAO;
-	private JTextField txtNome, txtSobrenome, txtTelefone, txtNascimento;
-	private JTextField txtEmail, txtEspecialidade, txtSalario;
-	private JComboBox<String> cobSexo, cobVinculo;;
+	private JTextField txtNome, txtSobrenome, txtNascimento;
+	private JTextField txtEmail, txtEspecialidade;
+	private JComboBox<String> cobSexo, cobVinculo;
 	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
 	
 	public EditarProfessor (Professor professor) {
@@ -51,6 +52,8 @@ public class EditarProfessor extends JFrame implements ActionListener {
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/professor16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -75,7 +78,7 @@ public class EditarProfessor extends JFrame implements ActionListener {
         basic.add(topPanel);
 
         JPanel fieldPanel = new JPanel();
-        fieldPanel.setLayout(new GridLayout(10, 2));
+        fieldPanel.setLayout(new GridLayout(8, 2));
                
         Font fontLabel = new Font("Verdana", Font.PLAIN, 14);
         Color colorLabel = new Color(50, 50, 25);
@@ -119,15 +122,6 @@ public class EditarProfessor extends JFrame implements ActionListener {
         fieldPanel.add(cobSexo, BorderLayout.EAST);
         
         
-        // Telefone:
-        /*JLabel lblTelefone = new JLabel("Telefone:");
-        lblTelefone.setFont(fontLabel);
-        lblTelefone.setForeground(colorLabel);
-        fieldPanel.add(lblTelefone, BorderLayout.WEST);
-        txtTelefone = new JTextField(professor.getTelefone());
-        fieldPanel.add(txtTelefone, BorderLayout.EAST);
-        */
-        
         // Data de Nacimento:
         JLabel lblNascimento = new JLabel("Nascimento:");
         lblNascimento.setFont(fontLabel);
@@ -155,15 +149,6 @@ public class EditarProfessor extends JFrame implements ActionListener {
         fieldPanel.add(txtEspecialidade, BorderLayout.EAST); 
         
         
-        // Salario:
-        /*JLabel lblSalario = new JLabel("Salario:");
-        lblSalario.setFont(fontLabel);
-        lblSalario.setForeground(colorLabel);
-        fieldPanel.add(lblSalario, BorderLayout.WEST);
-        txtSalario = new JTextField(String.valueOf(professor.getSalario()));
-        fieldPanel.add(txtSalario, BorderLayout.EAST);
-        */
-        
         // Vinculo:
         JLabel lblVinculo = new JLabel("Vinculo:");
         lblVinculo.setFont(fontLabel);
@@ -174,6 +159,7 @@ public class EditarProfessor extends JFrame implements ActionListener {
         cobVinculo.addItem("Bolsa");
         cobVinculo.addItem("PJ");
         cobVinculo.addItem("Servidor");
+        cobVinculo.setSelectedItem(professor.getVinculo());
         fieldPanel.add(cobVinculo, BorderLayout.EAST); 
         
 
@@ -208,7 +194,8 @@ public class EditarProfessor extends JFrame implements ActionListener {
         bottom.setMaximumSize(new Dimension(450, 0));
         
         setTitle("Professor");
-        setSize(new Dimension(450, 450));
+        setIconImage(favicon.getImage());
+        setSize(new Dimension(450, 330));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -218,21 +205,18 @@ public class EditarProfessor extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnVisualizar) {
-			System.out.println(profDAO.listarAlunosByProfessor(professor.getId()));
-			JOptionPane.showMessageDialog(this, profDAO.listarAlunosByProfessor(professor.getId()));
+			//System.out.println(profDAO.listarAlunosByProfessor(professor.getId()));
+			//JOptionPane.showMessageDialog(this, profDAO.listarAlunosByProfessor(professor.getId()));
 		}
 		
 		if (e.getSource() == btnSalvar) {
-			//professor.setId(Integer.parseInt(txtId.toString()));
 			professor.setNome(txtNome.getText());
 			professor.setSobrenome(txtSobrenome.getText());
 			professor.setSexoInt(cobSexo.getSelectedIndex());
-			//professor.setTelefone(txtTelefone.getText());
 			professor.setDataNascimento(txtNascimento.getText());
 			professor.setEmail(txtEmail.getText());
-			//professor.setEspecialidade(txtEspecialidade.getText());
-			//professor.setVinculo(cobVinculo.getSelectedItem().toString());
-			//professor.setSalario(Double.parseDouble(txtSalario.getText()));	
+			professor.setEspecialidade(txtEspecialidade.getText());
+			professor.setVinculo(cobVinculo.getSelectedItem().toString());
 			
 			if (professor.getId() > 0) {
 				profDAO.atualizar(professor);

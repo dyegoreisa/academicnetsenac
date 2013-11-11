@@ -5,13 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 
 import br.com.senac.model.Aluno;
 
 public class ExportarAlunos {
 	
-	public void exportar(ArrayList<Aluno> alunos, String nomeArquivo) {
+	public void exportar(List<Aluno> alunos, String nomeArquivo) {
 				
 		for (Aluno a : alunos) {
 			escreverArquivo(a.getId() + ";"

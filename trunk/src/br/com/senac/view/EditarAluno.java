@@ -32,10 +32,10 @@ public class EditarAluno extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 524411140664560533L;
 	
+	private ImageIcon favicon;
 	private Aluno aluno;
 	private AlunoDAO alunoDAO;
-	private JTextField txtNome, txtSobrenome, txtTelefone, txtNascimento;
-	private JTextField txtEmail, txtMatricula;
+	private JTextField txtNome, txtSobrenome, txtNascimento, txtEmail;
 	private JComboBox<String> cobSexo;
 	private JCheckBox chbBolsa;
 	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
@@ -53,6 +53,8 @@ public class EditarAluno extends JFrame implements ActionListener {
 	}
 	
 	private final void initUI() {
+		
+		favicon = new ImageIcon(getClass().getResource("/images/aluno16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -77,7 +79,7 @@ public class EditarAluno extends JFrame implements ActionListener {
         basic.add(topPanel);
 
         JPanel fieldPanel = new JPanel();
-        fieldPanel.setLayout(new GridLayout(10, 2));
+        fieldPanel.setLayout(new GridLayout(7, 2));
                
         Font fontLabel = new Font("Verdana", Font.PLAIN, 14);
         Color colorLabel = new Color(50, 50, 25);
@@ -121,15 +123,6 @@ public class EditarAluno extends JFrame implements ActionListener {
         fieldPanel.add(cobSexo, BorderLayout.EAST);
         
         
-        // Telefone:
-        /*JLabel lblTelefone = new JLabel("Telefone:");
-        lblTelefone.setFont(fontLabel);
-        lblTelefone.setForeground(colorLabel);
-        fieldPanel.add(lblTelefone, BorderLayout.WEST);
-        txtTelefone = new JTextField(aluno.getTelefone());
-        fieldPanel.add(txtTelefone, BorderLayout.EAST);
-        */
-        
         // Data de Nacimento:
         JLabel lblNascimento = new JLabel("Nascimento:");
         lblNascimento.setFont(fontLabel);
@@ -147,15 +140,6 @@ public class EditarAluno extends JFrame implements ActionListener {
         txtEmail = new JTextField(aluno.getEmail());
         fieldPanel.add(txtEmail, BorderLayout.EAST);
         
-        
-        // Matricula:
-        /*JLabel lblMatricula = new JLabel("Matricula:");
-        lblMatricula.setFont(fontLabel);
-        lblMatricula.setForeground(colorLabel);
-        fieldPanel.add(lblMatricula, BorderLayout.WEST);
-        txtMatricula = new JTextField(aluno.getMatricula().toString());
-        fieldPanel.add(txtMatricula, BorderLayout.EAST); 
-        */
         
         // Bolsa:
         JLabel lblBolsa = new JLabel("Bolsa:");
@@ -197,7 +181,8 @@ public class EditarAluno extends JFrame implements ActionListener {
         bottom.setMaximumSize(new Dimension(450, 0));
         
         setTitle("Aluno");
-        setSize(new Dimension(450, 450));
+        setIconImage(favicon.getImage());
+        setSize(new Dimension(450, 300));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -207,23 +192,15 @@ public class EditarAluno extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnVisualizar) {
-			JOptionPane.showMessageDialog(this, alunoDAO.listarProfessoresByAluno(aluno.getId()));
+			//JOptionPane.showMessageDialog(this, alunoDAO.listarProfessoresByAluno(aluno.getId()));
 		}
 		
 		if (e.getSource() == btnSalvar) {
 			aluno.setNome(txtNome.getText());
 			aluno.setSobrenome(txtSobrenome.getText());
 			aluno.setSexoInt(cobSexo.getSelectedIndex());
-			//aluno.setTelefone(txtTelefone.getText());
 			aluno.setDataNascimento(txtNascimento.getText());
 			aluno.setEmail(txtEmail.getText());
-			/*try { 
-				aluno.setMatricula(Integer.parseInt(txtMatricula.getText()));
-			} catch (NumberFormatException ex) {
-				ex.printStackTrace();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}*/
 			aluno.setBolsa(chbBolsa.isSelected());
 			
 			if (aluno.getId() > 0) {

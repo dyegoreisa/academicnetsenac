@@ -18,32 +18,33 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import br.com.senac.dao.DisciplinaDAO;
-import br.com.senac.model.Disciplina;
+import br.com.senac.dao.TurmaDAO;
+import br.com.senac.model.Turma;
 
-public class ListaDisciplina extends JFrame implements ActionListener, MouseListener{
+public class ListaTurmaMatricula extends JFrame implements ActionListener{
 
-	private static final long serialVersionUID = 3081662216432237545L;
+	private static final long serialVersionUID = 5849257271905351845L;
 	
 	private ImageIcon favicon;
-	private JButton btnNovo, btnFechar;
-	private JTable tableDisciplinas;
-	private DisciplinaDAO disciplinaDAO;
+	private JButton btnAdicionar, btnFechar;
+	private JTable tableTurmas;
+	private TurmaDAO turmaDAO;
 	
-	public ListaDisciplina () {
-		disciplinaDAO = new DisciplinaDAO();
+	public ListaTurmaMatricula () {
+		turmaDAO = new TurmaDAO();
 		initUI();
 	}
 	
 	private final void initUI() {
 		
-		favicon = new ImageIcon(getClass().getResource("/images/disciplina16x16.png"));
+		favicon = new ImageIcon(getClass().getResource("/images/turma16x16.png"));
 		
 		JPanel basic = new JPanel();
 		basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -51,11 +52,11 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
 		
 		JPanel topPanel = new JPanel(new BorderLayout(0, 0));
 		topPanel.setMaximumSize(new Dimension(450, 0));
-		JLabel title = new JLabel("Lista de Disciplinas");
+		JLabel title = new JLabel("Lista de turmas");
 		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 		topPanel.add(title);
 		
-		ImageIcon icon = new ImageIcon(getClass().getResource("/images/disciplina48x48.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/turma48x48.png"));
         JLabel label = new JLabel(icon);
         label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         topPanel.add(label, BorderLayout.WEST);
@@ -69,12 +70,11 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
 
         JPanel fieldPanel = new JPanel();
                
-        tableDisciplinas = new JTable(new DisciplinaModelTable(disciplinaDAO.listar()));
-        tableDisciplinas.addMouseListener(this);
-        fieldPanel.add(tableDisciplinas);
+        tableTurmas = new JTable(new TurmaModelTable(turmaDAO.listar()));
+        fieldPanel.add(tableTurmas);
 
-        JScrollPane pane = new JScrollPane(tableDisciplinas);
-        tableDisciplinas.setFillsViewportHeight(true);
+        JScrollPane pane = new JScrollPane(tableTurmas);
+        tableTurmas.setFillsViewportHeight(true);
         pane.setPreferredSize(new Dimension(500, 250));
         fieldPanel.add(pane);
       
@@ -83,12 +83,13 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
         basic.add(fieldPanel);      
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        btnNovo = new JButton("Novo");
-        btnNovo.setMnemonic(KeyEvent.VK_N);
-        btnNovo.addActionListener(this);
-        bottom.add(btnNovo);
         
+        btnAdicionar = new JButton("Adicionar");
+        btnAdicionar.setToolTipText("Adicionar alunos a uma turma.");
+        btnAdicionar.setMnemonic(KeyEvent.VK_A);
+        btnAdicionar.addActionListener(this);
+        bottom.add(btnAdicionar);
+
         btnFechar = new JButton("Fechar");
         btnFechar.setMnemonic(KeyEvent.VK_F);
         btnFechar.addActionListener(this);
@@ -98,7 +99,7 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
 
         bottom.setMaximumSize(new Dimension(450, 0));
 
-        setTitle("Disciplinas");
+        setTitle("Matricular Alunos");
         setIconImage(favicon.getImage());
         setSize(new Dimension(600, 400));
         setResizable(false);
@@ -108,61 +109,32 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnNovo) {
-            EditarDisciplina tela = new EditarDisciplina(null);
-            tela.setVisible(true);
-            dispose();
-		}
 		if (e.getSource() == btnFechar) {
 			dispose();
-		}		
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-			JTable target = (JTable)e.getSource();
-			int row = target.getSelectedRow();
-			Disciplina disciplina = disciplinaDAO.getById((Integer) target.getValueAt(row, 0));
-            EditarDisciplina tea = new EditarDisciplina(disciplina);
-            tea.setVisible(true);
-            dispose();
 		}
 		
+		if (e.getSource() == btnAdicionar) {
+			int row = tableTurmas.getSelectedRow();
+			
+			if (row < 0) {
+				JOptionPane.showMessageDialog(this, "Selecione uma turma");
+			} else {
+				Turma t = turmaDAO.getById((Integer) tableTurmas.getValueAt(row, 0));
+				AdicionarAlunoTurma aat = new AdicionarAlunoTurma(t);
+				aat.setVisible(true);
+				dispose();
+			}
+		}
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}	
 	
-	class DisciplinaModelTable extends AbstractTableModel {
+	class TurmaModelTable extends AbstractTableModel {
 
-		private static final long serialVersionUID = 7248039800690616839L;
+		private static final long serialVersionUID = -4097626378869023301L;
 		
-		private ArrayList<Disciplina> dados;
-		private String[] colunas = {"ID", "Nome"};
+		private ArrayList<Turma> dados;
+		private String[] colunas = {"ID", "Nome", "Data Inicio", "Previsão", "Tem Alunos"};
 		
-		public DisciplinaModelTable (ArrayList<Disciplina> dados) {
+		public TurmaModelTable (ArrayList<Turma> dados) {
 			this.dados = dados;
 		}
 		
@@ -186,6 +158,15 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
 	    		
 	    	case 1:
 	    		return dados.get(row).getNome();
+	    		
+	    	case 2:
+	    		return dados.get(row).getDataInicio();
+	    		
+	    	case 3:
+	    		return dados.get(row).getPrevisaoTermino();
+	    		
+	    	case 4:
+	    		return "";
 	    		
 	    	default:
 	    		return null;
@@ -226,6 +207,7 @@ public class ListaDisciplina extends JFrame implements ActionListener, MouseList
 	    		if (value instanceof String) {
 	    			dados.get(row).setNome((String) value);
 	    		}
+
 	    	}
 	        fireTableCellUpdated(row, col);
 	    }
