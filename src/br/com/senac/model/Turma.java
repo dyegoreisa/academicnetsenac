@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -39,8 +41,12 @@ public class Turma {
 	@JoinColumn(name="id_curso")
 	private Curso curso;
 	
-	@OneToMany(mappedBy = "turma", targetEntity = Matricula.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Matricula> matriculas;
+	//@OneToMany(mappedBy = "turma", targetEntity = Matricula.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany
+	@JoinTable(name ="matricula",
+			joinColumns=@JoinColumn(name ="id_turma"),
+			inverseJoinColumns=@JoinColumn(name ="id_aluno"))
+	private List<Aluno> alunos;
 	
 	public Turma() {}
 
