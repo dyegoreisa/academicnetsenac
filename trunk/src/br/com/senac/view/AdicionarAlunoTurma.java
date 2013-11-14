@@ -29,11 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import br.com.senac.dao.AlunoDAO;
-import br.com.senac.dao.MatriculaDAO;
-import br.com.senac.dao.TurmaDAO;
 import br.com.senac.model.Aluno;
-import br.com.senac.model.Matricula;
-import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
 public class AdicionarAlunoTurma extends JFrame implements ActionListener, MouseListener  {
@@ -43,7 +39,6 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
 	private ImageIcon favicon;
 	private Turma turma;
 	private AlunoDAO alunoDAO;
-	private MatriculaDAO matriculaDAO;
 	private int id;
 	private JButton btnSalvar, btnFechar;
 	private JList<Aluno> listAlunos, listAlunosMatriculados;
@@ -56,7 +51,6 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
         	this.turma = turma;
         }
 
-        matriculaDAO = new MatriculaDAO();
         alunoDAO = new AlunoDAO();
         
 		initUI();
@@ -138,7 +132,7 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
         fieldPanel.add(paneListaAlunos, BorderLayout.WEST);
         
         // Lista de alunos Matriculados
-        listAlunosMatriculados = new JList<Aluno>(new ModelListAluno(matriculaDAO.listarAlunosByTurma(turma)));
+        listAlunosMatriculados = new JList<Aluno>(new ModelListAluno(new ArrayList<Aluno>()));
         listAlunosMatriculados.addMouseListener(this);
         JScrollPane paneListaAlunosMatriculados = new JScrollPane();
         paneListaAlunosMatriculados.getViewport().add(listAlunosMatriculados);

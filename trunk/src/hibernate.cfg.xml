@@ -21,7 +21,7 @@
 	<property name="c3p0.min_size">10</property>
 	<property name="c3p0.timeout">100</property>
 	
-	<property name="hibernate.hbm2ddl.auto">validate</property>
+	<property name="hibernate.hbm2ddl.auto">update</property>
     
     <!-- validate | update | create | create-drop -->
     <mapping class="br.com.senac.model.Curso" />
@@ -30,7 +30,6 @@
     <mapping class="br.com.senac.model.Pessoa" />
     <mapping class="br.com.senac.model.Aluno" />
     <mapping class="br.com.senac.model.Telefone" />
-    <mapping class="br.com.senac.model.Matricula" />
     <mapping class="br.com.senac.model.Professor" />
   </session-factory>
 </hibernate-configuration>
