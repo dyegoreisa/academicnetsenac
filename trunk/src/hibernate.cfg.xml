@@ -10,8 +10,8 @@
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
     
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-	<property name="hibernate.show_sql">true</property>
-	<property name="hibernate.format_sql">true</property>
+	<property name="hibernate.show_sql">false</property>
+	<property name="hibernate.format_sql">false</property>
 	<property name="hibernate.jdbc.batch_size">20</property>
 
 	<property name="c3p0.acquire_increment">2</property>

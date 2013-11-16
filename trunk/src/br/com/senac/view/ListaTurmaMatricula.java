@@ -7,9 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -131,10 +129,10 @@ public class ListaTurmaMatricula extends JFrame implements ActionListener{
 
 		private static final long serialVersionUID = -4097626378869023301L;
 		
-		private ArrayList<Turma> dados;
-		private String[] colunas = {"ID", "Nome", "Data Inicio", "Previsão", "Tem Alunos"};
+		private List<Turma> dados;
+		private String[] colunas = {"ID", "Nome", "Data Inicio", "Previsão"};
 		
-		public TurmaModelTable (ArrayList<Turma> dados) {
+		public TurmaModelTable (List<Turma> dados) {
 			this.dados = dados;
 		}
 		
@@ -164,10 +162,7 @@ public class ListaTurmaMatricula extends JFrame implements ActionListener{
 	    		
 	    	case 3:
 	    		return dados.get(row).getPrevisaoTermino();
-	    		
-	    	case 4:
-	    		return "";
-	    		
+	    			    		
 	    	default:
 	    		return null;
 	    	}

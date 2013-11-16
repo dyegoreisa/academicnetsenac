@@ -7,8 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -27,16 +26,16 @@ import javax.swing.table.AbstractTableModel;
 import br.com.senac.dao.TurmaDAO;
 import br.com.senac.model.Turma;
 
-public class ListaTurma extends JFrame implements ActionListener, MouseListener{
+public class ListaTurmaProfessor extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 5849257271905351845L;
 	
 	private ImageIcon favicon;
-	private JButton btnNovo, btnFechar;
+	private JButton btnAdicionar, btnFechar;
 	private JTable tableTurmas;
 	private TurmaDAO turmaDAO;
 	
-	public ListaTurma () {
+	public ListaTurmaProfessor () {
 		turmaDAO = new TurmaDAO();
 		initUI();
 	}
@@ -70,7 +69,6 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
         JPanel fieldPanel = new JPanel();
                
         tableTurmas = new JTable(new TurmaModelTable(turmaDAO.listar()));
-        tableTurmas.addMouseListener(this);
         fieldPanel.add(tableTurmas);
 
         JScrollPane pane = new JScrollPane(tableTurmas);
@@ -83,12 +81,13 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
         basic.add(fieldPanel);      
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        btnNovo = new JButton("Novo");
-        btnNovo.setMnemonic(KeyEvent.VK_N);
-        btnNovo.addActionListener(this);
-        bottom.add(btnNovo);
         
+        btnAdicionar = new JButton("Adicionar");
+        btnAdicionar.setToolTipText("Adicionar alunos a uma turma.");
+        btnAdicionar.setMnemonic(KeyEvent.VK_A);
+        btnAdicionar.addActionListener(this);
+        bottom.add(btnAdicionar);
+
         btnFechar = new JButton("Fechar");
         btnFechar.setMnemonic(KeyEvent.VK_F);
         btnFechar.addActionListener(this);
@@ -98,7 +97,7 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
 
         bottom.setMaximumSize(new Dimension(450, 0));
 
-        setTitle("Turma");
+        setTitle("Definir Professores");
         setIconImage(favicon.getImage());
         setSize(new Dimension(600, 400));
         setResizable(false);
@@ -108,53 +107,23 @@ public class ListaTurma extends JFrame implements ActionListener, MouseListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnNovo) {
-            EditarTurma tep = new EditarTurma(null);
-            tep.setVisible(true);
-            dispose();
-		}
-		
 		if (e.getSource() == btnFechar) {
 			dispose();
-		}		
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-			JTable target = (JTable)e.getSource();
-			int row = target.getSelectedRow();
-			Turma t = turmaDAO.getById((Integer) target.getValueAt(row, 0));
-            EditarTurma tet = new EditarTurma(t);
-            tet.setVisible(true);
-            dispose();
 		}
 		
+		if (e.getSource() == btnAdicionar) {
+			int row = tableTurmas.getSelectedRow();
+			
+			if (row < 0) {
+				JOptionPane.showMessageDialog(this, "Selecione uma turma");
+			} else {
+				Turma t = turmaDAO.getById((Integer) tableTurmas.getValueAt(row, 0));
+				AdicionarProfessorTurma apt = new AdicionarProfessorTurma(t);
+				apt.setVisible(true);
+				dispose();
+			}
+		}
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}	
 	
 	class TurmaModelTable extends AbstractTableModel {
 

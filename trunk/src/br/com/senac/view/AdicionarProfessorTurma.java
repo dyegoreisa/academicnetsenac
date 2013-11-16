@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -28,24 +27,27 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
-import br.com.senac.dao.AlunoDAO;
+import org.hibernate.Session;
+
+import br.com.senac.dao.Conexao;
+import br.com.senac.dao.ProfessorDAO;
 import br.com.senac.dao.TurmaDAO;
-import br.com.senac.model.Aluno;
+import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
-public class AdicionarAlunoTurma extends JFrame implements ActionListener, MouseListener  {
+public class AdicionarProfessorTurma extends JFrame implements ActionListener, MouseListener  {
 
 	private static final long serialVersionUID = 714672937069102260L;
 	
 	private ImageIcon favicon;
 	private Turma turma;
-	private AlunoDAO alunoDAO;
+	private ProfessorDAO professorDAO;
 	private TurmaDAO turmaDAO;
 	private int id;
 	private JButton btnSalvar, btnFechar;
-	private JList<Aluno> listAlunos, listAlunosMatriculados;
+	private JList<Professor> listProfessores, listProfessoresVinculados;
 	
-	public AdicionarAlunoTurma (Turma turma) {
+	public AdicionarProfessorTurma (Turma turma) {
         if (turma == null) {
         	JOptionPane.showMessageDialog(this, "Deve ser selecionada uma turma.");
         	dispose();
@@ -53,7 +55,7 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
         	this.turma = turma;
         }
 
-        alunoDAO = new AlunoDAO();
+        professorDAO = new ProfessorDAO();
         turmaDAO = new TurmaDAO();
         
 		initUI();
@@ -69,7 +71,7 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
 		
 		JPanel topPanel = new JPanel(new BorderLayout(0, 0));
 		topPanel.setMaximumSize(new Dimension(450, 0));
-		JLabel title = new JLabel("Adicionar alunos a Turma");
+		JLabel title = new JLabel("Adicionar professores a Turma");
 		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 		topPanel.add(title);
 		
@@ -109,13 +111,13 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
         labelPanel.add(lxtNome, BorderLayout.EAST);
 
         // Labels Lista de alunos
-        JLabel lblListaAlunos = new JLabel("Lista de Alunos:");
+        JLabel lblListaAlunos = new JLabel("Lista de Professores:");
         lblListaAlunos.setFont(fontLabel);
         lblListaAlunos.setForeground(colorLabel);
         labelPanel.add(lblListaAlunos, BorderLayout.WEST);
         
         // Labels Lista de Alunos Matriculados
-        JLabel lblListaAlunoMatriculados = new JLabel("Lista de Alunos Matriculados:");
+        JLabel lblListaAlunoMatriculados = new JLabel("Lista de Professores Vinculados:");
         lblListaAlunoMatriculados.setFont(fontLabel);
         lblListaAlunoMatriculados.setForeground(colorLabel);
         labelPanel.add(lblListaAlunoMatriculados, BorderLayout.EAST);
@@ -128,18 +130,18 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
         fieldPanel.setLayout(new GridLayout(1, 2));
         
         // Lista de alunos
-        listAlunos = new JList<Aluno>(new ModelListAluno(alunoDAO.listar()));
-        listAlunos.addMouseListener(this);
-        JScrollPane paneListaAlunos = new JScrollPane();
-        paneListaAlunos.getViewport().add(listAlunos);
-        fieldPanel.add(paneListaAlunos, BorderLayout.WEST);
+        listProfessores = new JList<Professor>(new ModelListProfessor(professorDAO.listar()));
+        listProfessores.addMouseListener(this);
+        JScrollPane paneListaProfessor = new JScrollPane();
+        paneListaProfessor.getViewport().add(listProfessores);
+        fieldPanel.add(paneListaProfessor, BorderLayout.WEST);
         
         // Lista de alunos Matriculados
-        listAlunosMatriculados = new JList<Aluno>(new ModelListAluno(turmaDAO.listarAlunos(turma)));
-        listAlunosMatriculados.addMouseListener(this);
-        JScrollPane paneListaAlunosMatriculados = new JScrollPane();
-        paneListaAlunosMatriculados.getViewport().add(listAlunosMatriculados);
-        fieldPanel.add(paneListaAlunosMatriculados, BorderLayout.EAST);
+        listProfessoresVinculados = new JList<Professor>(new ModelListProfessor(turmaDAO.listarProfessores(turma)));
+        listProfessoresVinculados.addMouseListener(this);
+        JScrollPane paneListaProfessoresVinculados = new JScrollPane();
+        paneListaProfessoresVinculados.getViewport().add(listProfessoresVinculados);
+        fieldPanel.add(paneListaProfessoresVinculados, BorderLayout.EAST);
         
         		
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -161,7 +163,7 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
 
         bottom.setMaximumSize(new Dimension(450, 0));
         
-        setTitle("Adicionar alunos à Turma");
+        setTitle("Adicionar professor à Turma");
         setIconImage(favicon.getImage());
         setSize(new Dimension(550, 350));
         setResizable(false);
@@ -173,13 +175,13 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnSalvar) {
-			ModelListAluno modelListAlu = (ModelListAluno) listAlunosMatriculados.getModel();
-			List<Aluno> arrayAlunos = modelListAlu.getArray();
+			ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
+			List<Professor> arrayProfessores = modelListProf.getArray();
 			
 			turmaDAO.atualizar(turma);
 			
-			ListaTurmaMatricula tltm = new ListaTurmaMatricula();
-			tltm.setVisible(true);
+			ListaTurmaProfessor tltp = new ListaTurmaProfessor();
+			tltp.setVisible(true);
 			
 			dispose();
 		}
@@ -196,23 +198,23 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
-			if (e.getSource() == listAlunos) {
-				ModelListAluno modelListAlu = (ModelListAluno) listAlunosMatriculados.getModel();
-				List<Aluno> arrayAlunos = modelListAlu.getArray();
+			if (e.getSource() == listProfessores) {
+				ModelListProfessor modelListProf = (ModelListProfessor) listProfessoresVinculados.getModel();
+				List<Professor> arrayProfessor = modelListProf.getArray();
 				
-				Aluno aluno = listAlunos.getSelectedValue();
-	
-				turma.addAluno(aluno);
+				Professor professor = listProfessores.getSelectedValue();
 				
-				arrayAlunos.add(aluno);
+				turma = turmaDAO.addProfessor(turma, professor);
 				
-				ModelListAluno modelAlunos = new ModelListAluno(arrayAlunos);
-				listAlunosMatriculados.setModel(modelAlunos);
+				arrayProfessor.add(professor);
+				
+				ModelListProfessor modelProfessor = new ModelListProfessor(arrayProfessor);
+				listProfessoresVinculados.setModel(modelProfessor);
 			}
 			
-			if (e.getSource() == listAlunosMatriculados) {
-				int index = listAlunosMatriculados.getSelectedIndex();
-				listAlunosMatriculados.remove(index);
+			if (e.getSource() == listProfessoresVinculados) {
+				int index = listProfessoresVinculados.getSelectedIndex();
+				listProfessoresVinculados.remove(index);
 			}
 			
 		}
@@ -242,28 +244,28 @@ public class AdicionarAlunoTurma extends JFrame implements ActionListener, Mouse
 		
 	}	
 	
-	public class ModelListAluno extends AbstractListModel<Aluno> {
+	public class ModelListProfessor extends AbstractListModel<Professor> {
 
 		private static final long serialVersionUID = -6382215151854365504L;
 
-		private List<Aluno> alunos;
+		private List<Professor> professores;
 		
-		public ModelListAluno(List<Aluno> alunos) {
-			this.alunos = alunos; 
+		public ModelListProfessor(List<Professor> professores) {
+			this.professores = professores; 
 		}
 		
 		@Override
 		public int getSize() {
-			return alunos.size();
+			return professores.size();
 		}
 
 		@Override
-		public Aluno getElementAt(int index) {
-			return alunos.get(index);
+		public Professor getElementAt(int index) {
+			return professores.get(index);
 		}
 		
-		public List<Aluno> getArray() {
-			return alunos;
+		public List<Professor> getArray() {
+			return professores;
 		}
 				
 	}

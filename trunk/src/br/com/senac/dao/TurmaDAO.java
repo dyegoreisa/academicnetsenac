@@ -1,10 +1,17 @@
 package br.com.senac.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.transform.Transformers;
 
+import br.com.senac.model.Aluno;
+import br.com.senac.model.Professor;
 import br.com.senac.model.Turma;
 
 public class TurmaDAO {
@@ -76,12 +83,38 @@ public class TurmaDAO {
 		return turma;
 	}
 	
-	public ArrayList<Turma> listar() {
-		ArrayList<Turma> turmas = new ArrayList<>();
+	public Turma addProfessor(Turma t, Professor professor) {
+		Turma turma = new Turma();
+		try {
+			session = Conexao.getSession();
+			session.beginTransaction();
+			turma = (Turma) session.get(Turma.class, t.getId());
+			turma.addProfessor(professor);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return turma;		
+	}
+	
+	public List<Turma> listar() {
+		List<Turma> turmas = new ArrayList<>();
 		session = Conexao.getSession();
 		try {
 			session.beginTransaction();
-			turmas = (ArrayList<Turma>) session.createCriteria(Turma.class).list();
+			turmas = session.createCriteria(Turma.class)
+					.setProjection(Projections.distinct(Projections.projectionList()
+							.add(Projections.property("id"), "id")
+							.add(Projections.property("nome"), "nome")
+							.add(Projections.property("dataInicio"), "dataInicio")
+							.add(Projections.property("dataFim"), "dataFim")
+							.add(Projections.property("previsaoTermino"), "previsaoTermino")
+							.add(Projections.property("curso"), "curso")))
+					.setResultTransformer(Transformers.aliasToBean(Turma.class))
+					.list();
 			session.getTransaction().commit();
 		} catch(Exception e) {
 			session.getTransaction().rollback();
@@ -91,7 +124,54 @@ public class TurmaDAO {
 		}
 		return turmas;
 	}
+	
+	public List<Aluno> listarAlunos(Turma turma) {
+		List<Aluno> alunos = new ArrayList<>();
+		session = Conexao.getSession();
+		try {
+			session.beginTransaction();
+			Criteria cri = session.createCriteria(Aluno.class)
+					.setProjection(Projections.distinct(Projections.projectionList()
+							.add(Projections.property("nome"), "nome")))
+					.setResultTransformer(Transformers.aliasToBean(Aluno.class))
+					.createCriteria("turmas", "t")
+					.add(Restrictions.eq("id", turma.getId()));
+					
+			alunos = cri.list();
+			session.getTransaction().commit();
+		} catch(Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return alunos;
+	}
 
+	public List<Professor> listarProfessores(Turma turma) {
+		List<Professor> professores = new ArrayList<>();
+		session = Conexao.getSession();
+		try {
+			session.beginTransaction();
+			Criteria cri = session.createCriteria(Professor.class)
+					.setProjection(Projections.distinct(Projections.projectionList()
+							.add(Projections.property("nome"), "nome")))
+					.setResultTransformer(Transformers.aliasToBean(Professor.class))
+					.createCriteria("turmas", "t")
+					.add(Restrictions.eq("id", turma.getId()));
+					
+			professores = cri.list();
+			session.getTransaction().commit();
+		} catch(Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return professores;
+	}
+	
+	
 /*	public ArrayList<Aluno> listarAlunos(int id) {
 		conn = Conexao.getConexao();
 		

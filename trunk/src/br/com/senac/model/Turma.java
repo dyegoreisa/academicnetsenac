@@ -3,7 +3,6 @@ package br.com.senac.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -41,14 +39,20 @@ public class Turma {
 	@JoinColumn(name="id_curso")
 	private Curso curso;
 	
-	//@OneToMany(mappedBy = "turma", targetEntity = Matricula.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@ManyToMany
-	@JoinTable(name ="matricula",
-			joinColumns=@JoinColumn(name ="id_turma"),
-			inverseJoinColumns=@JoinColumn(name ="id_aluno"))
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "matricula",
+			joinColumns = @JoinColumn(name = "id_turma"),
+			inverseJoinColumns = @JoinColumn(name = "id_aluno"))
 	private List<Aluno> alunos;
+
+	@ManyToMany
+	@JoinTable(name = "leciona",
+			joinColumns = @JoinColumn(name = "id_turma"),
+			inverseJoinColumns = @JoinColumn(name = "id_professor"))
+	private List<Professor> professores;
 	
-	public Turma() {}
+	public Turma() {
+	}
 
 	public Turma(int id, String nome) {
 		this.id = id;
@@ -79,6 +83,14 @@ public class Turma {
 		return curso;
 	}
 
+	public void addAluno(Aluno aluno) {
+		this.alunos.add(aluno);
+	}
+	
+	public void addProfessor(Professor professor) {
+		this.professores.add(professor);
+	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
