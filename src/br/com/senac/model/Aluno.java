@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -17,7 +18,7 @@ public class Aluno extends Pessoa {
 
 	private Boolean bolsa;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="matricula",
 			joinColumns=@JoinColumn(name="id_aluno"),
 			inverseJoinColumns=@JoinColumn(name="id_turma"))

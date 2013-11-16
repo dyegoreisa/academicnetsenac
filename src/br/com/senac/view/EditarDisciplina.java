@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,7 +24,10 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import br.com.senac.dao.DisciplinaDAO;
+import br.com.senac.dao.ProfessorDAO;
+import br.com.senac.model.Curso;
 import br.com.senac.model.Disciplina;
+import br.com.senac.model.Professor;
 
 public class EditarDisciplina extends JFrame implements ActionListener {
 
@@ -32,11 +36,14 @@ public class EditarDisciplina extends JFrame implements ActionListener {
 	private ImageIcon favicon;
 	private Disciplina disciplina;
 	private DisciplinaDAO disciplinaDAO;
+	private ProfessorDAO professorDAO;
 	private JTextField txtNome;
+	private JComboBox<Professor> cobProfessores;
 	private JButton btnSalvar, btnExcluir, btnFechar;
 	
 	public EditarDisciplina (Disciplina disciplina) {
         disciplinaDAO = new DisciplinaDAO();
+        professorDAO = new ProfessorDAO();
         
         if (disciplina == null) {
         	this.disciplina = new Disciplina();
@@ -75,7 +82,7 @@ public class EditarDisciplina extends JFrame implements ActionListener {
 
         // Formulário
         JPanel fieldPanel = new JPanel();
-        fieldPanel.setLayout(new GridLayout(2, 2));
+        fieldPanel.setLayout(new GridLayout(3, 2));
                
         Font fontLabel = new Font("Verdana", Font.PLAIN, 14);
         Color colorLabel = new Color(50, 50, 25);
@@ -96,6 +103,27 @@ public class EditarDisciplina extends JFrame implements ActionListener {
         fieldPanel.add(lblNome, BorderLayout.WEST);
         txtNome = new JTextField(disciplina.getNome());
         fieldPanel.add(txtNome, BorderLayout.EAST);
+        
+        // Professor
+        JLabel lblProfessor = new JLabel("Professor:");
+        lblProfessor.setFont(fontLabel);
+        lblProfessor.setForeground(colorLabel);
+        fieldPanel.add(lblProfessor, BorderLayout.WEST);
+        cobProfessores = new JComboBox<Professor>();
+        
+        int index = 0, count = 0, idProfessor = 0;
+        if (disciplina.getProfessor() != null) {
+        	idProfessor = disciplina.getProfessor().getId();
+        }
+        for (Professor professor : professorDAO.listar()) {
+        	cobProfessores.addItem(professor);
+        	if (professor.getId() == idProfessor) {
+        		index = count;
+        	}
+        	count++;
+        }
+        cobProfessores.setSelectedIndex(index);
+        fieldPanel.add(cobProfessores, BorderLayout.EAST);        
 
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         basic.add(fieldPanel);      
@@ -124,7 +152,7 @@ public class EditarDisciplina extends JFrame implements ActionListener {
         
         setTitle("Disciplina");
         setIconImage(favicon.getImage());
-        setSize(new Dimension(450, 180));
+        setSize(new Dimension(450, 220));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -136,6 +164,9 @@ public class EditarDisciplina extends JFrame implements ActionListener {
 		
 		if (e.getSource() == btnSalvar) {
 			disciplina.setNome(txtNome.getText());
+			String[] aux = cobProfessores.getSelectedItem().toString().split(" - ");
+			Professor professor = new Professor(Integer.parseInt(aux[0]), aux[1]);
+			disciplina.setProfessor(professor);
 			
 			if (disciplina.getId() > 0) {
 				disciplinaDAO.atualizar(disciplina);

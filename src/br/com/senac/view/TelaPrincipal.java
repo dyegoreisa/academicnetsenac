@@ -146,7 +146,18 @@ public class TelaPrincipal extends JFrame {
 		
 		JMenuItem itemMenuDefinirProfessor = new JMenuItem("Definir Professor");
 		itemMenuDefinirProfessor.setToolTipText("Definir Professor e Disciplina na turma");
-		// TODO: Colocar ação para Definir professor
+		itemMenuDefinirProfessor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+		            @Override
+		            public void run() {
+		                ListaTurmaProfessor tltp = new ListaTurmaProfessor();
+		                tltp.setVisible(true);
+		            }
+		        });	
+			}
+		});
 		
 		// Criando submenu de Relatorio
 		JMenuItem itemMenuRelAluno = new JMenuItem("Alunos por Turma");
@@ -186,7 +197,7 @@ public class TelaPrincipal extends JFrame {
 		menuGestao.add(itemMenuMatricular);
 		menuGestao.add(itemMenuDefinirProfessor);
 		
-		// Adicionando os submenus de Relatórios
+		// Adicionando os submenus de Relatórios - Suprimido, pois vai dar tempo de fazer
 		menuRelatorio.add(itemMenuRelAluno);
 		menuRelatorio.add(itemMenuRelProfessor);
 		menuRelatorio.add(itemMenuRelDisciplina);
@@ -197,7 +208,7 @@ public class TelaPrincipal extends JFrame {
 		// Adicionando os menus na barra
 		menuBar.add(menuCadastro);
 		menuBar.add(menuGestao);
-		menuBar.add(menuRelatorio);
+		//menuBar.add(menuRelatorio); - Suprimido, pois vai dar tempo de fazer
 		menuBar.add(menuSistema);
 		
 		// Adicionando a barra na tela
