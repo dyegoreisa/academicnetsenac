@@ -30,6 +30,6 @@
     <mapping class="br.com.senac.model.Pessoa" />
     <mapping class="br.com.senac.model.Aluno" />
     <mapping class="br.com.senac.model.Telefone" />
-    <mapping class="br.com.senac.model.Professor" />
+    <mapping class="br.com.senac.model.Professor" />    
   </session-factory>
 </hibernate-configuration>

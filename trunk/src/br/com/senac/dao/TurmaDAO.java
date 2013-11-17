@@ -83,6 +83,26 @@ public class TurmaDAO {
 		return turma;
 	}
 	
+	public Turma getByNome(String nome) {
+		Turma turma = new Turma();
+		try {
+			session = Conexao.getSession();
+			session.beginTransaction();
+			turma = (Turma) session.createCriteria(Turma.class)
+					.add( Restrictions.naturalId()
+							.set("nome", nome)
+					).setCacheable(true)
+					.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return turma;
+	}	
+	
 	public Turma addProfessor(Turma t, Professor professor) {
 		Turma turma = new Turma();
 		try {

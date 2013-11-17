@@ -15,12 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity
 public class Turma {
 	
 	@Id @GeneratedValue
 	private int id;
 	
+	@NaturalId
 	private String nome;
 	
 	@Temporal(TemporalType.DATE)
@@ -52,6 +55,10 @@ public class Turma {
 	private List<Professor> professores;
 	
 	public Turma() {
+	}
+
+	public Turma(String nome) {
+		this.nome = nome;
 	}
 
 	public Turma(int id, String nome) {
