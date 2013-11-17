@@ -38,7 +38,7 @@ public class EditarAluno extends JFrame implements ActionListener {
 	private JTextField txtNome, txtSobrenome, txtNascimento, txtEmail;
 	private JComboBox<String> cobSexo;
 	private JCheckBox chbBolsa;
-	private JButton btnVisualizar, btnSalvar, btnExcluir, btnFechar;
+	private JButton btnSalvar, btnExcluir, btnFechar;
 	
 	public EditarAluno (Aluno aluno) {
         alunoDAO = new AlunoDAO();
@@ -156,11 +156,6 @@ public class EditarAluno extends JFrame implements ActionListener {
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        btnVisualizar = new JButton("Ver Professor");
-        btnVisualizar.setMnemonic(KeyEvent.VK_V);
-        btnVisualizar.addActionListener(this);
-        bottom.add(btnVisualizar);
-        
         btnSalvar = new JButton("Salvar");
         btnSalvar.setMnemonic(KeyEvent.VK_S);
         btnSalvar.addActionListener(this);
@@ -191,10 +186,6 @@ public class EditarAluno extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnVisualizar) {
-			//JOptionPane.showMessageDialog(this, alunoDAO.listarProfessoresByAluno(aluno.getId()));
-		}
-		
 		if (e.getSource() == btnSalvar) {
 			aluno.setNome(txtNome.getText());
 			aluno.setSobrenome(txtSobrenome.getText());

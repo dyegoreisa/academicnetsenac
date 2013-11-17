@@ -12,9 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+
+import br.com.senac.model.Turma;
 
 public class TelaPrincipal extends JFrame {
 
@@ -162,7 +165,14 @@ public class TelaPrincipal extends JFrame {
 		// Criando submenu de Relatorio
 		JMenuItem itemMenuRelAluno = new JMenuItem("Alunos por Turma");
 		itemMenuRelAluno.setToolTipText("Relatório de Alunos por Turma");
-		// TODO: Colocar ação para alunos por turma
+		itemMenuRelAluno.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String nomeTurma = JOptionPane.showInputDialog(null, "Informe o nome da turma:");
+				RelAlunoTurma rat = new RelAlunoTurma(new Turma(nomeTurma));
+				rat.setVisible(true);
+			}
+		});
 		
 		JMenuItem itemMenuRelProfessor = new JMenuItem("Professores por Turma");
 		itemMenuRelProfessor.setToolTipText("Relatório de Professores por Turma");
@@ -197,10 +207,10 @@ public class TelaPrincipal extends JFrame {
 		menuGestao.add(itemMenuMatricular);
 		menuGestao.add(itemMenuDefinirProfessor);
 		
-		// Adicionando os submenus de Relatórios - Suprimido, pois vai dar tempo de fazer
+		// Adicionando os submenus de Relatórios
 		menuRelatorio.add(itemMenuRelAluno);
-		menuRelatorio.add(itemMenuRelProfessor);
-		menuRelatorio.add(itemMenuRelDisciplina);
+		//menuRelatorio.add(itemMenuRelProfessor);  //- Suprimido, pois vai dar tempo de fazer
+		//menuRelatorio.add(itemMenuRelDisciplina);  //- Suprimido, pois vai dar tempo de fazer
 		
 		// Adicionando os submenus de Sistema
 		menuSistema.add(itemMenuSair);
@@ -208,7 +218,7 @@ public class TelaPrincipal extends JFrame {
 		// Adicionando os menus na barra
 		menuBar.add(menuCadastro);
 		menuBar.add(menuGestao);
-		//menuBar.add(menuRelatorio); - Suprimido, pois vai dar tempo de fazer
+		menuBar.add(menuRelatorio);
 		menuBar.add(menuSistema);
 		
 		// Adicionando a barra na tela
