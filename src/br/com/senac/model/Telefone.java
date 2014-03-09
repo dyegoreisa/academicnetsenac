@@ -26,8 +26,6 @@ public class Telefone implements Serializable{
 	@JoinColumn(name="id_pessoa")
 	private Pessoa pessoa;
 	
-	public Telefone() {}
-	
 	public Telefone(String numero, String contato) {
 		super();
 		this.numero = numero;

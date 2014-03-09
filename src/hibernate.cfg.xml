@@ -6,12 +6,12 @@
   <session-factory>
     <property name="hibernate.connection.username">postgres</property>
     <property name="hibernate.connection.password">banco123</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/academicnetsenac</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/acedemicnetsenac</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
     
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 	<property name="hibernate.show_sql">false</property>
-	<property name="hibernate.format_sql">false</property>
+	<property name="hibernate.format_sql">true</property>
 	<property name="hibernate.jdbc.batch_size">20</property>
 
 	<property name="c3p0.acquire_increment">2</property>
@@ -21,15 +21,16 @@
 	<property name="c3p0.min_size">10</property>
 	<property name="c3p0.timeout">100</property>
 	
+	<!-- validate | update | create | create-drop -->
 	<property name="hibernate.hbm2ddl.auto">update</property>
     
-    <!-- validate | update | create | create-drop -->
     <mapping class="br.com.senac.model.Curso" />
     <mapping class="br.com.senac.model.Disciplina" />
     <mapping class="br.com.senac.model.Turma" />
     <mapping class="br.com.senac.model.Pessoa" />
     <mapping class="br.com.senac.model.Aluno" />
     <mapping class="br.com.senac.model.Telefone" />
-    <mapping class="br.com.senac.model.Professor" />    
+    <mapping class="br.com.senac.model.Matricula" />
+    <mapping class="br.com.senac.model.Professor" />
   </session-factory>
 </hibernate-configuration>

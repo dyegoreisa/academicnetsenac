@@ -76,7 +76,7 @@ public class CursoDAO {
 	}
 	
 	public ArrayList<Curso> listar() {
-		ArrayList<Curso> cursos = new ArrayList<>();
+		ArrayList<Curso> cursos = new ArrayList();
 		session = Conexao.getSession();
 		try {
 			session.beginTransaction();
