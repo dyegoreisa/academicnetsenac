@@ -65,7 +65,7 @@ public class ProfessorDAO {
 	}
 
 	public List<Professor> listar() {
-		List<Professor> professores = new ArrayList<>();
+		List<Professor> professores = new ArrayList();
 		session = Conexao.getSession();
 		try {
 			session.beginTransaction();

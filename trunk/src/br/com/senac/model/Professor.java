@@ -1,14 +1,12 @@
 package br.com.senac.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @DiscriminatorValue("Professor")
@@ -18,17 +16,10 @@ public class Professor extends Pessoa {
 	private String especialidade;
 	private String vinculo;
 	
-	@ManyToMany
-	@JoinTable(name = "leciona",
-			joinColumns = @JoinColumn(name = "id_professor"),
-			inverseJoinColumns = @JoinColumn(name = "id_turma"))
-	private List<Turma> turmas;
+	@Transient
+	private ArrayList<Leciona> lecionaTurmas = new ArrayList();
 
 	public Professor() {}
-	
-	public Professor(int id, String nome) {
-		super(id, nome, "", "");
-	}
 	
 	public Professor(String nome, String sobrenome, String email,
 			String especialidade, String vinculo) {
@@ -38,19 +29,11 @@ public class Professor extends Pessoa {
 	}
 	
 	public String getEspecialidade() {
-		if (especialidade instanceof String) {
-			return especialidade;
-		} else {
-			return "";
-		}
+		return especialidade;
 	}
 
 	public String getVinculo() {
-		if (vinculo instanceof String) {
-			return vinculo;
-		} else {
-			return "";
-		}
+		return vinculo;
 	}
 	
 	public void setEspecialidade(String especialidade) {
@@ -62,12 +45,48 @@ public class Professor extends Pessoa {
 	}
 	
 	public List<Turma> getTurmas() {
+		List<Turma> turmas = new ArrayList();
+		for (Leciona lt : lecionaTurmas) {
+			turmas.add(lt.getTurma());
+		}
 		return turmas;
 	}
 	
+	public List<Disciplina> getDisciplinas() {
+		List<Disciplina> disciplinas = new ArrayList();
+		for (Leciona lt : lecionaTurmas) {
+			disciplinas.add(lt.getDisciplina());
+		}
+		return disciplinas;
+	}
+	
+	public void addLecionaTurma(Turma turma, Disciplina disciplina) {
+		lecionaTurmas.add(new Leciona(turma, disciplina));
+	}
+
 	@Override
 	public String toString() {
-		return getId() + " - " + getNome() + " [" + getEspecialidade() + "]";
+		return "[Nome: " + getNome() + " Especialidade: " + especialidade + "]";
+	}
+	
+	private final class Leciona {
+		private Turma turma;
+		private Disciplina disciplina;
+		
+		public Leciona(Turma turma, Disciplina disciplina) {
+			super();
+			this.turma = turma;
+			this.disciplina = disciplina;
+		}
+
+		public Turma getTurma() {
+			return turma;
+		}
+
+		public Disciplina getDisciplina() {
+			return disciplina;
+		}
+
 	}
 
 }

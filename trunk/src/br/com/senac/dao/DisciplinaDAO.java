@@ -72,7 +72,7 @@ public class DisciplinaDAO {
 	}
 	
 	public ArrayList<Disciplina> listar() {
-		ArrayList<Disciplina> disciplinas = new ArrayList<>();
+		ArrayList<Disciplina> disciplinas = new ArrayList();
 		session = Conexao.getSession();
 		try {
 			session.beginTransaction();

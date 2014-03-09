@@ -63,7 +63,7 @@ public class AlunoDAO {
 	}
 
 	public List<Aluno> listar() {
-		List<Aluno> alunos = new ArrayList<>();
+		List<Aluno> alunos = new ArrayList();
 		session = Conexao.getSession();
 		try {
 			session.beginTransaction();
