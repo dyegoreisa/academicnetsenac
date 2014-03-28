@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -8,20 +9,15 @@
 <title>Meu Projeto Web</title>
 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
 </head>
+
+<c:if test="${sessionScope.usuarioLogado == null }">
+	<jsp:forward page="login.jsp"/>
+</c:if>
+
 <body>
-<p><font size="<%=Math.random() *5 %>"><%=new Date() %></font></p>
-<p>Seja bem vindo ao meu projeto!<br>
+<%// <jsp:include page="${pageContext.request.contextPath}/paginas/menu.jsp"/> %>
 <br>
-</p>
-<ul>
-	<li>Aluno
-		<ul>
-			<li><a href="aluno_cadastrar.jsp">Cadastrar</a></li>
-			<li><a href="aluno_buscar.jsp">Buscar</a></li>
-			<li><a href="aluno_listar.jsp">Listar</a></li>
-		</ul>
-	</li>
-</ul>
+<p><font size="<%=Math.random() *5 %>"><%=new Date() %></font></p>
 <script src="bootstrap/js/jquery.js"></script>
 <script src="bootstrap/js/bootstrap.js"></script>
 </body>
