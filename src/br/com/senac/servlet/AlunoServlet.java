@@ -42,55 +42,96 @@ public class AlunoServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Aluno aluno = new Aluno();
+		Aluno alunoEditar = new Aluno();
 		AlunoDAO dao = new AlunoDAO();
 		List<Aluno> alunos = new ArrayList();
 		
-		String sucessPage = "";
+		String mensagem = "";
+		String destino = "aluno/aluno_listar.jsp";
+		
+		int acao = 0;
 		
 		try {
-			int acao = 0;
+
 			if (request.getParameter("acao") != null) {
 				acao = Integer.parseInt(request.getParameter("acao"));
+			} else if (request.getParameter("id") != null) {
+				alunoEditar = dao.getById(Integer.parseInt(request.getParameter("id")));
+				acao = 4;
 			}
-			
-			aluno.setNome(request.getParameter("nome"));
-			aluno.setSobrenome(request.getParameter("sobrenome"));
-			aluno.setSexo(request.getParameter("sexo"));
-			aluno.setEmail(request.getParameter("email"));
-			aluno.setDataNascimento(request.getParameter("data_nascimento"));
-			
+
 			switch(acao)
 			{
-			case 1:
+			case 1: // Inserir
+				aluno.setNome(request.getParameter("nome"));
+				aluno.setSobrenome(request.getParameter("sobrenome"));
+				aluno.setSexo(request.getParameter("sexo"));
+				aluno.setEmail(request.getParameter("email"));
+				aluno.setDataNascimento(request.getParameter("data_nascimento"));
+				
 				dao.inserir(aluno);
-				sucessPage = "sucesso.jsp";
+
+				mensagem = "Aluno criado";
+				
+				alunos = dao.listar();
+				request.setAttribute("listaAlunos", alunos);
 				break;
 				
-			case 2:
+			case 2: // Atualizar
+				aluno.setId(Integer.parseInt(request.getParameter("id")));
+				aluno.setNome(request.getParameter("nome"));
+				aluno.setSobrenome(request.getParameter("sobrenome"));
+				aluno.setSexo(request.getParameter("sexo"));
+				aluno.setEmail(request.getParameter("email"));
+				aluno.setDataNascimento(request.getParameter("data_nascimento"));
+				
 				dao.atualizar(aluno);
-				sucessPage = "sucesso.jsp";
+				
+				mensagem = "Aluno alterado";
+
+				alunos = dao.listar();
+				request.setAttribute("listaAlunos", alunos);
 				break;
 
-			case 3:
+			case 3: // Excluir
+				aluno.setId(Integer.parseInt(request.getParameter("id")));
+				
 				dao.apagar(aluno);
-				alunos = dao.listar();
-				sucessPage = "aluno_listar.jsp";
-				break;
+				
+				mensagem = "Aluno apagado";
 
-			case 4:
 				alunos = dao.listar();
-				sucessPage = "aluno_listar.jsp";
+				request.setAttribute("listaAlunos", alunos);
 				break;
 				
+			case 4: // Tela de cadastro
+				request.setAttribute("alunoEditar", alunoEditar);
+				destino = "aluno_cadastrar.jsp";
+				break;
+				
+			case 5: // Buscar
+				String conteudo = request.getParameter("conteudo");
+				
+				alunos = dao.buscar(conteudo);
+				
+				request.setAttribute("listaAlunos", alunos);
+				break;
+				
+			default:
+				alunos = dao.listar();
+				request.setAttribute("listaAlunos", alunos);
+
 			}
 
 
 		} catch (Exception e) {
+			mensagem = "Erro!";
+			destino = "erro.jsp";
 			e.printStackTrace();
 		}
-		
-		request.setAttribute("aluno", aluno);
-		RequestDispatcher rd = request.getRequestDispatcher(sucessPage);
+
+		request.setAttribute("mensagem", mensagem);
+		RequestDispatcher rd = request.getRequestDispatcher(destino);
 		rd.forward(request, response);
 		
 	}
