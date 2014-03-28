@@ -31,7 +31,7 @@ public abstract class Pessoa {
 	private String sobrenome;
 	private String email;
 	
-	@OneToMany(mappedBy = "pessoa", targetEntity = Telefone.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pessoa")
 	private List<Telefone> telefones;
 	
 	@Temporal(TemporalType.DATE)
