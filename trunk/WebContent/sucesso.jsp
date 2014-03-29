@@ -24,5 +24,10 @@
 	Informações resumidas do aluno:<br>
 	<%=aluno %>
 </p>
+<hr>
+Mensagem Scriptlet: <%=request.getAttribute("mensagem") %> <br>
+Mensagem EL: ${mensagem } <br>
+Mensagem JSTL: <c:out value="${mensagem}"/> <br>
+<hr>
 </body>
 </html>
