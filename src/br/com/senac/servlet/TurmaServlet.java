@@ -19,13 +19,13 @@ import br.com.senac.model.Aluno;
  * Servlet implementation class AlunoServlet
  */
 @WebServlet("/AlunoServlet")
-public class AlunoServlet extends HttpServlet {
+public class TurmaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public AlunoServlet() {
+    public TurmaServlet() {
         // TODO Auto-generated constructor stub
     }
 
