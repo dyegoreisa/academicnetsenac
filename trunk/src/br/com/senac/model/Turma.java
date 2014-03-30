@@ -1,5 +1,7 @@
 package br.com.senac.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -84,13 +86,46 @@ public class Turma {
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 	}
+	
+	public void setDataInicio(String dataInicio) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			this.dataInicio = formatter.parse(dataInicio);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
 
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
+	
+	public void setDataFim(String dataFim) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			this.dataFim = formatter.parse(dataFim);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
 
 	public void setPrevisaoTermino(Date previsaoTermino) {
 		this.previsaoTermino = previsaoTermino;
+	}
+	
+	public void setPrevisaoTermino(String previsaoTermino) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			this.previsaoTermino = formatter.parse(previsaoTermino);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setCurso(Curso curso) {

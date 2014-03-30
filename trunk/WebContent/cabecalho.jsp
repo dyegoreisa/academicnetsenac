@@ -11,6 +11,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Buscar Aluno</title>
 <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.css" rel="stylesheet">
+<script type="text/javascript">
+	var excluir = function() {
+		if (confirm("Deseja apagar?")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+</script>
 <style type="text/css">
 
   /* Sticky footer styles
