@@ -4,13 +4,13 @@
     pageEncoding="ISO-8859-1"%>
 <div class="form-group">
   <div class="col-md-4">
-    <a class="btn btn-default" href="${pageContext.request.contextPath}/AlunoServlet?acao=6">
+    <a class="btn btn-default" href="${pageContext.request.contextPath}/CursoServlet?acao=6">
     	&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Novo
     </a>
   </div>
 </div>
 
-<form class="form-inline" action="AlunoServlet">
+<form class="form-inline" action="CursoServlet">
 <fieldset>
 
 <!-- Search input-->
@@ -39,26 +39,20 @@
 	<thead>
 	<tr>
 		<th>Nome</th>
-		<th>Sobrenome</th>
-		<th>E-mail</th>
-		<th>Nascimento</th>
 		<th colspan="2">Aç&otilde;es</th>
 	</tr>
 	</thead>
 	<tbody>
-	<c:forEach var="item" items="${listaAlunos}">
+	<c:forEach var="item" items="${listaCursos}">
 		<tr>
 			<td>${item.nome}</td>
-			<td>${item.sobrenome}</td>
-			<td>${item.email}</td>
-			<td><fmt:formatDate value="${item.dataNascimento}" pattern="dd/MM/yyyy"/></td>
 			<td>
-				<a href="AlunoServlet?id=${item.id}&acao=4">
+				<a href="CursoServlet?id=${item.id}&acao=4">
 					<span class="glyphicon glyphicon-edit"></span>
 				</a>
 			</td>
 			<td>
-				<a href="AlunoServlet?id=${item.id}&acao=3">
+				<a href="CursoServlet?id=${item.id}&acao=3" onclick="return excluir();">
 					<span class="glyphicon glyphicon-remove-sign"></span>
 				</a>
 			</td>

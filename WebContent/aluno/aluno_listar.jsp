@@ -58,7 +58,7 @@
 				</a>
 			</td>
 			<td>
-				<a href="AlunoServlet?id=${item.id}&acao=3">
+				<a href="AlunoServlet?id=${item.id}&acao=3" onclick="return excluir();">
 					<span class="glyphicon glyphicon-remove-sign"></span>
 				</a>
 			</td>

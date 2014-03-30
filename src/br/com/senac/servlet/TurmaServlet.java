@@ -11,14 +11,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.senac.dao.AlunoDAO;
-import br.com.senac.model.Aluno;
+import br.com.senac.dao.CursoDAO;
+import br.com.senac.dao.TurmaDAO;
+import br.com.senac.model.Curso;
+import br.com.senac.model.Turma;
 
 
 /**
- * Servlet implementation class AlunoServlet
+ * Servlet implementation class TurmaServlet
  */
-@WebServlet("/AlunoServlet")
+@WebServlet("/TurmaServlet")
 public class TurmaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -41,13 +43,17 @@ public class TurmaServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Aluno aluno = new Aluno();
-		Aluno alunoEditar = new Aluno();
-		AlunoDAO dao = new AlunoDAO();
-		List<Aluno> alunos = new ArrayList();
+		Turma turma = new Turma();
+		Turma turmaEditar = new Turma();
+		TurmaDAO dao = new TurmaDAO();
+		CursoDAO cursoDAO = new CursoDAO();
+		List<Turma> turmas = new ArrayList();
 		
 		String mensagem = "";
-		String destino = "aluno/aluno_listar.jsp";
+		String destino = "turma/turma_listar.jsp";
+		
+		List<Curso> cursos = cursoDAO.listar();
+		request.setAttribute("listaCursos", cursos);		
 		
 		int acao = 0;
 		
@@ -56,76 +62,86 @@ public class TurmaServlet extends HttpServlet {
 			if (request.getParameter("acao") != null) {
 				acao = Integer.parseInt(request.getParameter("acao"));
 			} else if (request.getParameter("id") != null) {
-				alunoEditar = dao.getById(Integer.parseInt(request.getParameter("id")));
+				turmaEditar = dao.getById(Integer.parseInt(request.getParameter("id")));
 				acao = 4;
 			}
 
 			switch(acao)
 			{
 			case 1: // Inserir
-				aluno.setNome(request.getParameter("nome"));
-				aluno.setSobrenome(request.getParameter("sobrenome"));
-				aluno.setSexo(request.getParameter("sexo"));
-				aluno.setEmail(request.getParameter("email"));
-				aluno.setDataNascimento(request.getParameter("data_nascimento"));
+				turma.setNome(request.getParameter("nome"));
+				turma.setDataInicio(request.getParameter("data_inicio"));
+				turma.setDataFim(request.getParameter("data_fim"));
+				turma.setPrevisaoTermino(request.getParameter("previsao"));
 				
-				dao.inserir(aluno);
+				Curso cursoInserir = cursoDAO.getById(Integer.parseInt(request.getParameter("curso")));
+				turma.setCurso(cursoInserir);
+				
+				dao.inserir(turma);
 
-				mensagem = "Aluno criado";
+				mensagem = "Turma criado";
 				
-				alunos = dao.listar();
-				request.setAttribute("listaAlunos", alunos);
+				turmas = dao.listar();
+				request.setAttribute("listaTurmas", turmas);
 				break;
 				
 			case 2: // Atualizar
-				aluno.setId(Integer.parseInt(request.getParameter("id")));
-				aluno.setNome(request.getParameter("nome"));
-				aluno.setSobrenome(request.getParameter("sobrenome"));
-				aluno.setSexo(request.getParameter("sexo"));
-				aluno.setEmail(request.getParameter("email"));
-				aluno.setDataNascimento(request.getParameter("data_nascimento"));
+				Curso cursoAlterar = cursoDAO.getById(Integer.parseInt(request.getParameter("curso")));
+				turma.setCurso(cursoAlterar);
 				
-				dao.atualizar(aluno);
+				turma.setId(Integer.parseInt(request.getParameter("id")));
+				turma.setNome(request.getParameter("nome"));
+				turma.setDataInicio(request.getParameter("data_inicio"));
+				turma.setDataFim(request.getParameter("data_fim"));
+				turma.setPrevisaoTermino(request.getParameter("previsao"));
 				
-				mensagem = "Aluno alterado";
+				dao.atualizar(turma);
+				
+				mensagem = "Turma alterado";
 
-				alunos = dao.listar();
-				request.setAttribute("listaAlunos", alunos);
+				turmas = dao.listar();
+				request.setAttribute("listaTurmas", turmas);
 				break;
 
 			case 3: // Excluir
-				aluno.setId(Integer.parseInt(request.getParameter("id")));
+				turma.setId(Integer.parseInt(request.getParameter("id")));
 				
-				dao.apagar(aluno);
+				dao.apagar(turma);
 				
-				mensagem = "Aluno apagado";
+				mensagem = "Turma apagado";
 
-				alunos = dao.listar();
-				request.setAttribute("listaAlunos", alunos);
+				turmas = dao.listar();
+				request.setAttribute("listaTurmas", turmas);
 				break;
 				
 			case 4: // Tela de alterar
-				int alunoId = Integer.parseInt(request.getParameter("id"));
-				alunoEditar = dao.getById(alunoId);
-				request.setAttribute("alunoEditar", alunoEditar);
-				destino = "/aluno/aluno_cadastrar.jsp";
+				int turmaId = Integer.parseInt(request.getParameter("id"));
+				turmaEditar = dao.getById(turmaId);
+				
+				request.setAttribute("turmaEditar", turmaEditar);
+				
+				destino = "/turma/turma_cadastrar.jsp";
 				break;
 				
 			case 5: // Buscar
 				String conteudo = request.getParameter("conteudo");
+				int cursoId = Integer.parseInt(request.getParameter("curso"));
+				Curso cursoBusca = cursoDAO.getById(cursoId);
 				
-				alunos = dao.buscar(conteudo);
+				turmas = dao.buscar(conteudo, cursoBusca);
 				
-				request.setAttribute("listaAlunos", alunos);
+				request.setAttribute("cursoBusca", cursoBusca);
+				request.setAttribute("listaTurmas", turmas);
 				break;
 				
-			case 6:
-				destino = "/aluno/aluno_cadastrar.jsp";
+			case 6: // Tela de inclusão
+				
+				destino = "/turma/turma_cadastrar.jsp";
 				break;
 				
 			default:
-				alunos = dao.listar();
-				request.setAttribute("listaAlunos", alunos);
+				turmas = dao.listar();
+				request.setAttribute("listaTurmas", turmas);
 
 			}
 
