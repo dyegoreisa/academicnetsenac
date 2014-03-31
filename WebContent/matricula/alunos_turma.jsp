@@ -3,13 +3,15 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <table class="table table-striped table-hover">
+	<caption>Alunos da turma <b>${turma.nome}</b> com previs&atilde;o de t&eacute;rmino em 
+	<b><fmt:formatDate value="${turma.previsaoTermino}" pattern="dd/MM/yyyy"/></b></caption>
 	<thead>
 	<tr>
 		<th>Nome</th>
 		<th>Sobrenome</th>
 		<th>E-mail</th>
 		<th>Nascimento</th>
-		<th>A&ccedil;&atilde;o</th>
+		<th>Cancelar Matr&iacute;cula</th>
 	</tr>
 	</thead>
 	<tbody>
