@@ -29,11 +29,34 @@ public class Matricula implements Serializable{
 	
 	private String codigo;
 	private boolean ativa;
+	
+	public Matricula () {}
 
 	public Matricula(String codigo, boolean ativa) {
 		super();
 		this.codigo = codigo;
 		this.ativa = ativa;
+	}
+	
+	public Matricula(Turma turma, Aluno aluno, String codigo, boolean ativa) {
+		super();
+		this.turma = turma;
+		this.aluno = aluno;
+		this.codigo = codigo;
+		this.ativa = ativa;
+	}
+	
+	public Matricula(Turma turma, Aluno aluno) {
+		this.turma = turma;
+		this.aluno = aluno;
+	}
+
+	public Aluno getAluno() {
+		return aluno;
+	}
+	
+	public Turma getTurma() {
+		return turma;
 	}
 
 	public String getCodigo() {

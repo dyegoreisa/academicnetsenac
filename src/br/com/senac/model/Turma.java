@@ -131,5 +131,13 @@ public class Turma {
 	public void setCurso(Curso curso) {
 		this.curso = curso;
 	}
+
+	public void setMatriculas(List<Matricula> matriculas) {
+		this.matriculas = matriculas;
+	}
+	
+	public List<Matricula> getMatriculas() {
+		return matriculas;
+	}
 	
 }

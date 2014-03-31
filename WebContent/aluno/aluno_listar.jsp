@@ -42,7 +42,7 @@
 		<th>Sobrenome</th>
 		<th>E-mail</th>
 		<th>Nascimento</th>
-		<th colspan="2">Aç&otilde;es</th>
+		<th colspan="3">Aç&otilde;es</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -52,6 +52,11 @@
 			<td>${item.sobrenome}</td>
 			<td>${item.email}</td>
 			<td><fmt:formatDate value="${item.dataNascimento}" pattern="dd/MM/yyyy"/></td>
+			<td>
+				<a href="MatriculaServlet?id_aluno=${item.id}&acao=7">
+					<span class="glyphicon glyphicon-briefcase"></span>
+				</a>
+			</td>
 			<td>
 				<a href="AlunoServlet?id=${item.id}&acao=4">
 					<span class="glyphicon glyphicon-edit"></span>

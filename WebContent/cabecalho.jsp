@@ -12,8 +12,12 @@
 <title>Buscar Aluno</title>
 <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.css" rel="stylesheet">
 <script type="text/javascript">
-	var excluir = function() {
-		if (confirm("Deseja apagar?")) {
+	var excluir = function(mensagem) {
+		if (mensagem === undefined) {
+			mensagem = 'Deseja apagar?';
+		}
+		
+		if (confirm(mensagem)) {
 			return true;
 		} else {
 			return false;
@@ -98,6 +102,17 @@
       </ul>
     </div>
   </div>
+  <div class="btn-group">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Gest&atilde;o
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="${pageContext.request.contextPath}/MatriculaServlet?acao=4">Matricular Aluno</a></li>
+      </ul>
+    </div>
+  </div>  
   <div class="btn-group">
     <a class="btn btn-default" href="${pageContext.request.contextPath}/LogoutServlet">
     	&nbsp;<span class="glyphicon glyphicon-log-out"></span>&nbsp;

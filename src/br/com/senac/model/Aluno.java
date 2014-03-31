@@ -67,6 +67,14 @@ public class Aluno extends Pessoa {
 	public String toString() {
 		return "[Nome: " + getNome() + " Matricula: " + getMatriculaAtiva() + "]";
 	}
+
+	public void setMatriculas(List<Matricula> matriculas) {
+		this.matriculas = matriculas;
+	}
+	
+	public List<Matricula> getMatriculas() {
+		return matriculas;
+	}
 	
 }
 
