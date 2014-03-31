@@ -55,7 +55,7 @@
 		<th>Data Fim</th>
 		<th>Previsão Termino</th>
 		<th>Curso<th>
-		<th colspan="2">Aç&otilde;es</th>
+		<th colspan="3">Aç&otilde;es</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -66,6 +66,11 @@
 			<td><fmt:formatDate value="${item.dataFim}" pattern="dd/MM/yyyy"/></td>
 			<td><fmt:formatDate value="${item.previsaoTermino}" pattern="dd/MM/yyyy"/></td>
 			<td>${item.curso.nome}</td>
+			<td>
+				<a href="MatriculaServlet?id_turma=${item.id}&acao=6">
+					<span class="glyphicon glyphicon-user"></span>
+				</a>
+			</td>
 			<td>
 				<a href="TurmaServlet?id=${item.id}&acao=4">
 					<span class="glyphicon glyphicon-edit"></span>
