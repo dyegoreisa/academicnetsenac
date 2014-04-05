@@ -1,9 +1,12 @@
 package br.com.senac.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
+import br.com.senac.model.Disciplina;
 import br.com.senac.model.Disciplina;
 
 public class DisciplinaDAO {
@@ -85,6 +88,32 @@ public class DisciplinaDAO {
 			session.close();
 		}
 		return disciplinas;
+	}
+
+	public List<Disciplina> buscar(String texto) {
+		List<Disciplina> Disciplinas = null;
+		try {
+			session = Conexao.getSession();
+			session.beginTransaction();
+			Disciplinas = (List<Disciplina>) session.createCriteria(Disciplina.class)
+					.add( Restrictions.like("nome", "%" + texto + "%") )
+					.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return Disciplinas;
+	}
+
+	
+//	
+	
+	public List<Disciplina> getListByIds(Integer[] idsDisciplinas) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

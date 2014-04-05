@@ -37,4 +37,9 @@ public class Disciplina {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public void setMatriculas(Object byDisciplina) {
+		// TODO Auto-generated method stub
+		
+	}
 }

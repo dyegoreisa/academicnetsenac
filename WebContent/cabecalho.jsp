@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Buscar Aluno</title>
+<title>Academic Net Senac</title>
 <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.css" rel="stylesheet">
 <script type="text/javascript">
 	var excluir = function(mensagem) {
@@ -99,6 +99,7 @@
         <li><a href="${pageContext.request.contextPath}/AlunoServlet">Aluno</a></li>
 	    <li><a href="${pageContext.request.contextPath}/CursoServlet">Curso</a></li>
         <li><a href="${pageContext.request.contextPath}/TurmaServlet">Turma</a></li>
+        <li><a href="${pageContext.request.contextPath}/DisciplinaServlet">Disciplina</a></li>
       </ul>
     </div>
   </div>
@@ -110,6 +111,7 @@
       </button>
       <ul class="dropdown-menu">
         <li><a href="${pageContext.request.contextPath}/MatriculaServlet?acao=4">Matricular Aluno</a></li>
+        <!-- <li><a href="${pageContext.request.contextPath}/DisciplinaCursoServlet?acao=4">Incluir Disciplina</a></li>  -->
       </ul>
     </div>
   </div>  

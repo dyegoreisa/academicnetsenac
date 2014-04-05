@@ -18,13 +18,13 @@ import br.com.senac.model.Usuario;
 /**
  * Servlet Filter implementation class MeuFilter
  */
-@WebFilter("/paginas/*")
-public class LoginFilter implements Filter {
+@WebFilter("/*")
+public class AllFilter implements Filter {
 
     /**
      * Default constructor. 
      */
-    public LoginFilter() {
+    public AllFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -42,19 +42,24 @@ public class LoginFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		
+//		System.out.println("ServletPath: " + httpRequest.getServletPath());
+//		System.out.println("RequestURI: " + httpRequest.getRequestURI());
+		
 		HttpSession sessao = httpRequest.getSession();
 	
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
-		System.out.println("O usuário é: " + usuario);
 
-		if (usuario == null) {
-			System.out.println("Não está logado!");
-			request.setAttribute("mensagem", "Login ou senha inválidos!");
+		if (httpRequest.getRequestURI().contains("bootstrap") ||
+				httpRequest.getRequestURI().contains("LoginServlet")) {
+//			System.out.println("Liberado!!");
+			chain.doFilter(request, response);
+		} else if (usuario == null) {
+//			System.out.println("Não está logado!");
 			sessao.invalidate();
-			RequestDispatcher rd = request.getRequestDispatcher("../login.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 			rd.forward(request, response);
 		} else {
-			System.out.println(usuario.getLogin() + " Logado!");
+//			System.out.println(usuario.getLogin() + " Logado!");
 			chain.doFilter(request, response);
 		}
 		
