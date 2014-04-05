@@ -11,7 +11,7 @@
 <jsp:useBean id="aluno" scope="request" class="br.com.senac.model.Aluno"/>
 <H1>Cadastrado com sucesso!</H1>
 <p>
-	Dados do aluno cadatrado
+	Dados do aluno cadastrado
 	Nome: <jsp:getProperty property="nome" name="aluno"/>
 	<br>
 	Sobrenome: <jsp:getProperty property="sobrenome" name="aluno"/>
