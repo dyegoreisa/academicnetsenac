@@ -49,14 +49,14 @@ public class AllFilter implements Filter {
 	
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 
-		if (httpRequest.getRequestURI().contains("bootstrap") ||
-				httpRequest.getRequestURI().contains("LoginServlet")) {
+		if (httpRequest.getRequestURI().contains("javax.faces.resource") ||
+				httpRequest.getRequestURI().contains("login.jsf")) {
 //			System.out.println("Liberado!!");
 			chain.doFilter(request, response);
 		} else if (usuario == null) {
 //			System.out.println("Não está logado!");
 			sessao.invalidate();
-			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsf");
 			rd.forward(request, response);
 		} else {
 //			System.out.println(usuario.getLogin() + " Logado!");
