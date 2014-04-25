@@ -5,9 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -29,7 +31,7 @@ public abstract class Pessoa {
 	private String sobrenome;
 	private String email;
 	
-	@OneToMany(mappedBy = "pessoa")
+	@OneToMany(mappedBy = "pessoa", targetEntity = Telefone.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Telefone> telefones;
 	
 	@Temporal(TemporalType.DATE)
