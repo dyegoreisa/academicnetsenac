@@ -29,10 +29,7 @@ public class LoginMB {
 	}
 	
 	public String logar() {
-		System.out.println("entrei aqui!!!");
-		
-		FacesContext facesContext = FacesContext.getCurrentInstance();  
-        HttpServletRequest request = (HttpServletRequest) facesContext.getCurrentInstance().getExternalContext().getRequest();  
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();  
         HttpSession sessao = request.getSession();  
 		
 		String destino = "";
@@ -54,13 +51,10 @@ public class LoginMB {
 	}
 	
 	public String sair() {
-		System.out.println("Tô fora!!!");
-		
-		FacesContext facesContext = FacesContext.getCurrentInstance();  
-        HttpServletRequest request = (HttpServletRequest) facesContext.getCurrentInstance().getExternalContext().getRequest();  
-        HttpSession sessao = request.getSession();
-        sessao.invalidate();
-        return "login";
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();  
+		HttpSession sessao = request.getSession();
+		sessao.invalidate();
+		return "login";
 	}
 	
 }
