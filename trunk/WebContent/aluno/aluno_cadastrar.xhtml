@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cadastrar Aluno</title>
+	<h:outputStylesheet library="css" name="default.css" />
+	<h:outputStylesheet library="css" name="syntaxhighlighter.css" />
+</h:head>
+<h:body>
+    <p:growl id="messages"/>  
+
+    <p:menubar>
+    	<p:menuitem value="Home" url="#{pageContext.request.contextPath}/index.jsf" icon="ui-icon-home"/>
+  
+        <f:facet name="options">
+            <p:commandButton action="#{loginMB.sair}" type="button" value="Sair" icon="ui-icon-extlink" />
+        </f:facet>  
+    </p:menubar>
+    
+<h:form id="frmCadastroAluno">
+	<p:panel header="Cadastrar Aluno">
+		<p:panelGrid columns="3">
+
+			<h:outputLabel for="nome" value="Nome:"/>
+			<h:inputText id="nome" value="#{alunoMB.aluno.nome}"
+				required="true"
+				requiredMessage="O campo Nome é obrigatório!"/>
+			<h:message for="nome"/>
+			
+			<h:outputLabel for="sobrenome" value="Sobrenome:"/>
+			<h:inputText id="sobrenome" value="#{alunoMB.aluno.sobrenome}"
+				required="true"
+				requiredMessage="O campo Sobrenome é obrigatório!"/>
+			<h:message for="sobrenome"/>
+			
+			<h:outputLabel for="email" value="E-mail:"/>
+			<h:inputText id="email" value="#{alunoMB.aluno.email}"
+				rendered="true"
+				requiredMessage="O campo E-mail é obrigatório!"/>
+			<h:message for="email"/>
+			
+			<h:outputLabel for="dataNascimento" value="Data de Nascimento:"/>
+			<p:calendar id="dataNascimento" value="#{alunoMB.aluno.dataNascimento}"
+				locale="pt_BR"
+				showButtonPanel="true"
+				rendered="true"
+				requiredMessage="O campo Data de Nascimento é obrigatório!">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</p:calendar>				
+			<h:message for="dataNascimento"/>
+			
+			<h:outputLabel for="sexo" value="Sexo:"/>
+			<h:selectOneRadio id="sexo" value="#{alunoMB.aluno.sexo}">
+   				<f:selectItems value="#{alunoMB.mapSexo}" />
+   			</h:selectOneRadio>
+			<h:message for="sexo"/>
+			
+			<h:commandButton action="#{alunoMB.inserir}" update="messages" value="Salvar"/>
+		</p:panelGrid>
+	</p:panel>
+</h:form>
+</h:body>
+</html>
