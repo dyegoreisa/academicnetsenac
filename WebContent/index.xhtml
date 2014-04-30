@@ -2,36 +2,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<title>Index do sistema</title>
-	<h:outputStylesheet library="css" name="default.css" />
-	<h:outputStylesheet library="css" name="syntaxhighlighter.css" />
-</h:head>
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-<h:form id="frmMenu">
-    <p:growl id="messages"/>  
 
-    <p:menubar>
-    	<p:menuitem value="Home" url="/index.jsf" icon="ui-icon-home"/>
-    	
-        <p:submenu label="Cadastro" icon="ui-icon-pencil">  
-            <p:menuitem value="Aluno" url="/aluno/aluno_listar.jsf" />
-            <p:menuitem value="Curso" url="#" />
-            <p:menuitem value="Turma" url="#" />
-            <p:menuitem value="Disciplina" url="#" />  
-        </p:submenu>  
-  
-        <p:submenu label="Gestão" icon="ui-icon-clipboard">
-            <p:menuitem value="Matricular Aluno" url="#" icon="ui-icon-check" />  
-        </p:submenu>  
-  
-        <f:facet name="options">
-            <p:commandButton actionListener="#{loginMB.sair}" type="button" value="Sair" icon="ui-icon-extlink" />
-        </f:facet>  
-    </p:menubar>  
-</h:form>
-	<h:graphicImage url="/resources/images/academicnet_logo_texto.png" />
+	<ui:composition template="template/common/commonLayout.xhtml">
+
+	</ui:composition>
+
 </h:body>
 </html>
