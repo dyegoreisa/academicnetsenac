@@ -8,11 +8,11 @@
 	</welcome-file-list>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/pagina_nao_encontrada.jsf</location>
+		<location>/erro404.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/falha_na_operacao.jsf</location>
+		<location>/erro500.jsf</location>
 	</error-page>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
