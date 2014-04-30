@@ -1,67 +1,66 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<title>Lista de Alunos</title>
-	<h:outputStylesheet library="css" name="default.css" />
-	<h:outputStylesheet library="css" name="syntaxhighlighter.css" />
-</h:head>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-  
-    <p:growl id="messages"/>  
 
-    <p:menubar>
-    	<p:menuitem value="Home" url="#{pageContext.request.contextPath}/index.jsf" icon="ui-icon-home"/>
-  
-        <f:facet name="options">
-            <p:commandButton action="#{loginMB.sair}" type="button" value="Sair" icon="ui-icon-extlink" />
-        </f:facet>  
-    </p:menubar>
+	<ui:composition template="/template/common/commonLayout.xhtml">
+		<p:growl id="messages" />
+		<ui:define name="content">
+			<h:form id="frmListaAlunos">
+				<p:panelGrid columns="3">
+					<p:button value="Novo"
+						href="#{pageContext.request.contextPath}/aluno/aluno_cadastrar.jsf"
+						icon="ui-icon-plus" />
+					<p:inputText id="conteudo" value="#{alunoMB.conteudo}" />
+					<p:commandButton actionListener="#{alunoMB.buscar}" value="Buscar"
+						update="listaAluno" />
+				</p:panelGrid>
 
-	<h:form id="frmBusca">
-		<p:panelGrid columns="3">
-			<p:button value="Novo" href="#{pageContext.request.contextPath}/aluno/aluno_cadastrar.jsf" icon="ui-icon-plus"/>
-			<p:inputText id="conteudo" value="#{alunoMB.conteudo}" />
-			<p:commandButton action="#{alunoMB.buscar}" value="Buscar"/>
-		</p:panelGrid>
-	</h:form>
-	<h:form>
-	<p:dataTable id="listaAluno" var="item" value="#{alunoMB.alunos}"
-		paginator="true" rows="50" emptyMessage="Não há alunos cadastrados"
-		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-		rowsPerPageTemplate="10,15,25,50,100">
-		<f:facet name="header">Lista de Alunos</f:facet>
-		<p:column headerText="ID" style="width: 4%;"
-			sortBy="#{item.id}">
-			<h:outputText value="#{item.id}" />
-		</p:column>
-		<p:column headerText="Nome" style="width: 23%;" sortBy="#{item.nome}">
-			<h:outputText value="#{item.nome}" />
-		</p:column>
-		<p:column headerText="Sobrenome" style="width: 23%;"
-			sortBy="#{item.sobrenome}">
-			<h:outputText value="#{item.sobrenome}" />
-		</p:column>
-		<p:column headerText="E-mail" style="width: 30%;"
-			sortBy="#{item.email}">
-			<h:outputText value="#{item.email}" />
-		</p:column>
-		<p:column headerText="Dt Nasc." style="width: 10%;"
-			sortBy="#{item.dataNascimento}">
-			<h:outputText value="#{item.dataNascimento}">
-				<f:convertDateTime pattern="dd/MM/yyyy"/>
-			</h:outputText>
-		</p:column>
-		<p:column style="width:10%">
-			<p:splitButton value="Alterar" actionListener="#{alunoMB.goUpdate(item)}" ajax="false" icon="ui-icon-arrowrefresh-1-w">
-		        <p:menuitem value="Excluir" actionListener="#{alunoMB.excluir(item)}" update="listaAluno" icon="ui-icon-close"/>
-		    </p:splitButton>
-        </p:column>        
-	
-	</p:dataTable>
-	</h:form>
+				<p:dataTable id="listaAluno" var="item" value="#{alunoMB.alunos}"
+					paginator="true" rows="50" emptyMessage="NÃ£o hÃ¡ alunos cadastrados"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,15,25,50,100">
+					<f:facet name="header">Lista de Alunos</f:facet>
+					<p:column headerText="ID" style="width: 4%;" sortBy="#{item.id}">
+						<h:outputText value="#{item.id}" />
+					</p:column>
+					<p:column headerText="Nome" style="width: 23%;"
+						sortBy="#{item.nome}">
+						<h:outputText value="#{item.nome}" />
+					</p:column>
+					<p:column headerText="Sobrenome" style="width: 23%;"
+						sortBy="#{item.sobrenome}">
+						<h:outputText value="#{item.sobrenome}" />
+					</p:column>
+					<p:column headerText="E-mail" style="width: 30%;"
+						sortBy="#{item.email}">
+						<h:outputText value="#{item.email}" />
+					</p:column>
+					<p:column headerText="Dt Nasc." style="width: 10%;"
+						sortBy="#{item.dataNascimento}">
+						<h:outputText value="#{item.dataNascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:10%">
+						<p:splitButton value="Alterar" action="#{alunoMB.goUpdate(item)}"
+							icon="ui-icon-arrowrefresh-1-w">
+							<p:menuitem value="Excluir"
+								actionListener="#{alunoMB.excluir(item)}" icon="ui-icon-close"
+								update="listaAluno" />
+						</p:splitButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
 </h:body>
+
 </html>

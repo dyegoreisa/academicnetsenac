@@ -16,18 +16,18 @@ public class AlunoMB {
 
 	private Aluno aluno;
 	private AlunoDAO alunoDAO;
+	private List<Aluno> alunos;
+	private String destino;
+	private int acao;
 	
 	/**
 	 * Campo usado para busca
 	 */
 	private String conteudo;
-	
-	private List<Aluno> alunos;
-	private String destino;
-	
-	private static Map<String,Object> mapSexo;
+
+	private static Map<String,String> mapSexo;
 	static {
-		mapSexo = new LinkedHashMap<String,Object>();
+		mapSexo = new LinkedHashMap<String,String>();
 		mapSexo.put("Masculino", "M"); //label, value
 		mapSexo.put("Feminio", "F");
 	}
@@ -35,6 +35,7 @@ public class AlunoMB {
 	public AlunoMB() {
 		aluno = new Aluno();
 		alunoDAO = new AlunoDAO();
+		acao = 1;
 	}
 
 	public Aluno getAluno() {
@@ -64,7 +65,7 @@ public class AlunoMB {
 		this.conteudo = conteudo;
 	}
 	
-	public Map<String,Object> getMapSexo() {
+	public Map<String,String> getMapSexo() {
 		return mapSexo;
 	}
 	
@@ -76,6 +77,13 @@ public class AlunoMB {
 		this.destino = destino;
 	}
 	
+	public int getAcao() {
+		return acao;
+	}
+	
+	public void setAcao(int acao) {
+		this.acao = acao;
+	}
 	
 	/*
 	 * Comandos 
@@ -83,21 +91,28 @@ public class AlunoMB {
 
 	public String goUpdate(Aluno alunoSelecionado) {
 		aluno = alunoDAO.getById(alunoSelecionado.getId());
-		return "aluno/aluno_cadastrar";
+		acao = 2;
+		return "aluno_cadastrar";
 	}
 
-	public String inserir() {
-		alunoDAO.inserir(aluno);
-		return "aluno_listar";
-	}
-	
-	public String alterar() {
-		alunoDAO.atualizar(aluno);
+	public String salvar() {
+		switch(acao)
+		{
+			case 1: // Inserir
+				alunoDAO.inserir(aluno);
+				break;
+				
+			case 2: // Alterar
+				alunoDAO.atualizar(aluno);
+				break;
+		}
+		
 		return "aluno_listar";
 	}
 	
 	public void excluir(Aluno alunoSelecionado) {
 		alunoDAO.apagar(alunoSelecionado);
+		alunos = alunoDAO.listar();
 	}
 	
 	public List<Aluno> listar() {

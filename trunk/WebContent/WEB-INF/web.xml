@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <welcome-file-list>
-    <welcome-file>login.jsf</welcome-file>
-  </welcome-file-list>
-  <error-page>
-    <error-code>404</error-code>
-    <location>/pagina_nao_encontrada.jsf</location>
-  </error-page>
-  <error-page>
-    <error-code>500</error-code>
-    <location>/falha_na_operacao.jsf</location>
-  </error-page>
-  <context-param>  
-	<param-name>primefaces.THEME</param-name>  
-	<param-value>bootstrap</param-value>  
-  </context-param>		
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<welcome-file-list>
+		<welcome-file>login.jsf</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/pagina_nao_encontrada.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/falha_na_operacao.jsf</location>
+	</error-page>
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
 </web-app>
