@@ -126,4 +126,22 @@ public class TurmaDAO {
 		}
 		return turmas;
 	}
+
+	public List<Turma> buscar(String texto) {
+		List<Turma> turmas = null;
+		try {
+			session = Conexao.getSession();
+			session.beginTransaction();
+			turmas = (List<Turma>) session.createCriteria(Turma.class)
+					.add(Restrictions.like("nome", "%" + texto + "%")).list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return turmas;
+	}
+	
 }
