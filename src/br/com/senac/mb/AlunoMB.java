@@ -92,7 +92,7 @@ public class AlunoMB {
 	public String goUpdate(Aluno alunoSelecionado) {
 		aluno = alunoDAO.getById(alunoSelecionado.getId());
 		acao = 2;
-		return "aluno_cadastrar";
+		return "cadastrarAluno";
 	}
 
 	public String salvar() {
@@ -107,7 +107,7 @@ public class AlunoMB {
 				break;
 		}
 		
-		return "aluno_listar";
+		return "listarAluno";
 	}
 	
 	public void excluir(Aluno alunoSelecionado) {

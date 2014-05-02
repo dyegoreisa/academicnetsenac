@@ -16,14 +16,16 @@
 				<p:menuitem value="Home" url="/index.jsf" icon="ui-icon-home" />
 
 				<p:submenu label="Cadastro" icon="ui-icon-pencil">
-					<p:menuitem value="Aluno" url="/aluno/aluno_listar.jsf" />
-					<p:menuitem value="Curso" url="#" />
-					<p:menuitem value="Turma" url="#" />
-					<p:menuitem value="Disciplina" url="#" />
+					<p:menuitem value="Aluno" url="/aluno/listarAluno.jsf" />
+					<p:menuitem value="Curso" url="/curso/listarCurso.jsf" />
+					<p:menuitem value="Turma" url="/turma/listarTurma.jsf" />
+					<p:menuitem value="Disciplina"
+						url="/disciplina/listarDisciplina.jsf" />
 				</p:submenu>
 
 				<p:submenu label="Gestão" icon="ui-icon-clipboard">
-					<p:menuitem value="Matricular Aluno" url="#" icon="ui-icon-check" />
+					<p:menuitem value="Matricular Aluno"
+						url="/matricula/matricularAlunoTurma.jsf" icon="ui-icon-check" />
 				</p:submenu>
 
 				<f:facet name="options">
