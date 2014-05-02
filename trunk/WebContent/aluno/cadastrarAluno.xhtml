@@ -12,6 +12,9 @@
 		<ui:define name="content">
 			<p:growl id="messages" />
 			<h:form id="frmCadastroAluno">
+				<h:inputHidden id="id" value="#{alunoMB.aluno.id}" />
+				<h:inputHidden id="acao" value="#{alunoMB.acao}" />
+
 				<p:panel header="Cadastrar Aluno">
 					<p:panelGrid columns="3">
 
