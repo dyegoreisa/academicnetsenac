@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+	<ui:composition template="/template/common/commonLayout.xhtml">
+		<p:growl id="messages" />
+		<ui:define name="content">
+			<h:form id="frmListaTurmas">
+				<p:panelGrid columns="3">
+					<p:button value="Novo"
+						href="#{pageContext.request.contextPath}/turma/cadastrarTurma.jsf"
+						icon="ui-icon-plus" />
+					<p:inputText id="conteudo" value="#{turmaMB.conteudo}" />
+ 					<p:commandButton actionListener="#{turmaMB.buscar}" value="Buscar"
+						update="listaTurma" />
+				</p:panelGrid>
+
+				<p:dataTable id="listaTurma" var="item" value="#{turmaMB.turmas}"
+					paginator="true" rows="50" emptyMessage="Não há turmas cadastrados"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,15,25,50,100">
+					<f:facet name="header">Lista de Turmas</f:facet>
+					<p:column headerText="ID" style="width: 4%;" sortBy="#{item.id}">
+						<h:outputText value="#{item.id}" />
+					</p:column>
+					<p:column headerText="Nome" style="width: 36%;"
+						sortBy="#{item.nome}">
+						<h:outputText value="#{item.nome}" />
+					</p:column>
+					<p:column headerText="Data Inicio" style="width: 10%;"
+						sortBy="#{item.dataInicio}">
+						<h:outputText value="#{item.dataInicio}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Data Fim" style="width: 10%;"
+						sortBy="#{item.dataFim}">
+						<h:outputText value="#{item.dataFim}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Previsão Término" style="width: 10%;"
+						sortBy="#{item.previsaoTermino}">
+						<h:outputText value="#{item.previsaoTermino}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:10%">
+						<p:splitButton value="Alterar" action="#{turmaMB.goUpdate(item)}"
+							icon="ui-icon-arrowrefresh-1-w">
+							<p:menuitem value="Excluir"
+								actionListener="#{turmaMB.excluir(item)}" icon="ui-icon-close"
+								update="listaTurma" />
+						</p:splitButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

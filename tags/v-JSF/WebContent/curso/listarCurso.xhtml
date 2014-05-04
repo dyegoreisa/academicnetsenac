@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+	<ui:composition template="/template/common/commonLayout.xhtml">
+		<p:growl id="messages" />
+		<ui:define name="content">
+			<h:form id="frmListaCursos">
+				<p:panelGrid columns="3">
+					<p:button value="Novo"
+						href="#{pageContext.request.contextPath}/curso/cadastrarCurso.jsf"
+						icon="ui-icon-plus" />
+					<p:inputText id="conteudo" value="#{cursoMB.conteudo}" />
+					<p:commandButton actionListener="#{cursoMB.buscar}" value="Buscar"
+						update="listaCurso" />
+				</p:panelGrid>
+
+				<p:dataTable id="listaCurso" var="item" value="#{cursoMB.cursos}"
+					paginator="true" rows="50" emptyMessage="Não há cursos cadastrados"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,15,25,50,100">
+					<f:facet name="header">Lista de Cursos</f:facet>
+					<p:column headerText="ID" style="width: 5%;" sortBy="#{item.id}">
+						<h:outputText value="#{item.id}" />
+					</p:column>
+					<p:column headerText="Nome" style="width: 85%;"
+						sortBy="#{item.nome}">
+						<h:outputText value="#{item.nome}" />
+					</p:column>
+					<p:column style="width:10%">
+						<p:splitButton value="Alterar" action="#{cursoMB.goUpdate(item)}"
+							icon="ui-icon-arrowrefresh-1-w">
+							<p:menuitem value="Excluir"
+								actionListener="#{cursoMB.excluir(item)}" icon="ui-icon-close"
+								update="listaCurso" />
+						</p:splitButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

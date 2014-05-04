@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+	<ui:composition template="/template/common/commonLayout.xhtml">
+
+		<ui:define name="content">
+			<p:growl id="messages" />
+			<h:form id="frmCadastroDisciplina">
+				<h:inputHidden id="id" value="#{disciplinaMB.disciplina.id}" />
+				<h:inputHidden id="acao" value="#{disciplinaMB.acao}" />
+
+				<p:panel header="Cadastrar Disciplina">
+					<p:panelGrid columns="3">
+
+						<h:outputLabel for="nome" value="Nome:" />
+						<h:inputText id="nome" value="#{disciplinaMB.disciplina.nome}"
+							required="true" requiredMessage="O campo Nome é obrigatório!" />
+						<h:message for="nome" />
+
+					</p:panelGrid>
+
+					<h:commandButton action="#{disciplinaMB.salvar}" update="messages"
+						value="Salvar" />
+
+					<h:commandButton type="reset" value="Limpar" />
+
+				</p:panel>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+</html>
