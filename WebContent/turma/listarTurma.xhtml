@@ -50,10 +50,6 @@
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</p:column>
-					<p:column headerText="Curso" style="width: 20%;"
-						sortBy="#{item.curso}">
-						<h:outputText value="#{item.curso}" />
-					</p:column>
 					<p:column style="width:10%">
 						<p:splitButton value="Alterar" action="#{turmaMB.goUpdate(item)}"
 							icon="ui-icon-arrowrefresh-1-w">

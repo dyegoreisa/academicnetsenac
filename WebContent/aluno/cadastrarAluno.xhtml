@@ -31,15 +31,15 @@
 
 						<h:outputLabel for="email" value="E-mail:" />
 						<h:inputText id="email" value="#{alunoMB.aluno.email}"
-							rendered="true" requiredMessage="O campo E-mail é obrigatório!" />
+							rendered="true" requiredMessage="O campo E-mail é obrigatório!"
+							validator="validaEmail" />
 						<h:message for="email" />
 
 						<h:outputLabel for="dataNascimento" value="Data de Nascimento:" />
 						<p:calendar id="dataNascimento"
 							value="#{alunoMB.aluno.dataNascimento}" locale="pt_BR"
-							showButtonPanel="true" rendered="true"
-							requiredMessage="O campo Data de Nascimento é obrigatório!">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							showButtonPanel="true" rendered="true">
+							<f:convertDateTime pattern="dd/MM/yy" timeZone="GMT-3" />
 						</p:calendar>
 						<h:message for="dataNascimento" />
 
@@ -49,10 +49,15 @@
 						</h:selectOneRadio>
 						<h:message for="sexo" />
 
+					</p:panelGrid>
+																							
 						<h:commandButton action="#{alunoMB.salvar}" update="messages"
 							value="Salvar" />
-					</p:panelGrid>
+
+						<h:commandButton type="reset" value="Limpar" />
+																	
 				</p:panel>
+				
 			</h:form>
 		</ui:define>
 

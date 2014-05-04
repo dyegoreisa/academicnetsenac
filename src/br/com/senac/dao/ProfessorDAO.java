@@ -95,49 +95,4 @@ public class ProfessorDAO {
 		}
 		return professor;
 	}
-	
-/*	public ArrayList<Aluno> listarAlunosByProfessor(int id) {
-		conn = Conexao.getConexao();
-		
-		ArrayList<Aluno> alunos = new ArrayList<>();
-		PreparedStatement pstmt = null;
-		
-		try {
-			pstmt = conn.prepareStatement("select a.id, a.nome, a.sobrenome, "
-					+ "a.email, a.matricula, a.bolsa "
-					+ "from turma_professor tp "
-					+ "join turma_aluno ta on ta.id_turma = tp.id_turma "
-					+ "join aluno a on a.id = ta.id_aluno "
-					+ "where tp.id_professor = ?");
-			pstmt.setInt(1, id);
-			ResultSet rs = pstmt.executeQuery();
-			
-			while (rs.next()) {
-				alunos.add(null); /*new Aluno(rs.getInt("id"), 
-						rs.getString("nome"),
-						rs.getString("sobrenome"), 
-						rs.getString("email"), 
-						rs.getInt("matricula"), 
-						rs.getBoolean("bolsa")));
-			}
-			
-			rs.close();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return alunos;
-	}
-	*/
 }

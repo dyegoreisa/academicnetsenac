@@ -29,7 +29,7 @@ public class AlunoMB {
 	static {
 		mapSexo = new LinkedHashMap<String,String>();
 		mapSexo.put("Masculino", "M"); //label, value
-		mapSexo.put("Feminio", "F");
+		mapSexo.put("Feminino", "F");
 	}
 	
 	public AlunoMB() {
