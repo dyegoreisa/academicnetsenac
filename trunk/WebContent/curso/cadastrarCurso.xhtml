@@ -23,9 +23,13 @@
 							required="true" requiredMessage="O campo Nome é obrigatório!" />
 						<h:message for="nome" />
 
-						<h:commandButton action="#{cursoMB.salvar}" update="messages"
-							value="Salvar" />
 					</p:panelGrid>
+
+					<h:commandButton action="#{cursoMB.salvar}" update="messages"
+						value="Salvar" />
+
+					<h:commandButton type="reset" value="Limpar" />
+
 				</p:panel>
 			</h:form>
 		</ui:define>

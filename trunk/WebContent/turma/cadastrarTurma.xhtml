@@ -17,49 +17,42 @@
 				<p:panel header="Cadastrar Turma">
 					<p:panelGrid columns="3">
 
-						<h:outputLabel for="curso" value="Nome:" />
-						<h:selectOneMenu id="curso" value="#{turmaMB.turma.curso}" converter="cursoConverter">
-							<f:selectItems value="#{turmaMB.turmas}" 
-								var="item"
-								itemValue="#{item.id}"
-								itemLabel="#{item.nome}"/>
-						</h:selectOneMenu>
-						<h:message for="curso" />				
-
 						<h:outputLabel for="nome" value="Nome:" />
 						<h:inputText id="nome" value="#{turmaMB.turma.nome}"
 							required="true" requiredMessage="O campo Nome é obrigatório!" />
 						<h:message for="nome" />
 
 						<h:outputLabel for="dataInicio" value="Data Incio:" />
-						<p:calendar id="dataInicio" 
-							value="#{turmaMB.turma.dataInicio}"
-							locale="pt_BR" showButtonPanel="true" rendered="true"
+						<p:calendar id="dataInicio" value="#{turmaMB.turma.dataInicio}"
+							locale="pt_BR" showButtonPanel="true" required="true"
 							requiredMessage="O campo Data Inicio é obrigatório!">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							<f:convertDateTime pattern="dd/MM/yy" timeZone="GMT-3" />
 						</p:calendar>
 						<h:message for="dataInicio" />
-		
+
 						<h:outputLabel for="dataFim" value="Data Fim:" />
-						<p:calendar id="dataFim"
-							value="#{turmaMB.turma.dataFim}" locale="pt_BR"
-							showButtonPanel="true" rendered="true">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+						<p:calendar id="dataFim" value="#{turmaMB.turma.dataFim}"
+							locale="pt_BR" showButtonPanel="true" rendered="true">
+							<f:convertDateTime pattern="dd/MM/yy" timeZone="GMT-3" />
 						</p:calendar>
 						<h:message for="dataFim" />
 
 						<h:outputLabel for="previsaoTermino" value="Previsão de Término:" />
 						<p:calendar id="previsaoTermino"
 							value="#{turmaMB.turma.previsaoTermino}" locale="pt_BR"
-							showButtonPanel="true" rendered="true"
+							showButtonPanel="true" required="true"
 							requiredMessage="O campo Previsão de Término é obrigatório!">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							<f:convertDateTime pattern="dd/MM/yy" timeZone="GMT-3" />
 						</p:calendar>
 						<h:message for="previsaoTermino" />
-		
-						<h:commandButton action="#{turmaMB.salvar}" update="messages"
-							value="Salvar" />
+
 					</p:panelGrid>
+
+					<h:commandButton action="#{turmaMB.salvar}" update="messages"
+						value="Salvar" />
+
+					<h:commandButton type="reset" value="Limpar" />
+
 				</p:panel>
 			</h:form>
 		</ui:define>
