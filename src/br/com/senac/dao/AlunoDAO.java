@@ -3,16 +3,28 @@ package br.com.senac.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.senac.model.Aluno;
 
+@Stateless
+@Interceptors(AlunoInterceptor.class)
 public class AlunoDAO {
 	
-	private Session session;		
-			
+	@PersistenceContext
+	EntityManager em;
+
+	public Session session;
+	
 	public boolean inserir(Aluno aluno) {
+		em.persist(aluno);
+		return true;
+	}
+	
+/*	public boolean inserir(Aluno aluno) {
 		boolean resp = false;
 		try {
 			session = Conexao.getSession();
@@ -28,7 +40,7 @@ public class AlunoDAO {
 		}
 		return resp;
 	}
-
+*/
 	public boolean atualizar(Aluno aluno) {
 		boolean resp = false;
 		try {

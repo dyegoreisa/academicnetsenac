@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
@@ -15,7 +16,10 @@ import br.com.senac.model.Aluno;
 public class AlunoMB {
 
 	private Aluno aluno;
+	
+	@EJB
 	private AlunoDAO alunoDAO;
+	
 	private List<Aluno> alunos;
 	private String destino;
 	private int acao;
@@ -34,7 +38,7 @@ public class AlunoMB {
 	
 	public AlunoMB() {
 		aluno = new Aluno();
-		alunoDAO = new AlunoDAO();
+		//alunoDAO = new AlunoDAO();
 		acao = 1;
 	}
 
