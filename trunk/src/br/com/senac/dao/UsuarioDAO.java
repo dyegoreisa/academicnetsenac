@@ -1,90 +1,55 @@
 package br.com.senac.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 
+import br.com.senac.model.Aluno;
 import br.com.senac.model.Usuario;
 
+@Stateless
 public class UsuarioDAO {
 	
-	private Session session;		
+	@PersistenceContext
+	EntityManager em;
 			
 	public boolean inserir(Usuario usuario) {
 		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.save(usuario);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		em.persist(usuario);
 		return resp;
 	}
 
 	public boolean atualizar(Usuario usuario) {
 		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.update(usuario);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		em.merge(usuario);
 		return resp;
 	}
 
 	public boolean apagar(Usuario usuario) {
 		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.delete(usuario);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		// TODO: Verificar se o usuário existe
+		em.remove(usuario);
 		return resp;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Usuario> listar() {
-		List<Usuario> usuarios = new ArrayList();
-		session = Conexao.getSession();
-		try {
-			session.beginTransaction();
-			usuarios = session.createCriteria(Usuario.class).list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return usuarios;
+		CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+		cq.select(cq.from(Aluno.class));
+		return (List<Usuario>) em.createQuery(cq).getResultList();
 	}
 	
 	public Usuario getById(int id) {
 		Usuario usuario = new Usuario();
-		try {
+		/*try {
 			session = Conexao.getSession();
 			session.beginTransaction();
 			usuario = (Usuario) session.get(Usuario.class, id);
@@ -94,13 +59,16 @@ public class UsuarioDAO {
 			e.printStackTrace();
 		} finally {
 			session.close();
-		}
-		return usuario;
+		}*/
+
+		return (Usuario) em.createQuery("SELECT * FROM usuario u WHERE u.id = :id")
+				.setParameter("id", id)
+				.setMaxResults(1);
 	}
 	
 	public List<Usuario> buscar(String texto) {
 		List<Usuario> usuarios = null;
-		try {
+		/*try {
 			session = Conexao.getSession();
 			session.beginTransaction();
 			usuarios = (List<Usuario>) session.createCriteria(Usuario.class)
@@ -112,12 +80,12 @@ public class UsuarioDAO {
 			e.printStackTrace();
 		} finally {
 			session.close();
-		}
+		}*/
 		return usuarios;
 	}
 	
 	public boolean verificarAcesso(Usuario usuario) {
-		Usuario usuarioBanco = null;
+		/*Usuario usuarioBanco = null;
 		try {
 			session = Conexao.getSession();
 			session.beginTransaction();
@@ -138,7 +106,16 @@ public class UsuarioDAO {
 		} finally {
 			session.close();
 		}
-		return (usuarioBanco != null);
+		
+		return (usuarioBanco != null);*/
+		
+		Object u = em.createQuery("SELECT id FROM Usuario u WHERE u.login = :login and u.senha = :senha")
+				.setParameter("login", usuario.getLogin())
+				.setParameter("senha", usuario.getSenha())
+				.setMaxResults(1);
+		
+		return (u != null);
+		
 	}
 }
 

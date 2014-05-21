@@ -2,6 +2,7 @@ package br.com.senac.mb;
 
 import java.io.IOException;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -18,6 +19,9 @@ import br.com.senac.model.Usuario;
 public class LoginMB {
 
 	private Usuario usuario;
+	
+	@EJB
+	private UsuarioDAO usuarioDAO;
 	
 	public LoginMB() {
 		usuario = new Usuario();
@@ -37,9 +41,7 @@ public class LoginMB {
 		
 		String destino = "";
 		
-		UsuarioDAO usuDAO = new UsuarioDAO();
-		
-		if (usuDAO.verificarAcesso(usuario)) {
+		if (usuarioDAO.verificarAcesso(usuario)) {
 			sessao.setAttribute("usuarioLogado", usuario);
 			destino = "index";
 		} else {
