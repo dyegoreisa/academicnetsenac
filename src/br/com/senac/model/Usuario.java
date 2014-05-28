@@ -3,14 +3,23 @@ package br.com.senac.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(
+			name = "verificarLoginSenhaUsuario", 
+			query = "SELECT u FROM Usuario u WHERE u.login = :login AND u.senha = :senha "
+	) 
+})
 public class Usuario {
 
 	@Id
 	@GeneratedValue
 	private long id;
-	
+
 	private String nome;
 	private String login;
 	private String senha;
@@ -65,6 +74,5 @@ public class Usuario {
 		}
 		return false;
 	}
-	
-	
+
 }

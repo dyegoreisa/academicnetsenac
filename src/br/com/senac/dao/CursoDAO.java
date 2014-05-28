@@ -1,114 +1,61 @@
 package br.com.senac.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 
-import br.com.senac.model.Aluno;
 import br.com.senac.model.Curso;
 
+@Stateless
+@Local
 public class CursoDAO {
 	
-	public Session session;
+	@PersistenceContext
+	EntityManager em;
 	
 	public boolean inserir(Curso curso) {
-		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.save(curso);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return resp;
+		em.persist(curso);
+		return true;
 	}
 
 	public boolean atualizar(Curso curso) {
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.update(curso);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return false;
+		em.merge(curso);
+		return true;
 	}
 	
 	public boolean apagar(Curso curso) {
-		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.delete(curso);
-			session.getTransaction().commit();
-			resp = true;
-		} catch(Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+		curso = getById(curso.getId());
+		if (curso != null) {
+			em.remove(curso);
 		}
-		return resp;
+		return true;
 	}
 
 	public Curso getById(int id) {
-		Curso curso = new Curso();
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			curso = (Curso) session.get(Curso.class, id);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-		return curso;
+		return em.find(Curso.class, id);
 	}
 	
-	public ArrayList<Curso> listar() {
-		ArrayList<Curso> cursos = new ArrayList();
-		session = Conexao.getSession();
-		try {
-			session.beginTransaction();
-			cursos = (ArrayList<Curso>) session.createCriteria(Curso.class).list();
-			session.getTransaction().commit();
-		} catch(Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return cursos;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Curso> listar() {
+		CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+		cq.select(cq.from(Curso.class));
+		return (List<Curso>) em.createQuery(cq).getResultList();
 	}
 
 	public List<Curso> buscar(String texto) {
-		List<Curso> cursos = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			cursos = (List<Curso>) session.createCriteria(Curso.class)
-					.add( Restrictions.like("nome", "%" + texto + "%") )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		texto = "%" + texto + "%";
+		
+		Query query = em.createNamedQuery("buscarCursos");
+		query.setParameter("nome", texto);
+		query.setMaxResults(10);
+		
+		List<Curso> cursos = query.getResultList();
+		
 		return cursos;
 	}	
 	

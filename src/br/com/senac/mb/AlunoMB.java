@@ -38,7 +38,6 @@ public class AlunoMB {
 	
 	public AlunoMB() {
 		aluno = new Aluno();
-		//alunoDAO = new AlunoDAO();
 		acao = 1;
 	}
 

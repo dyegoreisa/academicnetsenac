@@ -7,19 +7,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
-import br.com.senac.dao.CursoDAO;
+import br.com.senac.dao.AlunoDAO;
+import br.com.senac.model.Aluno;
 import br.com.senac.model.Curso;
 
-@FacesConverter(value = "cursoConverter")
-public class CursoConverter implements Converter {
+@FacesConverter(value = "alunoConverter")
+public class AlunoConverter implements Converter {
 
 	@EJB
-	private CursoDAO dao;
+	private AlunoDAO dao;
+
 	
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value != null && value.equals("")) {
-            return dao.getById(Integer.parseInt(value));  
+            return dao.getById(Integer.parseInt(value)); 
         } else {  
             return null;  
         }
@@ -29,10 +31,10 @@ public class CursoConverter implements Converter {
 	public String getAsString(FacesContext context, UIComponent component, Object object) {
 		try {  
 			if (object instanceof Curso) {
-				Curso curso = (Curso) object;
-				return String.valueOf(curso.getId()); 
+				Aluno aluno = (Aluno) object;
+				return String.valueOf(aluno.getId()); 
 			}
-        } catch (ConverterException e) {  
+        } catch (ConverterException e) {
             e.printStackTrace();  
         }  
         return null; 

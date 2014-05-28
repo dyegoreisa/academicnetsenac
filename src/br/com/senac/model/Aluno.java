@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@DiscriminatorValue("Aluno")
-@Table(name="Aluno")
+@NamedQueries({ 
+	@NamedQuery(
+			name = "buscarAlunos", 
+			query = "SELECT a FROM Aluno a WHERE a.nome LIKE :nome OR a.sobrenome LIKE :sobrenome OR a.email LIKE :email "
+	) 
+})
 public class Aluno extends Pessoa {
 
 	private Boolean bolsa;

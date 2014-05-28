@@ -3,14 +3,18 @@ package br.com.senac.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 @Entity
-@DiscriminatorValue("Professor")
-@Table(name="Professor")
+@NamedQueries({ 
+	@NamedQuery(
+			name = "buscarProfessores", 
+			query = "SELECT p FROM Professor p WHERE p.nome LIKE :nome OR p.sobrenome LIKE :sobrenome OR p.email LIKE :email "
+	) 
+})
 public class Professor extends Pessoa {
 
 	private String especialidade;

@@ -8,12 +8,21 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(
+			name = "buscarCursos", 
+			query = "SELECT c FROM Curso c WHERE c.nome LIKE :nome "
+	) 
+})
 public class Curso {
 	
-	@Id @GeneratedValue
+	@Id 
+	@GeneratedValue
 	private int id;
 	
 	private String nome;

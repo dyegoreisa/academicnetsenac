@@ -3,113 +3,67 @@ package br.com.senac.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.senac.model.Disciplina;
 import br.com.senac.model.Disciplina;
+import br.com.senac.model.Disciplina;
 
+@Stateless
+@Local
 public class DisciplinaDAO {
 	
-	public Session session;
+	@PersistenceContext
+	EntityManager em;
 	
 	public boolean inserir(Disciplina disciplina) {
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.save(disciplina);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return false;
+		em.persist(disciplina);
+		return true;
 	}
 
 	public boolean atualizar(Disciplina disciplina) {
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.update(disciplina);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return false;
+		em.merge(disciplina);
+		return true;
 	}
 	
 	public boolean apagar(Disciplina disciplina) {
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.delete(disciplina);
-			session.getTransaction().commit();
-		} catch(Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+		disciplina = getById(disciplina.getId());
+		if (disciplina != null) {
+			em.remove(disciplina);
 		}
-		return false;
+		return true;
 	}
 
 	public Disciplina getById(int id) {
-		Disciplina disciplina = new Disciplina();
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			disciplina = (Disciplina) session.get(Disciplina.class, id);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-		return disciplina;
+		return em.find(Disciplina.class, id);
 	}
 	
-	public ArrayList<Disciplina> listar() {
-		ArrayList<Disciplina> disciplinas = new ArrayList();
-		session = Conexao.getSession();
-		try {
-			session.beginTransaction();
-			disciplinas = (ArrayList<Disciplina>) session.createCriteria(Disciplina.class).list();
-			session.getTransaction().commit();
-		} catch(Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return disciplinas;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Disciplina> listar() {
+		CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+		cq.select(cq.from(Disciplina.class));
+		return (List<Disciplina>) em.createQuery(cq).getResultList();
 	}
 
 	public List<Disciplina> buscar(String texto) {
-		List<Disciplina> Disciplinas = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			Disciplinas = (List<Disciplina>) session.createCriteria(Disciplina.class)
-					.add( Restrictions.like("nome", "%" + texto + "%") )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return Disciplinas;
+		texto = "%" + texto + "%";
+		
+		Query query = em.createNamedQuery("buscarDisciplinas");
+		query.setParameter("nome", texto);
+		query.setMaxResults(10);
+		
+		List<Disciplina> disciplinas = query.getResultList();
+		
+		return disciplinas;
 	}
-
-	
-//	
 	
 	public List<Disciplina> getListByIds(Integer[] idsDisciplinas) {
 		// TODO Auto-generated method stub

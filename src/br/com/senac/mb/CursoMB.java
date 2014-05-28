@@ -2,6 +2,7 @@ package br.com.senac.mb;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
@@ -13,7 +14,10 @@ import br.com.senac.model.Curso;
 public class CursoMB {
 
 	private Curso curso;
+	
+	@EJB
 	private CursoDAO cursoDAO;
+	
 	private List<Curso> cursos;
 	private int acao;
 	
@@ -24,7 +28,6 @@ public class CursoMB {
 	
 	public CursoMB() {
 		curso = new Curso();
-		cursoDAO = new CursoDAO();
 		acao = 1;
 	}
 
