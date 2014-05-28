@@ -3,11 +3,20 @@ package br.com.senac.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(
+			name = "buscarDisciplinas", 
+			query = "SELECT d FROM Disciplina d WHERE d.nome LIKE :nome "
+	) 
+})
 public class Disciplina {
 	
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	private String nome;

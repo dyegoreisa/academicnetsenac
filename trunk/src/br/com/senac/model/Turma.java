@@ -13,11 +13,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(
+			name = "buscarTurmas", 
+			query = "SELECT t FROM Turma t WHERE t.nome LIKE :nome "
+	) 
+})
 public class Turma {
 	
 	@Id @GeneratedValue

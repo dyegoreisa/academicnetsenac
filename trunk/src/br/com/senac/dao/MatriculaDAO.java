@@ -1,10 +1,13 @@
 package br.com.senac.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.senac.model.Aluno;
 import br.com.senac.model.Curso;
@@ -12,195 +15,84 @@ import br.com.senac.model.Disciplina;
 import br.com.senac.model.Matricula;
 import br.com.senac.model.Turma;
 
+@Stateless
+@Local
 public class MatriculaDAO {
 	
-	private Session session;		
+	@PersistenceContext
+	EntityManager em;		
 			
 	public boolean inserir(Matricula matricula) {
-		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.save(matricula);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return resp;
+		em.persist(matricula);
+		return true;
 	}
 
 	public boolean atualizar(Matricula matricula) {
-		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.update(matricula);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return resp;
+		em.merge(matricula);
+		return true;
 	}
-
+	
 	public boolean apagar(Matricula matricula) {
-		boolean resp = false;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			session.delete(matricula);
-			session.getTransaction().commit();
-			resp = true;
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+		matricula = getByCodigo(matricula.getCodigo());
+		if (matricula != null) {
+			em.remove(matricula);
 		}
-		return resp;
+		return true;
 	}
 
+	public Matricula getByCodigo(String codigo) {
+		// TODO: Buscar por código
+		return null;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Matricula> listar() {
-		List<Matricula> matriculas = new ArrayList();
-		session = Conexao.getSession();
-		try {
-			session.beginTransaction();
-			matriculas = session.createCriteria(Matricula.class).list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return matriculas;
+		CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+		cq.select(cq.from(Matricula.class));
+		return (List<Matricula>) em.createQuery(cq).getResultList();
 	}
-	
-	public Matricula getById(int id) {
-		Matricula matricula = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			matricula = (Matricula) session.get(Matricula.class, id);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return matricula;
-	}
-	
+
 	public List<Matricula> buscar(String texto) {
-		List<Matricula> matriculas = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			matriculas = (List<Matricula>) session.createCriteria(Matricula.class)
-					.add( Restrictions.like("nome", "%" + texto + "%") )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		texto = "%" + texto + "%";
+		
+		Query query = em.createNamedQuery("buscarMatriculas");
+		query.setParameter("nome", texto);
+		query.setMaxResults(10);
+		
+		List<Matricula> matriculas = query.getResultList();
+		
 		return matriculas;
 	}
 
 	public List<Matricula> getByTurma(Turma turma) {
-		List<Matricula> matriculas = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			matriculas = (List<Matricula>) session.createCriteria(Matricula.class)
-				    .createAlias("aluno", "a")
-				    .add( Restrictions.eqProperty("aluno", "a.id") )
-					.add( Restrictions.eq("turma", turma) )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return matriculas;
+		
+		Query query = em.createQuery("SELECT m FROM Matricula m WHERE m.turma = :turma ");
+		query.setParameter("turma", turma);
+		query.setMaxResults(25);
+		
+		return query.getResultList();
 	}
 	
 	
 	public List<Matricula> getByAluno(Aluno aluno) {
 		List<Matricula> matriculas = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			matriculas = (List<Matricula>) session.createCriteria(Matricula.class)
-				    .createAlias("turma", "a")
-				    .add( Restrictions.eqProperty("turma", "a.id") )
-					.add( Restrictions.eq("aluno", aluno) )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		// TODO: fazer a busca por aluno
 		return matriculas;
 	}
 	
 	
 	public List<Matricula> getByCurso(Curso curso) {
 		List<Matricula> matriculas = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			matriculas = (List<Matricula>) session.createCriteria(Matricula.class)
-				    .createAlias("disciplina", "d")
-				    .add( Restrictions.eqProperty("disciplina", "d.id") )
-					.add( Restrictions.eq("curso", curso) )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		// TODO: fazer a busca por curso
 		return matriculas;
 	}
 	
 	public List<Matricula> getByDisciplina(Disciplina disciplina) {
 		List<Matricula> matriculas = null;
-		try {
-			session = Conexao.getSession();
-			session.beginTransaction();
-			matriculas = (List<Matricula>) session.createCriteria(Matricula.class)
-				    .createAlias("disciplina", "d")
-				    .add( Restrictions.eqProperty("disciplina", "d.id") )
-					.add( Restrictions.eq("disciplina", disciplina) )
-					.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		// TODO: fazer a busca por disciplina
 		return matriculas;
 	}
 
-	
-	
 //	
 	
 	public Object getById(Curso cursoSelecionada) {

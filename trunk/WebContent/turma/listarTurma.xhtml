@@ -16,7 +16,7 @@
 						href="#{pageContext.request.contextPath}/turma/cadastrarTurma.jsf"
 						icon="ui-icon-plus" />
 					<p:inputText id="conteudo" value="#{turmaMB.conteudo}" />
- 					<p:commandButton actionListener="#{turmaMB.buscar}" value="Buscar"
+					<p:commandButton actionListener="#{turmaMB.buscar}" value="Buscar"
 						update="listaTurma" />
 				</p:panelGrid>
 
@@ -28,7 +28,7 @@
 					<p:column headerText="ID" style="width: 4%;" sortBy="#{item.id}">
 						<h:outputText value="#{item.id}" />
 					</p:column>
-					<p:column headerText="Nome" style="width: 36%;"
+					<p:column headerText="Nome" style="width: 31%;"
 						sortBy="#{item.nome}">
 						<h:outputText value="#{item.nome}" />
 					</p:column>
@@ -50,6 +50,10 @@
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</p:column>
+					<p:column style="width:5%">
+						<p:button type="button" icon="ui-icon-info"
+							action="#{matriculaMB.listarAlunosTurma(item)}"/>
+					</p:column>
 					<p:column style="width:10%">
 						<p:splitButton value="Alterar" action="#{turmaMB.goUpdate(item)}"
 							icon="ui-icon-arrowrefresh-1-w">
@@ -60,6 +64,7 @@
 					</p:column>
 
 				</p:dataTable>
+				
 			</h:form>
 		</ui:define>
 

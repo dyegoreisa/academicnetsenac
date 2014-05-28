@@ -2,6 +2,7 @@ package br.com.senac.mb;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
@@ -13,7 +14,10 @@ import br.com.senac.model.Disciplina;
 public class DisciplinaMB {
 
 	private Disciplina disciplina;
+	
+	@EJB
 	private DisciplinaDAO disciplinaDAO;
+	
 	private List<Disciplina> disciplinas;
 	private int acao;
 	
@@ -24,7 +28,6 @@ public class DisciplinaMB {
 	
 	public DisciplinaMB() {
 		disciplina = new Disciplina();
-		disciplinaDAO = new DisciplinaDAO();
 		acao = 1;
 	}
 

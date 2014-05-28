@@ -2,6 +2,7 @@ package br.com.senac.mb;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
@@ -15,11 +16,16 @@ import br.com.senac.model.Turma;
 public class TurmaMB {
 
 	private Turma turma;
+	
+	@EJB
 	private TurmaDAO turmaDAO;
+	
+	@EJB
 	private CursoDAO cursoDAO;
+	
 	private List<Turma> turmas;
 	private List<Curso> cursos;
-
+	
 	private int acao;
 	
 	/**
@@ -29,8 +35,6 @@ public class TurmaMB {
 
 	public TurmaMB() {
 		turma = new Turma();
-		turmaDAO = new TurmaDAO();
-		cursoDAO = new CursoDAO();
 		acao = 1;
 	}
 
@@ -112,4 +116,5 @@ public class TurmaMB {
 	public void buscar() {
 		turmas = turmaDAO.buscar(conteudo.toString());
 	}
+	
 }
