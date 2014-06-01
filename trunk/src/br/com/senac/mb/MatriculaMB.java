@@ -5,9 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 
 import br.com.senac.dao.AlunoDAO;
 import br.com.senac.dao.MatriculaDAO;
@@ -20,6 +27,13 @@ import br.com.senac.model.Turma;
 @RequestScoped
 public class MatriculaMB {
 
+	@Resource(mappedName = "java:/queue/matriculaQueue")
+	private Queue fila;
+ 
+	@Inject
+	@JMSConnectionFactory("java:/ConnectionFactory")
+	private JMSContext context;	
+	
 	@EJB
 	private MatriculaDAO matriculaDAO;
 	
@@ -157,7 +171,16 @@ public class MatriculaMB {
          
             String codigo = sbCodigo.toString();
             
-            matriculaDAO.inserir(new Matricula(turma, alunoAtual, codigo, true));
+            Matricula matricula = new Matricula(turma, alunoAtual, codigo, true);
+            matriculaDAO.inserir(matricula);
+            try {
+    			ObjectMessage objMessage = context.createObjectMessage();
+    			objMessage.setObject(matricula);
+    			context.createProducer().send(fila, objMessage);
+     
+    		} catch (JMSException ex) {
+    			ex.printStackTrace();
+    		}
 		}
 		return "listarTurma";
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -12,11 +13,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
+import br.com.senac.interceptor.UsuarioInterceptor;
 import br.com.senac.model.Aluno;
 import br.com.senac.model.Usuario;
 
 @Stateless
 @Local
+@Interceptors(UsuarioInterceptor.class)
 public class UsuarioDAO {
 	
 	@PersistenceContext
