@@ -52,6 +52,7 @@ public class LoginMB {
 			sessao.invalidate();
 			destino = "login";
 		}
+
 		return destino;
 	}
 	

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -23,7 +24,8 @@ import javax.persistence.TemporalType;
 @Table(name="Pessoa")
 public abstract class Pessoa {
 	
-	@Id @GeneratedValue
+	@Id 
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;
 	private String nome;
 	private String sobrenome;

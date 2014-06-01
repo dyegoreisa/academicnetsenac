@@ -1,7 +1,9 @@
 package br.com.senac.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -17,10 +19,12 @@ import javax.persistence.NamedQuery;
 public class Usuario {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private long id;
 
 	private String nome;
+	
+	@Column(unique = true)
 	private String login;
 	private String senha;
 
