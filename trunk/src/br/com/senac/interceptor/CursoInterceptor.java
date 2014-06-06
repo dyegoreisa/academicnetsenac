@@ -11,18 +11,18 @@ public class CursoInterceptor {
 	@AroundInvoke
 	public Object cadastroLog(InvocationContext context) throws Exception {
 		
-		LogArquivo log = new LogArquivo();
+		LogArquivo log = new LogArquivo("/var/log/appJava/academicnetnsenac/curso.log");
 		
 		if (context.getMethod().getName().equals("inserir")) {
-			log.gravarLog(context.getParameters()[0], "criado às");
+			log.gravarLog(context.getParameters()[0], "criado Ã s");
 		}
 		
 		if (context.getMethod().getName().equals("atualizar")) {
-			log.gravarLog(context.getParameters()[0], "atualizado às");
+			log.gravarLog(context.getParameters()[0], "atualizado Ã s");
 		}
 		
 		if (context.getMethod().getName().equals("apagar")) {
-			log.gravarLog(context.getParameters()[0], "excluído às");
+			log.gravarLog(context.getParameters()[0], "excluÃ­do Ã s");
 		}
 				
 		return context.proceed();

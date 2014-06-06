@@ -9,8 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Session;
-
 import br.com.senac.model.Aluno;
 
 @Stateless
@@ -58,7 +56,7 @@ public class AlunoDAO {
 		query.setParameter("email", texto);
 		query.setMaxResults(10);
 		
-		List<Aluno> alunos = query.getResultList();
+		List<Aluno> alunos = (List<Aluno>) query.getResultList();
 		
 		return alunos;
 	}

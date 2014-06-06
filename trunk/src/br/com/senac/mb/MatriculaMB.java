@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
@@ -22,51 +24,52 @@ import br.com.senac.dao.TurmaDAO;
 import br.com.senac.model.Aluno;
 import br.com.senac.model.Matricula;
 import br.com.senac.model.Turma;
+import br.com.senac.util.LogArquivo;
 
-@ManagedBean(name="matriculaMB")
+@ManagedBean(name = "matriculaMB")
 @RequestScoped
 public class MatriculaMB {
 
 	@Resource(mappedName = "java:/queue/matriculaQueue")
 	private Queue fila;
- 
+
 	@Inject
 	@JMSConnectionFactory("java:/ConnectionFactory")
-	private JMSContext context;	
+	private JMSContext context;
 	
 	@EJB
 	private MatriculaDAO matriculaDAO;
-	
+
 	@EJB
 	private TurmaDAO turmaDAO;
-	
+
 	@EJB
 	private AlunoDAO alunoDAO;
 
 	private Matricula matricula;
 	private Turma turma;
-	
+
 	private String idTurma;
 	private String[] alunosSelecionados;
-	
+
 	private List<Turma> turmas;
 	private List<Aluno> alunos;
-	
+
 	private List<Matricula> matriculas;
-	
+
 	private String destino;
 	private int acao;
-	
+
 	/**
 	 * Campo usado para busca
 	 */
 	private String conteudo;
-	
+
 	public MatriculaMB() {
 		matricula = new Matricula();
 		acao = 1;
 	}
-		
+
 	public Matricula getMatricula() {
 		return matricula;
 	}
@@ -78,7 +81,7 @@ public class MatriculaMB {
 	public String getIdTurma() {
 		return idTurma;
 	}
-	
+
 	public String[] getAlunosSelecionados() {
 		return alunosSelecionados;
 	}
@@ -92,7 +95,7 @@ public class MatriculaMB {
 		alunos = alunoDAO.listar();
 		return alunos;
 	}
-	
+
 	public String getDestino() {
 		return destino;
 	}
@@ -116,7 +119,7 @@ public class MatriculaMB {
 	public void setIdTurma(String idTurma) {
 		this.idTurma = idTurma;
 	}
-	
+
 	public void setAlunosSelecionados(String[] alunosSelecionados) {
 		this.alunosSelecionados = alunosSelecionados;
 	}
@@ -128,7 +131,7 @@ public class MatriculaMB {
 	public void setAlunos(List<Aluno> alunos) {
 		this.alunos = alunos;
 	}
-	
+
 	public void setDestino(String destino) {
 		this.destino = destino;
 	}
@@ -144,44 +147,79 @@ public class MatriculaMB {
 	public List<Matricula> getMatriculas() {
 		return matriculas;
 	}
-	
+
 	public void setMatriculas(List<Matricula> matriculas) {
 		this.matriculas = matriculas;
 	}
-	
+
 	/*
-	 * Comandos 
+	 * Comandos
 	 */
 	public String salvar() {
+
+		LogArquivo log = new LogArquivo("/var/log/appJava/academicnetnsenac/erro_matricula.log");
 		
 		turma = turmaDAO.getById(Integer.parseInt(idTurma));
-		
-		for(int i = 0; i < alunosSelecionados.length; i++){
-			Aluno alunoAtual = alunoDAO.getById(Integer.parseInt(alunosSelecionados[i]));
-			
+
+		for (int i = 0; i < alunosSelecionados.length; i++) {
+			Aluno alunoAtual = alunoDAO.getById(Integer
+					.parseInt(alunosSelecionados[i]));
+
 			StringBuffer sbCodigo = new StringBuffer();
-            
-            DateFormat dateFormatYear = new SimpleDateFormat("yyyy");
-            Date date = new Date();
-            
-            sbCodigo.append(dateFormatYear.format(date));
-            sbCodigo.append(alunoAtual.getNome().substring(0, 2).toUpperCase());
-            sbCodigo.append(alunoAtual.getSobrenome().substring(0, 2).toUpperCase());
-            sbCodigo.append(1000 + (int)(Math.random() * ((9999 - 1000) + 1)));
-         
-            String codigo = sbCodigo.toString();
-            
-            Matricula matricula = new Matricula(turma, alunoAtual, codigo, true);
-            matriculaDAO.inserir(matricula);
-            try {
-    			ObjectMessage objMessage = context.createObjectMessage();
-    			objMessage.setObject(matricula);
-    			context.createProducer().send(fila, objMessage);
-     
-    		} catch (JMSException ex) {
-    			ex.printStackTrace();
-    		}
+
+			DateFormat dateFormatYear = new SimpleDateFormat("yyyy");
+			Date date = new Date();
+
+			sbCodigo.append(dateFormatYear.format(date));
+			sbCodigo.append(alunoAtual.getNome().substring(0, 2).toUpperCase());
+			sbCodigo.append(alunoAtual.getSobrenome().substring(0, 2)
+					.toUpperCase());
+			sbCodigo.append(1000 + (int) (Math.random() * ((9999 - 1000) + 1)));
+
+			String codigo = sbCodigo.toString();
+
+			Matricula matricula = new Matricula(turma, alunoAtual, codigo, true);
+			try {
+				matriculaDAO.inserir(matricula);
+				
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"Mensagem Sucesso:", "Alunos Matriculados!"));
+				
+			} catch(Exception e) {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Mensagem Erro Banco:", "O aluno já está matriculado na turma selecionada."));
+				e.printStackTrace();
+			}
+			
+			try {
+				ObjectMessage objMessage = context.createObjectMessage();
+				objMessage.setObject(matricula);
+				context.createProducer().send(fila, objMessage);
+
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN,
+								"Mensagem Fila:",
+								"Matricula enviada para fila com sucesso!"));
+
+			} catch (JMSException ex) {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Falha na Fila:",
+								"Falha ao enviar Matricula para fila!"));
+
+				log.gravarLog(ex.getStackTrace(), ex.getMessage());
+				
+				ex.printStackTrace();
+			}
+
 		}
+			
 		return "listarTurma";
 	}
 
@@ -189,5 +227,5 @@ public class MatriculaMB {
 		matriculas = matriculaDAO.getByTurma(turma);
 		return "alunoTurma";
 	}
-	
+
 }

@@ -21,7 +21,7 @@ public class Professor extends Pessoa {
 	private String vinculo;
 	
 	@Transient
-	private ArrayList<Leciona> lecionaTurmas = new ArrayList();
+	private ArrayList<Leciona> lecionaTurmas = new ArrayList<Leciona>();
 
 	public Professor() {}
 	
@@ -49,7 +49,7 @@ public class Professor extends Pessoa {
 	}
 	
 	public List<Turma> getTurmas() {
-		List<Turma> turmas = new ArrayList();
+		List<Turma> turmas = new ArrayList<Turma>();
 		for (Leciona lt : lecionaTurmas) {
 			turmas.add(lt.getTurma());
 		}
@@ -57,7 +57,7 @@ public class Professor extends Pessoa {
 	}
 	
 	public List<Disciplina> getDisciplinas() {
-		List<Disciplina> disciplinas = new ArrayList();
+		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 		for (Leciona lt : lecionaTurmas) {
 			disciplinas.add(lt.getDisciplina());
 		}

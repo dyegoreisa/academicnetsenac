@@ -12,8 +12,13 @@ import br.com.senac.util.LogArquivo;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/queue/matriculaQueue") }, mappedName = "java:/queue/matriculaQueue")
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/queue/matriculaQueue") }, 
+		mappedName = "java:/queue/matriculaQueue")
 public class MatriculaQueueMDB implements MessageListener {
+	
+	public MatriculaQueueMDB() {
+		
+	}
 	
 	public void onMessage(Message message) {
 		try {
@@ -25,8 +30,8 @@ public class MatriculaQueueMDB implements MessageListener {
 				try {
 					ObjectMessage obj = (ObjectMessage) message;
 					Matricula matricula = (Matricula) obj.getObject();
-					LogArquivo log = new LogArquivo();
-					log.gravarLog(matricula, "foi criada e consumida da fila às");
+					LogArquivo log = new LogArquivo("/var/log/appJava/academicnetnsenac/matriculaQueue.log");
+					log.gravarLog(matricula, "foi criada e consumida da fila Ã s");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -34,6 +39,5 @@ public class MatriculaQueueMDB implements MessageListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println(getClass() + " Fim");
 	}
 }

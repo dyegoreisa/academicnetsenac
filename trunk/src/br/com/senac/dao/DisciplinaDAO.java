@@ -1,6 +1,5 @@
 package br.com.senac.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -10,11 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-
-import br.com.senac.model.Disciplina;
-import br.com.senac.model.Disciplina;
 import br.com.senac.model.Disciplina;
 
 @Stateless
@@ -60,7 +54,7 @@ public class DisciplinaDAO {
 		query.setParameter("nome", texto);
 		query.setMaxResults(10);
 		
-		List<Disciplina> disciplinas = query.getResultList();
+		List<Disciplina> disciplinas = (List<Disciplina>) query.getResultList();
 		
 		return disciplinas;
 	}
