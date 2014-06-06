@@ -1,6 +1,5 @@
 package br.com.senac.dao;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Local;

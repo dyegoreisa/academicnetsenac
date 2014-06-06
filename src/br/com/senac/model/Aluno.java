@@ -28,7 +28,7 @@ public class Aluno extends Pessoa {
 	private Matricula matriculaAtiva;
 
 	public Aluno() {
-		matriculas = new ArrayList();
+		matriculas = new ArrayList<Matricula>();
 	}
 	
 	public Aluno(String nome, String sobrenome, String email,

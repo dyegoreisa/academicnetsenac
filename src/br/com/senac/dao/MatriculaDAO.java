@@ -59,7 +59,7 @@ public class MatriculaDAO {
 		query.setParameter("nome", texto);
 		query.setMaxResults(10);
 		
-		List<Matricula> matriculas = query.getResultList();
+		List<Matricula> matriculas = (List<Matricula>) query.getResultList();
 		
 		return matriculas;
 	}
@@ -70,7 +70,7 @@ public class MatriculaDAO {
 		query.setParameter("turma", turma);
 		query.setMaxResults(25);
 		
-		return query.getResultList();
+		return (List<Matricula>) query.getResultList();
 	}
 	
 	

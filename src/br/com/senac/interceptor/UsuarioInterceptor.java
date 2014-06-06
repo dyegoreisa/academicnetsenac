@@ -10,10 +10,10 @@ public class UsuarioInterceptor {
 	@AroundInvoke
 	public Object loginLog(InvocationContext context) throws Exception {
 		
-		LogArquivo log = new LogArquivo();
+		LogArquivo log = new LogArquivo("/var/log/appJava/academicnetnsenac/usuario.log");
 		
 		if (context.getMethod().getName().equals("verificarAcesso")) {
-			log.gravarLog(context.getParameters()[0], "efetuou login às");
+			log.gravarLog(context.getParameters()[0], "efetuou login Ã s");
 		}
 		
 		return context.proceed();

@@ -1,6 +1,5 @@
 package br.com.senac.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -10,11 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.ConstraintViolationException;
-
-import br.com.senac.model.Turma;
 import br.com.senac.model.Turma;
 
 @Stateless
@@ -60,7 +54,7 @@ public class TurmaDAO {
 		query.setParameter("nome", texto);
 		query.setMaxResults(10);
 		
-		List<Turma> turmas = query.getResultList();
+		List<Turma> turmas = (List<Turma>) query.getResultList();
 		
 		return turmas;
 	}

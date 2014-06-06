@@ -57,7 +57,7 @@ public class CursoDAO {
 		query.setParameter("nome", texto);
 		query.setMaxResults(10);
 		
-		List<Curso> cursos = query.getResultList();
+		List<Curso> cursos = (List<Curso>) query.getResultList();
 		
 		return cursos;
 	}	

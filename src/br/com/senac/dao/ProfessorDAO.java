@@ -1,8 +1,6 @@
 package br.com.senac.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -11,9 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Session;
-
-import br.com.senac.model.Professor;
 import br.com.senac.model.Professor;
 
 @Stateless
@@ -61,7 +56,7 @@ public class ProfessorDAO {
 		query.setParameter("email", texto);
 		query.setMaxResults(10);
 		
-		List<Professor> professores = query.getResultList();
+		List<Professor> professores = (List<Professor>) query.getResultList();
 		
 		return professores;
 	}
