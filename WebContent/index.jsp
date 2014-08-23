@@ -1,0 +1,102 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    	               "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>RESTfull</title>
+</head>
+<body>
+	<h2>Bem vindo ao Web Service RESTfull!</h2>
+	<fieldset>
+		<legend>ProfessorWS</legend>
+		<table>
+			<thead>
+				<tr>
+					<td>Ação</td>
+					<td>Método</td>
+					<td>Endereço</td>
+					<td>Parâmetros</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Listar</td>
+					<td>GET</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/ProfessorServico</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>Incluir</td>
+					<td>PUT</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/ProfessorServico</td>
+					<td>dataNascimento; email; nome; sobrenome; sexo</td>
+				</tr>
+				<tr>
+					<td>Alterar</td>
+					<td>POST</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/ProfessorServico</td>
+					<td>dataNascimento; email; id; nome; sobrenome; sexo</td>
+				</tr>
+				<tr>
+					<td>Consultar</td>
+					<td>GET</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/ProfessorServico/{id}</td>
+					<td>id</td>
+				</tr>
+				<tr>
+					<td>Exluir</td>
+					<td>DELETE</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/ProfessorServico/{id}</td>
+					<td>id</td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>
+	<fieldset>
+		<legend>CursoWS</legend>
+		<table>
+			<thead>
+				<tr>
+					<td>Ação</td>
+					<td>Método</td>
+					<td>Endereço</td>
+					<td>Parâmetros</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Listar</td>
+					<td>GET</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/CursoServico</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>Incluir</td>
+					<td>PUT</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/CursoServico</td>
+					<td>nome</td>
+				</tr>
+				<tr>
+					<td>Alterar</td>
+					<td>POST</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/CursoServico</td>
+					<td>id; nome</td>
+				</tr>
+				<tr>
+					<td>Consultar</td>
+					<td>GET</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/CursoServico/{id}</td>
+					<td>id</td>
+				</tr>
+				<tr>
+					<td>Exluir</td>
+					<td>DELETE</td>
+					<td>http://localhost:8080/AcademicNetWS/rs/CursoServico/{id}</td>
+					<td>id</td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>
+</body>
+</html>
