@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+	<ui:composition template="/template/common/commonLayout.xhtml">
+
+		<ui:define name="content">
+			<p:growl id="messages" />
+			<h:form id="frmCadastroAluno">
+				<h:inputHidden id="id" value="#{alunoMB.aluno.id}" />
+				<h:inputHidden id="acao" value="#{alunoMB.acao}" />
+
+				<p:panel header="Cadastrar Aluno">
+					<p:panelGrid columns="3">
+
+						<h:outputLabel for="nome" value="Nome:" />
+						<h:inputText id="nome" value="#{alunoMB.aluno.nome}"
+							required="true" requiredMessage="O campo Nome é obrigatório!" />
+						<h:message for="nome" />
+
+						<h:outputLabel for="sobrenome" value="Sobrenome:" />
+						<h:inputText id="sobrenome" value="#{alunoMB.aluno.sobrenome}"
+							required="true"
+							requiredMessage="O campo Sobrenome é obrigatório!" />
+						<h:message for="sobrenome" />
+
+						<h:outputLabel for="email" value="E-mail:" />
+						<h:inputText id="email" value="#{alunoMB.aluno.email}"
+							rendered="true" requiredMessage="O campo E-mail é obrigatório!"
+							validator="validaEmail" />
+						<h:message for="email" />
+
+						<h:outputLabel for="dataNascimento" value="Data de Nascimento:" />
+						<p:calendar id="dataNascimento"
+							value="#{alunoMB.aluno.dataNascimento}" locale="pt_BR"
+							showButtonPanel="true" rendered="true">
+							<f:convertDateTime pattern="dd/MM/yy" timeZone="GMT-3" />
+						</p:calendar>
+						<h:message for="dataNascimento" />
+
+						<h:outputLabel for="sexo" value="Sexo:" />
+						<h:selectOneRadio id="sexo" value="#{alunoMB.aluno.sexo}">
+							<f:selectItems value="#{alunoMB.mapSexo}" />
+						</h:selectOneRadio>
+						<h:message for="sexo" />
+
+					</p:panelGrid>
+																							
+						<h:commandButton action="#{alunoMB.salvar}" update="messages"
+							value="Salvar" />
+
+						<h:commandButton type="reset" value="Limpar" />
+																	
+				</p:panel>
+				
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>
