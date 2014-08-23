@@ -4,18 +4,16 @@ import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import br.com.senac.interceptor.CursoInterceptor;
 import br.com.senac.model.Curso;
 
 @Stateless
 @Local
-@Interceptors(CursoInterceptor.class)
 public class CursoDAO {
 	
 	@PersistenceContext

@@ -1,9 +1,9 @@
 package br.com.senac.model;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,7 +21,9 @@ import javax.persistence.TemporalType;
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="tipo_pessoa")
 @Table(name="Pessoa")
-public abstract class Pessoa {
+public abstract class Pessoa implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
@@ -31,8 +32,7 @@ public abstract class Pessoa {
 	private String sobrenome;
 	private String email;
 	
-	@OneToMany(mappedBy = "pessoa")
-	private List<Telefone> telefones;
+	private String telefone;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="data_nascimento")
@@ -53,23 +53,23 @@ public abstract class Pessoa {
 		this.email = email;
 	}	
 	
-	public Pessoa(String nome, String sobrenome, String sexo, List<Telefone> telefones,
+	public Pessoa(String nome, String sobrenome, String sexo, String telefone,
 			Date dataNascimento, String email) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.sexo = sexo;
-		this.telefones = telefones;
+		this.telefone = telefone;
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 	}
 
 	public Pessoa(int id, String nome, String sobrenome, String sexo,
-			List<Telefone> telefones, Date dataNascimento, String email) {
+			String telefone, Date dataNascimento, String email) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.sexo = sexo;
-		this.telefones = telefones;
+		this.telefone = telefone;
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 	}
@@ -101,8 +101,8 @@ public abstract class Pessoa {
 		return 0;
 	}
 
-	public List<Telefone> getTelefones() {
-		return telefones;
+	public String getTelefone() {
+		return telefone;
 	}
 
 	public Date getDataNascimento() {
@@ -152,8 +152,8 @@ public abstract class Pessoa {
 		setSexo(sexo == 0 ? "M" : "F");
 	}
 
-	public void addTelefone(Telefone telefone) {
-		this.telefones.add(telefone);
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 	public void setDataNascimento(Date dataNascimento) {

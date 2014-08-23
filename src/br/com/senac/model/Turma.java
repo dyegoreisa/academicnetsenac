@@ -1,5 +1,6 @@
 package br.com.senac.model;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,8 +28,10 @@ import javax.persistence.TemporalType;
 			query = "SELECT t FROM Turma t WHERE t.nome LIKE :nome "
 	) 
 })
-public class Turma {
+public class Turma implements Serializable{
 	
+	private static final long serialVersionUID = -7942338430625372831L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;

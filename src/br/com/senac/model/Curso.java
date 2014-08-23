@@ -1,17 +1,14 @@
 package br.com.senac.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @NamedQueries({ 
@@ -20,27 +17,25 @@ import javax.persistence.OneToMany;
 			query = "SELECT c FROM Curso c WHERE c.nome LIKE :nome "
 	) 
 })
-public class Curso {
-	
+@XmlRootElement
+public class Curso implements Serializable {
+
+	private static final long serialVersionUID = -1393004898310976195L;
+
 	@Id 
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;
 	
 	private String nome;
 	
-	@OneToMany(mappedBy = "curso", targetEntity = Turma.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Turma> turmas;
-	
 	public Curso() {
 		super();
-		turmas = new ArrayList<Turma>();
 	}
 	
 	public Curso(int id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		turmas = new ArrayList<Turma>();
 	}
 	
 	public int getId() {
@@ -51,10 +46,6 @@ public class Curso {
 		return nome;
 	}
 	
-	public List<Turma> getTurmas() {
-		return turmas;
-	}
-	
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -63,10 +54,6 @@ public class Curso {
 		this.nome = nome;
 	}
 	
-	public void setTurmas(List<Turma> turmas) {
-		this.turmas = turmas;
-	}
-
 	@Override
 	public String toString() {
 		return id + " - " + nome;

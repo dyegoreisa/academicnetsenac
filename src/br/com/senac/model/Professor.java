@@ -1,5 +1,6 @@
 package br.com.senac.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @NamedQueries({ 
@@ -15,7 +17,10 @@ import javax.persistence.Transient;
 			query = "SELECT p FROM Professor p WHERE p.nome LIKE :nome OR p.sobrenome LIKE :sobrenome OR p.email LIKE :email "
 	) 
 })
-public class Professor extends Pessoa {
+@XmlRootElement
+public class Professor extends Pessoa implements Serializable {
+
+	private static final long serialVersionUID = -8249960545208553388L;
 
 	private String especialidade;
 	private String vinculo;

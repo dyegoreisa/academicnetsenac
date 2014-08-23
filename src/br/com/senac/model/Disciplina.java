@@ -1,5 +1,7 @@
 package br.com.senac.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +16,10 @@ import javax.persistence.NamedQuery;
 			query = "SELECT d FROM Disciplina d WHERE d.nome LIKE :nome "
 	) 
 })
-public class Disciplina {
-	
+public class Disciplina implements Serializable {
+
+	private static final long serialVersionUID = 2025006138177553580L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;
